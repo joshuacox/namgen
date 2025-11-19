@@ -1,0 +1,2 @@
+# namgen
+A Name Generator
