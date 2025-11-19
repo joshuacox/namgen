@@ -1,0 +1,134 @@
+.\" Namgen manual page
+.\"
+.\" Copyright 2023 Your Name <your.email@domain>
+.\"
+.\" This is free documentation; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License
+.\" as published by the Free Software Foundation; either version
+.\" 2 of the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, see <https://www.gnu.org/licenses/>.
+.\"
+
+.TH NAMGEN 1 "November 2023" "namgen" "User Commands"
+.SH NAME
+namgen \- A flexible name generator combining adjectives and nouns
+
+.SH SYNOPSIS
+.B namgen
+[options]
+
+.SH DESCRIPTION
+A name generator that combines words from adjective and noun lists to create unique names. It supports various formatting options, custom assets, and configuration through environment variables.
+
+.PP
+The program randomly selects combinations of adjectives and nouns and formats them according to specified rules. By default, it generates names in the format "adjective-noun", but this can be customized using various options.
+
+.SH OPTIONS
+.TP
+.B \-a, --adj-file FILE
+Path to custom adjectives file (default: assets/adjectives/adjectives.list)
+
+.TP
+.B \-n, --noun-file FILE
+Path to custom nouns file (default: assets/nouns/nouns.list)
+
+.TP
+.B \-s, --separator SEP
+Use custom separator string (default: "-")
+
+.TP
+.B \-x, --null-separator
+Do not print any separator between adjective and noun
+
+.TP
+.B \-c, --count COUNT
+Number of names to generate (default: terminal height)
+
+.TP
+.B \--capcasing
+Capitalize the first letter of both adjective and noun
+
+.TP
+.B \--camelcasing
+CamelCase style with only noun capitalized
+
+.TP
+.B \-v, --debug
+Enable debug output
+
+.TP
+.B \--help
+Show this help message and exit
+
+.SH CONFIGURATION
+The behavior of namgen can be controlled through several environment variables:
+
+.TP
+.B ASSETS_DIR
+Path to assets directory containing adjectives/nouns subfolders (default: ./assets)
+
+.TP
+.B ADJ_FILE
+Path to default adjectives file (overrides ADJ_FOLDER if set)
+
+.TP
+.B NOUN_FILE
+Path to default nouns file (overrides NOUN_FOLDER if set)
+
+.TP
+.B NOUN_FOLDER
+Path to nouns file/folder (default: assets/nouns)
+
+.TP
+.B ADJ_FOLDER
+Path to adjectives file/folder (default: assets/adjectives)
+
+.TP
+.B NULL_SEPARATOR
+Enable null separator mode (true/false)
+
+.TP
+.B SEPARATOR
+Custom separator string
+
+.TP
+.B CAPCASING
+Enable capcasing style (true/false)
+
+.TP
+.B CAMELCASING
+Enable camel casing style (true/false)
+
+.SH EXAMPLES
+Generate 5 names:
+.sp
+   namgen -c 5
+
+Use custom files:
+.sp
+   namgen -a custom_adjectives.txt -n custom_nouns.txt --camelcasing --count 10
+
+Set environment variable for separator:
+.sp
+   SEPARATOR='-' namgen
+
+Produce CamelCase style names:
+.sp
+   namgen --camelcasing
+
+Enable null separator mode:
+.sp
+   NULL_SEPARATOR=true namgen
+
+.SH BUGS
+Please report bugs to <your.email@domain>
+
+.SH SEE ALSO
+README.md for more detailed information and installation instructions.
