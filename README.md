@@ -13,10 +13,17 @@ A flexible name generator that combines adjectives and nouns to create unique na
 - Installable via make
 
 ## Installation
+
 1. Clone the repository
 2. Run `cmake .`
 3. Run `make`
 4. Optionally install with `sudo make install`
+
+### oneliner installation
+
+```
+curl https://raw.githubusercontent.com/joshuacox/namgen/refs/heads/main/scripts/install.sh | sh
+```
 
 ## Usage
 ```bash
