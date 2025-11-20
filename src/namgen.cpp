@@ -152,6 +152,7 @@ fs::path resolveFile(const std::string& envVar,
 
 int main(int argc, char* argv[]) {
     CommandLineOptions opts = parseCommandLine(argc, argv);
+    std::mt19937 rng(std::random_device{}());
     std::mt19937 rng(std::random_device{}());  // Add rng variable declaration
     std::size_t counto = 0;                 // final number of names to generate
     bool optCountSet = false;               // true if user supplied --count / -c
@@ -162,7 +163,7 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i < argc; ++i) {
         const std::string arg = argv[i];
         if (arg == "--null-separator" || arg == "-x") {
-            optNullSeparator = true;
+            opts.nullSeparator = true;
         } else if (arg == "--adj-file" || arg == "-a") {
             // Expect a following argument that contains the adjective file path
             if (i + 1 >= argc) {
@@ -170,8 +171,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the adjective file value
-            optAdjFile = argv[i];
-            optAdjFileSet = true;
+            opts.adjFile = argv[i];
+            opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
             // Expect a following argument that contains the noun file path
             if (i + 1 >= argc) {
@@ -179,8 +180,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the noun file value
-            optNounFile = argv[i];
-            optNounFileSet = true;
+            opts.nounFile = argv[i];
+            opts.nounFileSet = true;
         } else if (arg == "--separator" || arg == "-s") {
             // Expect a following argument that contains the separator string
             if (i + 1 >= argc) {
@@ -188,8 +189,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the separator value
-            optSeparator = argv[i];
-            optSeparatorSet = true;
+            opts.separator = argv[i];
+            opts.separatorSet = true;
         } else if (arg == "--count" || arg == "-c") {
             // Expect a following argument that contains the numeric count
             if (i + 1 >= argc) {
@@ -234,13 +235,13 @@ int main(int argc, char* argv[]) {
 
     // Resolve configuration (environment variables with defaults)
     std::string separator;
-    if (optSeparatorSet) {
-        separator = optSeparator;                     // CLI overrides everything
+    if (opts.separatorSet) {
+        separator = opts.separator;                     // CLI overrides everything
     } else {
         separator = getEnv("SEPARATOR", "-");         // fall back to env / default
     }
     const std::string nullSeparatorEnv = getEnv("NULL_SEPARATOR", "false");
-    const bool nullSeparator = (nullSeparatorEnv == "true") || optNullSeparator;
+    const bool nullSeparator = (nullSeparatorEnv == "true") || opts.nullSeparator;
     const std::string capcasingEnv = getEnv("CAPCASING", "false");
     const bool capcasing = optCapcasing || (capcasingEnv == "true");
     const std::string camelcasingEnv = getEnv("CAMELCASING", "false");
@@ -314,8 +315,8 @@ int main(int argc, char* argv[]) {
     // Resolve noun file from command line first, then fall back to NOUN_FILE and folder
     // Resolve adjective file from command line first
     fs::path adjFile;
-    if (optAdjFileSet) {
-        adjFile = fs::absolute(optAdjFile);
+    if (opts.adjFileSet) {
+        adjFile = fs::absolute(opts.adjFile);
         if (!fs::exists(adjFile) || !fs::is_regular_file(adjFile)) {
             std::cerr << "Error: --adj-file points to a non‑regular file: " << adjFile << "\n";
             return 1;
@@ -326,8 +327,8 @@ int main(int argc, char* argv[]) {
 
     // Resolve noun file from command line first
     fs::path nounFile;
-    if (optNounFileSet) {
-        nounFile = fs::absolute(optNounFile);
+    if (opts.nounFileSet) {
+        nounFile = fs::absolute(opts.nounFile);
         if (!fs::exists(nounFile) || !fs::is_regular_file(nounFile)) {
             std::cerr << "Error: --noun-file points to a non‑regular file: " << nounFile << "\n";
             return 1;
