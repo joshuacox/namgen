@@ -65,8 +65,9 @@ void printGeneratedName(const std::string& name,
                        const std::filesystem::path& adjFile,
                        const std::filesystem::path& adjFolder,
                        const std::filesystem::path& nounFile,
-                       const std::filesystem::path& nounFolder) {
-    // Extract original components for debugging (assuming separator is '-')
+                       const std::filesystem::path& nounFolder,
+                       const std::string& separator) {
+    // Extract original components for debugging using provided separator
     std::string adj = name.substr(0, name.find(separator));
     std::string noun = name.substr(name.find(separator) + 1);
     
@@ -151,19 +152,6 @@ const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
     return vec[dist(rng)];
 }
 
-/* Helper: convert a string to lower case */
-std::string toLower(const std::string& s) {
-    std::string out;
-    out.reserve(s.size());
-    std::transform(s.begin(), s.end(), std::back_inserter(out),
-                   [](unsigned char c) { return std::tolower(c); });
-    return out;
-}
-
-static void capitalizeFirst(std::string& s) {
-    if (!s.empty())
-        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
-}
 
 /* Debug printer – mirrors the shell script's debugger function */
 void debugger(const std::string& adjective,
