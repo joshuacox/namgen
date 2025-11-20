@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cctype> // for tolower
 #include <cstddef>  // for std::size_t
 #include <cstdlib>
 #include <filesystem>
@@ -11,6 +12,22 @@
 #include <string>
 #include <vector>
 using namespace std;  // Add this to avoid qualifying with std::
+
+/* Helper: convert string to lower case */
+std::string toLower(const std::string& s) {
+    std::string out;
+    out.reserve(s.size());
+    for (char c : s) {
+        out += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    }
+    return out;
+}
+
+static void capitalizeFirst(std::string& s) {
+    if (!s.empty()) {
+        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
+    }
+}
 
 /* Helper: prepare components with proper casing */
 std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
@@ -45,10 +62,10 @@ std::string generateName(const std::string& adjective,
 void printGeneratedName(const std::string& name,
                        size_t currentCount,
                        size_t totalNames,
-                       const fs::path& adjFile,
-                       const fs::path& adjFolder,
-                       const fs::path& nounFile,
-                       const fs::path& nounFolder) {
+                       const std::filesystem::path& adjFile,
+                       const std::filesystem::path& adjFolder,
+                       const std::filesystem::path& nounFile,
+                       const std::filesystem::path& nounFolder) {
     // Extract original components for debugging (assuming separator is '-')
     std::string adj = name.substr(0, name.find(separator));
     std::string noun = name.substr(name.find(separator) + 1);
