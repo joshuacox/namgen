@@ -1,12 +1,147 @@
 #include <algorithm>
-#include <cctype>
+#include <cctype> // for tolower
+#include <cstddef>  // for std::size_t
 #include <cstdlib>
 #include <filesystem>
+#if defined(_WIN32) || defined(_WIN64)
+#include <sys/system.h>
+#endif
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <string>
 #include <vector>
+
+using namespace std::filesystem;
+
+/* Helper: convert string to lower case */
+std::string toLower(const std::string& str) {
+    std::string result = str;
+    for (auto& c : result) {
+        c = tolower(c);
+    }
+    return result;
+}
+
+/* Helper: capitalize first letter and make the rest lowercase */
+void capitalizeFirst(std::string& str) {
+    if (!str.empty()) {
+        str[0] = toupper(str[0]);
+        for (size_t i = 1; i < str.size(); ++i) {
+            str[i] = tolower(str[i]);
+        }
+    }
+}
+
+/* Helper: capitalize only the first letter */
+void properCapcasing(std::string& str) {
+    if (!str.empty()) {
+        str[0] = toupper(str[0]);
+    }
+}
+
+// Debug printer – mirrors the shell script's debugger function
+void debugger(const std::string& adjective,
+             const std::string& noun,
+             const std::filesystem::path& adjFile,
+             const std::filesystem::path& adjFolder,
+             const std::filesystem::path& nounFile,
+             const std::filesystem::path& nounFolder,
+             std::size_t countzero,
+             std::size_t counto) {
+    const char* dbg = std::getenv("DEBUG");
+    if (!dbg || std::string(dbg) != "true")
+        return;
+
+    std::cerr << "DEBUG:\n";
+    std::cerr << "  adjective : " << adjective << "\n";
+    std::cerr << "  noun      : " << noun << "\n";
+    std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
+    std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
+    std::cerr << "  NOUN_FILE : " << nounFile << "\n";
+    std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
+    std::cerr << "  " << countzero << " > " << counto << "\n";
+}
+
+/* Helper: prepare components with proper casing */
+std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
+                                                     const std::string& rawNoun,
+                                                     bool capcasing,
+                                                     bool camelcasing) {
+    std::string adjective = rawAdj;
+    std::string noun = toLower(rawNoun);
+
+    if (capcasing) {
+        capitalizeFirst(adjective);
+        capitalizeFirst(noun);
+    } else if (camelcasing) {
+        // Keep adjective lowercase and only capitalize first letter of noun
+        for (auto& c : adjective) {
+            c = tolower(c);
+        }
+        properCapcasing(noun);
+    }
+
+    return {adjective, noun};
+}
+
+// Random choice helper template
+
+/* Helper: generate a single name combination */
+std::string generateName(const std::string& adjective,
+                        const std::string& noun,
+                        bool nullSeparator,
+                        const std::string& separator,
+                        bool camelcasing) {
+    if (nullSeparator || separator.empty()) {
+        return (camelcasing ? toLower(adjective) : adjective) + noun;
+    }
+    
+    // When using both separator and camel casing:
+    // - Keep adjective as-is from prepareComponents
+    // - Only apply separator without forcing lower case
+    return adjective + separator + noun;
+}
+
+/* Helper: print generated name with debug info */
+void printGeneratedName(const std::string& name,
+                       size_t currentCount,
+                       size_t totalNames,
+                       const std::filesystem::path& adjFile,
+                       const std::filesystem::path& adjFolder,
+                       const std::filesystem::path& nounFile,
+                       const std::filesystem::path& nounFolder,
+                       const std::string& separator) {
+    // Extract original components for debugging using provided separator
+    std::string adj = name.substr(0, name.find(separator));
+    std::string noun = name.substr(name.find(separator) + 1);
+    
+    debugger(adj, noun, adjFile, adjFolder, nounFile, nounFolder,
+             currentCount, totalNames);
+    std::cout << name << "\n";
+}
+
+struct CommandLineOptions {
+    std::string adjFile;
+    bool adjFileSet = false;
+    std::string nounFile;
+    bool nounFileSet = false;
+    bool nullSeparator = false;
+    bool separatorSet = false; 
+    std::string separator;
+    size_t count = 0;
+    bool countSet = false;
+    bool debug = false;
+    bool capcasing = false;
+    bool camelcasing = false;
+};
+
+CommandLineOptions parseCommandLine(int argc, char* argv[]) {
+    CommandLineOptions opts;
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    return opts;
+}
 
 namespace fs = std::filesystem;
 
@@ -62,42 +197,7 @@ const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
     return vec[dist(rng)];
 }
 
-/* Helper: convert a string to lower case */
-std::string toLower(const std::string& s) {
-    std::string out;
-    out.reserve(s.size());
-    std::transform(s.begin(), s.end(), std::back_inserter(out),
-                   [](unsigned char c) { return std::tolower(c); });
-    return out;
-}
 
-static void capitalizeFirst(std::string& s) {
-    if (!s.empty())
-        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
-}
-
-/* Debug printer – mirrors the shell script's debugger function */
-void debugger(const std::string& adjective,
-              const std::string& noun,
-              const fs::path& adjFile,
-              const fs::path& adjFolder,
-              const fs::path& nounFile,
-              const fs::path& nounFolder,
-              std::size_t countzero,
-              std::size_t counto) {
-    const char* dbg = std::getenv("DEBUG");
-    if (!dbg || std::string(dbg) != "true")
-        return;
-
-    std::cerr << "DEBUG:\n";
-    std::cerr << "  adjective : " << adjective << "\n";
-    std::cerr << "  noun      : " << noun << "\n";
-    std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
-    std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
-    std::cerr << "  NOUN_FILE : " << nounFile << "\n";
-    std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
-    std::cerr << "  " << countzero << " > " << counto << "\n";
-}
 
 /* Determine terminal height – fallback to 24 if we cannot query it */
 std::size_t terminalLines() {
@@ -125,19 +225,8 @@ fs::path resolveFile(const std::string& envVar,
 }
 
 int main(int argc, char* argv[]) {
-    // Seed RNG
-    std::random_device rd;
-    std::mt19937 rng(rd());
-
-    // ----- command-line option handling ---------------------------------
-    // optNounFile: path from --noun-file, optNounFileSet indicates if set
-    std::string optAdjFile;                // adjective file path from command line
-    bool optAdjFileSet = false;            // true if user passed --adj-file
-    std::string optNounFile;               // noun file path from command line
-    bool optNounFileSet = false;           // true if user passed --noun-file
-    bool optNullSeparator = false;         // true if user passed --null_separator or -n
-    bool optSeparatorSet = false;          // true if user passed --separator / -s
-    std::string optSeparator;              // value supplied on the command line
+    CommandLineOptions opts = parseCommandLine(argc, argv);
+    std::mt19937 rng(std::random_device{}());
     std::size_t counto = 0;                 // final number of names to generate
     bool optCountSet = false;               // true if user supplied --count / -c
     bool optDebug = false;                  // true if user passed --debug
@@ -147,7 +236,7 @@ int main(int argc, char* argv[]) {
     for (int i = 1; i < argc; ++i) {
         const std::string arg = argv[i];
         if (arg == "--null-separator" || arg == "-x") {
-            optNullSeparator = true;
+            opts.nullSeparator = true;
         } else if (arg == "--adj-file" || arg == "-a") {
             // Expect a following argument that contains the adjective file path
             if (i + 1 >= argc) {
@@ -155,8 +244,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the adjective file value
-            optAdjFile = argv[i];
-            optAdjFileSet = true;
+            opts.adjFileSet = true;
+            opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
             // Expect a following argument that contains the noun file path
             if (i + 1 >= argc) {
@@ -164,8 +253,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the noun file value
-            optNounFile = argv[i];
-            optNounFileSet = true;
+            opts.nounFileSet = true;
+            opts.nounFileSet = true;
         } else if (arg == "--separator" || arg == "-s") {
             // Expect a following argument that contains the separator string
             if (i + 1 >= argc) {
@@ -173,8 +262,8 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the separator value
-            optSeparator = argv[i];
-            optSeparatorSet = true;
+            opts.separatorSet = true;
+            opts.separator = argv[i];
         } else if (arg == "--count" || arg == "-c") {
             // Expect a following argument that contains the numeric count
             if (i + 1 >= argc) {
@@ -219,13 +308,15 @@ int main(int argc, char* argv[]) {
 
     // Resolve configuration (environment variables with defaults)
     std::string separator;
-    if (optSeparatorSet) {
-        separator = optSeparator;                     // CLI overrides everything
+    if (opts.separatorSet) {
+        if (opts.separatorSet) {
+            separator = opts.separator;
+        }
     } else {
         separator = getEnv("SEPARATOR", "-");         // fall back to env / default
     }
     const std::string nullSeparatorEnv = getEnv("NULL_SEPARATOR", "false");
-    const bool nullSeparator = (nullSeparatorEnv == "true") || optNullSeparator;
+    const bool nullSeparator = (nullSeparatorEnv == "true") || opts.nullSeparator;
     const std::string capcasingEnv = getEnv("CAPCASING", "false");
     const bool capcasing = optCapcasing || (capcasingEnv == "true");
     const std::string camelcasingEnv = getEnv("CAMELCASING", "false");
@@ -299,8 +390,8 @@ int main(int argc, char* argv[]) {
     // Resolve noun file from command line first, then fall back to NOUN_FILE and folder
     // Resolve adjective file from command line first
     fs::path adjFile;
-    if (optAdjFileSet) {
-        adjFile = fs::absolute(optAdjFile);
+    if (opts.adjFileSet) {
+        adjFile = fs::absolute(opts.adjFile);
         if (!fs::exists(adjFile) || !fs::is_regular_file(adjFile)) {
             std::cerr << "Error: --adj-file points to a non‑regular file: " << adjFile << "\n";
             return 1;
@@ -311,8 +402,8 @@ int main(int argc, char* argv[]) {
 
     // Resolve noun file from command line first
     fs::path nounFile;
-    if (optNounFileSet) {
-        nounFile = fs::absolute(optNounFile);
+    if (opts.nounFileSet) {
+        nounFile = fs::absolute(opts.nounFile);
         if (!fs::exists(nounFile) || !fs::is_regular_file(nounFile)) {
             std::cerr << "Error: --noun-file points to a non‑regular file: " << nounFile << "\n";
             return 1;
@@ -333,27 +424,15 @@ int main(int argc, char* argv[]) {
     // Main loop – generate names
     std::size_t countzero = 0;
     while (countzero < counto) {
-        std::string rawNoun = randomChoice(nounLines, rng);
-        std::string rawAdj  = randomChoice(adjLines, rng);
+        const auto rawNoun = randomChoice(nounLines, rng);
+        const auto rawAdj = randomChoice(adjLines, rng);
 
-        std::string noun = toLower(rawNoun);
-        std::string adjective = rawAdj; // keep original case
+        // Prepare components with proper formatting
+        const auto [adjective, noun] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
 
-        debugger(adjective, noun, adjFile, adjFolder, nounFile, nounFolder, countzero, counto);
-
-        if (capcasing) {
-            capitalizeFirst(adjective);
-            capitalizeFirst(noun);
-        }
-        else if (camelcasing) {
-            capitalizeFirst(noun);
-        }
-        if (nullSeparator) {
-            std::cout << adjective << noun << "\n";
-        }
-        else {
-            std::cout << adjective << separator << noun << "\n";
-        }
+        // Generate and print the name
+        const std::string name = generateName(adjective, noun, nullSeparator, separator, camelcasing);
+        printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder, separator);
 
         ++countzero;
     }
