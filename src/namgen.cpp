@@ -12,6 +12,52 @@
 #include <vector>
 using namespace std;  // Add this to avoid qualifying with std::
 
+/* Helper: prepare components with proper casing */
+std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
+                                                     const std::string& rawNoun,
+                                                     bool capcasing,
+                                                     bool camelcasing) {
+    std::string adjective = rawAdj;
+    std::string noun = toLower(rawNoun);
+
+    if (capcasing) {
+        capitalizeFirst(adjective);
+        capitalizeFirst(noun);
+    } else if (camelcasing) {
+        capitalizeFirst(noun);
+    }
+
+    return {adjective, noun};
+}
+
+/* Helper: generate a single name combination */
+std::string generateName(const std::string& adjective,
+                        const std::string& noun,
+                        bool nullSeparator,
+                        const std::string& separator) {
+    if (nullSeparator) {
+        return adjective + noun;
+    }
+    return adjective + separator + noun;
+}
+
+/* Helper: print generated name with debug info */
+void printGeneratedName(const std::string& name,
+                       size_t currentCount,
+                       size_t totalNames,
+                       const fs::path& adjFile,
+                       const fs::path& adjFolder,
+                       const fs::path& nounFile,
+                       const fs::path& nounFolder) {
+    // Extract original components for debugging (assuming separator is '-')
+    std::string adj = name.substr(0, name.find(separator));
+    std::string noun = name.substr(name.find(separator) + 1);
+    
+    debugger(adj, noun, adjFile, adjFolder, nounFile, nounFolder,
+             currentCount, totalNames);
+    std::cout << name << "\n";
+}
+
 struct CommandLineOptions {
     string adjFile;
     bool adjFileSet = false;
@@ -343,52 +389,6 @@ int main(int argc, char* argv[]) {
     if (nounLines.empty() || adjLines.empty()) {
         std::cerr << "Error: selected noun or adjective file is empty.\n";
         return 1;
-    }
-
-    // Helper: prepare components with proper casing
-    std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
-                                                         const std::string& rawNoun,
-                                                         bool capcasing,
-                                                         bool camelcasing) {
-        std::string adjective = rawAdj;
-        std::string noun = toLower(rawNoun);
-
-        if (capcasing) {
-            capitalizeFirst(adjective);
-            capitalizeFirst(noun);
-        } else if (camelcasing) {
-            capitalizeFirst(noun);
-        }
-
-        return {adjective, noun};
-    }
-
-    // Helper: generate a single name combination
-    std::string generateName(const std::string& adjective,
-                            const std::string& noun,
-                            bool nullSeparator,
-                            const std::string& separator) {
-        if (nullSeparator) {
-            return adjective + noun;
-        }
-        return adjective + separator + noun;
-    }
-
-    // Helper: print generated name with debug info
-    void printGeneratedName(const std::string& name,
-                           size_t currentCount,
-                           size_t totalNames,
-                           const fs::path& adjFile,
-                           const fs::path& adjFolder,
-                           const fs::path& nounFile,
-                           const fs::path& nounFolder) {
-        // Extract original components for debugging (assuming separator is '-')
-        std::string adj = name.substr(0, name.find(separator));
-        std::string noun = name.substr(name.find(separator) + 1);
-    
-        debugger(adj, noun, adjFile, adjFolder, nounFile, nounFolder,
-                 currentCount, totalNames);
-        std::cout << name << "\n";
     }
 
     // Main loop – generate names
