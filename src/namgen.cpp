@@ -11,7 +11,8 @@
 #include <random>
 #include <string>
 #include <vector>
-using namespace std;  // Add this to avoid qualifying with std::
+
+using namespace std;
 
 /* Helper: convert string to lower case */
 std::string toLower(const std::string& s) {
@@ -19,13 +20,23 @@ std::string toLower(const std::string& s) {
     out.reserve(s.size());
     for (char c : s) {
         out += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-/* Debug printer – mirrors the shell script's debugger function */
+    }
+    return out;
+}
+
+static void capitalizeFirst(std::string& s) {
+    if (!s.empty()) {
+        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
+    }
+}
+
+// Debug printer – mirrors the shell script's debugger function
 void debugger(const std::string& adjective,
               const std::string& noun,
-              const fs::path& adjFile,
-              const fs::path& adjFolder,
-              const fs::path& nounFile,
-              const fs::path& nounFolder,
+              const std::fs::path& adjFile,
+              const std::fs::path& adjFolder,
+              const std::fs::path& nounFile,
+              const std::fs::path& nounFolder,
               std::size_t countzero,
               std::size_t counto) {
     const char* dbg = std::getenv("DEBUG");
@@ -40,12 +51,6 @@ void debugger(const std::string& adjective,
     std::cerr << "  NOUN_FILE : " << nounFile << "\n";
     std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
     std::cerr << "  " << countzero << " > " << counto << "\n";
-}
-
-static void capitalizeFirst(std::string& s) {
-    if (!s.empty()) {
-        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
-    }
 }
 
 /* Helper: prepare components with proper casing */
@@ -64,6 +69,13 @@ std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
     }
 
     return {adjective, noun};
+}
+
+// Random choice helper template
+template <typename T>
+const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
+    std::uniform_int_distribution<std::size_t> dist(0, vec.size() - 1);
+    return vec[dist(rng)];
 }
 
 /* Helper: generate a single name combination */
