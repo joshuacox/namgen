@@ -1,18 +1,21 @@
 #include <algorithm>
-#include <cctype> // for tolower
+#include <cctype>    // for tolower
 #include <cstddef>  // for std::size_t
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
+#include <iostream>  // for std::cerr
+#include <random>
+#include <string>
 #if defined(_WIN32) || defined(_WIN64)
 #include <sys/system.h>
 #endif
-#include <fstream>
-#include <iostream>
-#include <random>
-#include <string>
 #include <vector>
 
 using namespace std::filesystem;
+
+
+static constexpr int DEFAULT_TERMINAL_LINES = 24;
 
 /* Helper: convert string to lower case */
 std::string toLower(const std::string& str) {
@@ -49,25 +52,28 @@ void debugger(const std::string& adjective,
              const std::filesystem::path& nounFolder,
              std::size_t countzero,
              std::size_t counto) {
-    const char* dbg = std::getenv("DEBUG");
-    if (!dbg || std::string(dbg) != "true")
-        return;
-
-    std::cerr << "DEBUG:\n";
-    std::cerr << "  adjective : " << adjective << "\n";
-    std::cerr << "  noun      : " << noun << "\n";
-    std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
-    std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
-    std::cerr << "  NOUN_FILE : " << nounFile << "\n";
-    std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
-    std::cerr << "  " << countzero << " > " << counto << "\n";
+    if (const char* dbg = std::getenv("DEBUG")) {
+        if (std::string(dbg) == "true") {
+            std::cerr << "DEBUG:\n";
+            std::cerr << "  adjective : " << adjective << "\n";
+            std::cerr << "  noun      : " << noun << "\n";
+            std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
+            std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
+            std::cerr << "  NOUN_FILE : " << nounFile << "\n";
+            std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
+            std::cerr << "  " << countzero << " > " << counto << "\n";
+        }
+    }
 }
 
-/* Helper: prepare components with proper casing */
+/* Prepare components with proper casing */
 std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
                                                      const std::string& rawNoun,
                                                      bool capcasing,
                                                      bool camelcasing) {
+    if (rawAdj.empty() || rawNoun.empty()) {
+        throw std::invalid_argument("Input strings must not be empty");
+    }
     std::string adjective = rawAdj;
     std::string noun = toLower(rawNoun);
 
@@ -201,8 +207,8 @@ const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
 
 /* Determine terminal height – fallback to 24 if we cannot query it */
 std::size_t terminalLines() {
-    // Simple fallback; more sophisticated approaches would use ioctl or termsize libs.
-    return 24;
+    // Default to configurable value if we can't determine terminal size
+    return DEFAULT_TERMINAL_LINES;
 }
 
 /* Resolve a file path from an environment variable, falling back to a random file in a folder */
@@ -277,9 +283,13 @@ int main(int argc, char* argv[]) {
             optCountArg = argv[i];
             try {
                 counto = static_cast<std::size_t>(std::stoul(optCountArg));
+                if (counto == 0) {
+                    throw std::invalid_argument("Count must be >0");
+                }
                 optCountSet = true;
-            } catch (const std::exception&) {
-                std::cerr << "Error: invalid count value '" << optCountArg << "'.\n";
+            } catch (const std::exception& e) {
+                std::cerr << "Error: invalid count value '" << optCountArg 
+                          << "'. Must be a positive integer." << '\n';
                 return 1;
             }
         } else if (arg == "--capcasing") {    // new flag
