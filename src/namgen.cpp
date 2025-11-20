@@ -16,7 +16,7 @@
 using namespace std::filesystem;
 
 
-static constexpr int DEFAULT_TERMINAL_LINES = 24;
+static constexpr int DEFAULT_TERMINAL_LINES = 24; // Used as fallback when terminal height detection fails
 
 /* Helper: convert string to lower case */
 std::string toLower(const std::string& str) {
@@ -35,6 +35,11 @@ void capitalizeFirst(std::string& str) {
             str[i] = tolower(str[i]);
         }
     }
+}
+
+/* Helper: create exclusion set from string */
+std::unordered_set<char> createExclusionSet(const std::string& excludeChars) {
+    return std::unordered_set<char>(excludeChars.begin(), excludeChars.end());
 }
 
 /* Helper: capitalize only the first letter */
@@ -202,22 +207,26 @@ std::vector<fs::path> collectFiles(const fs::path& folder) {
 /* Remove excluded characters from words */
 std::vector<std::string> filterWords(const std::vector<std::string>& words, 
                                   const std::string& excludeChars) {
-    // Initialize excluded set with default or provided characters
-    const auto& excl = excludeChars.empty() 
-        ? std::string("'-")  // Create a temporary string for default chars
-        : excludeChars;
-    
-    std::unordered_set<char> excluded(excl.begin(), excl.end());
+    // Initialize excluded character set with proper handling of apostrophes and case sensitivity
+    std::unordered_set<char> excluded;
+    if (!excludeChars.empty()) {
+        excluded = createExclusionSet(excludeChars);
+    } else {
+        excluded.insert('\'');
+        excluded.insert('-');
+    }
     std::vector<std::string> filtered;
     
     for (const auto& word : words) {
         std::string cleaned;
         for (char c : word) {
-            if (!excluded.count(c)) {
-                cleaned += c;
+            if (!excluded.count(tolower(c))) { // Check lowercase version
+                cleaned += c; // Preserve original case
             }
         }
-        filtered.push_back(cleaned);
+        if (!cleaned.empty()) { // Only add non-empty strings
+            filtered.push_back(cleaned);
+        }
     }
     
     return filtered;
@@ -466,13 +475,13 @@ int main(int argc, char* argv[]) {
     const std::vector<std::string> adjLines  = readLines(adjFile);
 
     if (nounLines.empty() || adjLines.empty()) {
-        std::cerr << "Error: selected noun or adjective file is empty.\n";
+        std::cerr << "Error: Selected noun or adjective file appears to be empty or contained only whitespace.\n";
         return 1;
     }
 
-    // Main loop – generate names
     std::size_t countzero = 0;
-    while (countzero < counto) {
+    // Generate requested number of names
+    for (; countzero < counto; ) {
         // Filter out words with excluded characters if needed
         std::vector<std::string> filteredNouns = nounLines;
         std::vector<std::string> filteredAdjectives = adjLines;
@@ -491,11 +500,42 @@ int main(int argc, char* argv[]) {
         const auto rawAdj = randomChoice(filteredAdjectives, rng);
 
         // Prepare components with proper formatting
-        const auto [adjective, noun] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
+        std::string adjective = rawAdj;
+        std::string noun = rawNoun;
+
+        if (capcasing || camelcasing) {
+            // Ensure both components are properly capitalized and special characters are handled
+            capitalizeFirst(adjective);
+            if (!camelcasing) {
+                capitalizeFirst(noun);
+            } else {
+                for (auto& c : adjective) {
+                    c = tolower(c);
+                }
+                properCapcasing(noun);
+
+                // Ensure apostrophes are properly capitalized
+                std::string tempNoun;
+                bool nextUpper = true;
+                for (char c : noun) {
+                    if (nextUpper && isalpha(c)) {
+                        tempNoun += toupper(c);
+                        nextUpper = false;
+                    } else {
+                        tempNoun += tolower(c);
+                        if (c == '\'') {
+                            nextUpper = true;
+                        }
+                    }
+                }
+                noun = tempNoun;
+            }
+        }
 
         // Generate and print the name
         const std::string name = generateName(adjective, noun, nullSeparator, separator, camelcasing);
-        printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder, separator);
+        printGeneratedName(name, static_cast<std::size_t>(countzero), counto, 
+                          adjFile, adjFolder, nounFile, nounFolder, separator);
 
         ++countzero;
     }
