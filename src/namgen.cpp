@@ -12,19 +12,43 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using namespace std::filesystem;
 
 /* Helper: convert string to lower case */
+std::string toLower(const std::string& str) {
+    std::string result = str;
+    for (auto& c : result) {
+        c = tolower(c);
+    }
+    return result;
+}
+
+/* Helper: capitalize first letter and make the rest lowercase */
+void capitalizeFirst(std::string& str) {
+    if (!str.empty()) {
+        str[0] = toupper(str[0]);
+        for (size_t i = 1; i < str.size(); ++i) {
+            str[i] = tolower(str[i]);
+        }
+    }
+}
+
+/* Helper: capitalize only the first letter */
+void properCapcasing(std::string& str) {
+    if (!str.empty()) {
+        str[0] = toupper(str[0]);
+    }
+}
 
 // Debug printer – mirrors the shell script's debugger function
 void debugger(const std::string& adjective,
-              const std::string& noun,
-              const std::fs::path& adjFile,
-              const std::fs::path& adjFolder,
-              const std::fs::path& nounFile,
-              const std::fs::path& nounFolder,
-              std::size_t countzero,
-              std::size_t counto) {
+             const std::string& noun,
+             const std::filesystem::path& adjFile,
+             const std::filesystem::path& adjFolder,
+             const std::filesystem::path& nounFile,
+             const std::filesystem::path& nounFolder,
+             std::size_t countzero,
+             std::size_t counto) {
     const char* dbg = std::getenv("DEBUG");
     if (!dbg || std::string(dbg) != "true")
         return;
@@ -58,11 +82,6 @@ std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
 }
 
 // Random choice helper template
-template <typename T>
-const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
-    std::uniform_int_distribution<std::size_t> dist(0, vec.size() - 1);
-    return vec[dist(rng)];
-}
 
 /* Helper: generate a single name combination */
 std::string generateName(const std::string& adjective,
@@ -424,7 +443,7 @@ int main(int argc, char* argv[]) {
 
         // Generate and print the name
         const std::string name = generateName(adjective, noun, nullSeparator, separator);
-        printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder);
+        printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder, separator);
 
         ++countzero;
     }
