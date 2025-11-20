@@ -15,20 +15,6 @@
 using namespace std;
 
 /* Helper: convert string to lower case */
-std::string toLower(const std::string& s) {
-    std::string out;
-    out.reserve(s.size());
-    for (char c : s) {
-        out += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    }
-    return out;
-}
-
-static void capitalizeFirst(std::string& s) {
-    if (!s.empty()) {
-        s[0] = static_cast<char>(std::toupper(static_cast<unsigned char>(s[0])));
-    }
-}
 
 // Debug printer – mirrors the shell script's debugger function
 void debugger(const std::string& adjective,
