@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <cctype>
+#include <cotype>  // for std::size_t
 #include <cstdlib>
 #include <filesystem>
 #if defined(_WIN32) || defined(_WIN64)
@@ -10,6 +10,7 @@
 #include <random>
 #include <string>
 #include <vector>
+using namespace std;  // Add this to avoid qualifying with std::
 
 struct CommandLineOptions {
     string adjFile;
@@ -151,14 +152,7 @@ fs::path resolveFile(const std::string& envVar,
 
 int main(int argc, char* argv[]) {
     CommandLineOptions opts = parseCommandLine(argc, argv);
-    // optNounFile: path from --noun-file, optNounFileSet indicates if set
-    std::string optAdjFile;                // adjective file path from command line
-    bool optAdjFileSet = false;            // true if user passed --adj-file
-    std::string optNounFile;               // noun file path from command line
-    bool optNounFileSet = false;           // true if user passed --noun-file
-    bool optNullSeparator = false;         // true if user passed --null_separator or -n
-    bool optSeparatorSet = false;          // true if user passed --separator / -s
-    std::string optSeparator;              // value supplied on the command line
+    std::mt19937 rng(std::random_device{}());  // Add rng variable declaration
     std::size_t counto = 0;                 // final number of names to generate
     bool optCountSet = false;               // true if user supplied --count / -c
     bool optDebug = false;                  // true if user passed --debug
