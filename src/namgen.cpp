@@ -2,6 +2,9 @@
 #include <cctype>
 #include <cstdlib>
 #include <filesystem>
+#if defined(_WIN32) || defined(_WIN64)
+#include <sys/system.h>
+#endif
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -125,11 +128,7 @@ fs::path resolveFile(const std::string& envVar,
 }
 
 int main(int argc, char* argv[]) {
-    // Seed RNG
-    std::random_device rd;
-    std::mt19937 rng(rd());
-
-    // ----- command-line option handling ---------------------------------
+    CommandLineOptions opts = parseCommandLine(argc, argv);
     // optNounFile: path from --noun-file, optNounFileSet indicates if set
     std::string optAdjFile;                // adjective file path from command line
     bool optAdjFileSet = false;            // true if user passed --adj-file
