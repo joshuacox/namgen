@@ -202,9 +202,12 @@ std::vector<fs::path> collectFiles(const fs::path& folder) {
 /* Remove excluded characters from words */
 std::vector<std::string> filterWords(const std::vector<std::string>& words, 
                                   const std::string& excludeChars) {
-    // Default to removing apostrophes and hyphens if no exclude string is provided
-    std::unordered_set<char> excluded(excludeChars.empty() ? "'-" : excludeChars.begin(), 
-                                   excludeChars.empty() ? excludeChars.end() : excludeChars.end());
+    // Initialize excluded set with default or provided characters
+    const auto& excl = excludeChars.empty() 
+        ? std::string("'")  // Create a temporary string for default chars
+        : excludeChars;
+    
+    std::unordered_set<char> excluded(excl.begin(), excl.end());
     std::vector<std::string> filtered;
     
     for (const auto& word : words) {
