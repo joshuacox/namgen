@@ -19,8 +19,27 @@ std::string toLower(const std::string& s) {
     out.reserve(s.size());
     for (char c : s) {
         out += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    }
-    return out;
+/* Debug printer – mirrors the shell script's debugger function */
+void debugger(const std::string& adjective,
+              const std::string& noun,
+              const fs::path& adjFile,
+              const fs::path& adjFolder,
+              const fs::path& nounFile,
+              const fs::path& nounFolder,
+              std::size_t countzero,
+              std::size_t counto) {
+    const char* dbg = std::getenv("DEBUG");
+    if (!dbg || std::string(dbg) != "true")
+        return;
+
+    std::cerr << "DEBUG:\n";
+    std::cerr << "  adjective : " << adjective << "\n";
+    std::cerr << "  noun      : " << noun << "\n";
+    std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
+    std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
+    std::cerr << "  NOUN_FILE : " << nounFile << "\n";
+    std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
+    std::cerr << "  " << countzero << " > " << counto << "\n";
 }
 
 static void capitalizeFirst(std::string& s) {
