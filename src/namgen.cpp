@@ -243,7 +243,12 @@ int main(int argc, char* argv[]) {
                 std::cerr << "Error: " << arg << " requires an argument.\n";
                 return 1;
             }
-            ++i;                                   // move to the adjective file value
+            if (i + 1 < argc) {  // Ensure we don't read beyond argv
+                ++i;             // move to the adjective file value
+            } else {
+                std::cerr << "Error: Could not read argument for " << arg << "\n";
+                return 1;
+            }
             opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
             // Expect a following argument that contains the noun file path
