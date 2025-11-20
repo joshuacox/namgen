@@ -137,7 +137,7 @@ struct CommandLineOptions {
     bool separatorSet = false; 
     std::string separator;
     std::string excludeChars;
-    bool excludeSet = false;
+    bool excludeSet = true;
     size_t count = 0;
     bool countSet = false;
     bool debug = false;
@@ -204,7 +204,7 @@ std::vector<std::string> filterWords(const std::vector<std::string>& words,
                                   const std::string& excludeChars) {
     // Initialize excluded set with default or provided characters
     const auto& excl = excludeChars.empty() 
-        ? std::string("'")  // Create a temporary string for default chars
+        ? std::string("'-")  // Create a temporary string for default chars
         : excludeChars;
     
     std::unordered_set<char> excluded(excl.begin(), excl.end());
