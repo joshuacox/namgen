@@ -189,28 +189,6 @@ const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
 }
 
 
-/* Debug printer – mirrors the shell script's debugger function */
-void debugger(const std::string& adjective,
-              const std::string& noun,
-              const fs::path& adjFile,
-              const fs::path& adjFolder,
-              const fs::path& nounFile,
-              const fs::path& nounFolder,
-              std::size_t countzero,
-              std::size_t counto) {
-    const char* dbg = std::getenv("DEBUG");
-    if (!dbg || std::string(dbg) != "true")
-        return;
-
-    std::cerr << "DEBUG:\n";
-    std::cerr << "  adjective : " << adjective << "\n";
-    std::cerr << "  noun      : " << noun << "\n";
-    std::cerr << "  ADJ_FILE  : " << adjFile << "\n";
-    std::cerr << "  ADJ_FOLDER: " << adjFolder << "\n";
-    std::cerr << "  NOUN_FILE : " << nounFile << "\n";
-    std::cerr << "  NOUN_FOLDER: " << nounFolder << "\n";
-    std::cerr << "  " << countzero << " > " << counto << "\n";
-}
 
 /* Determine terminal height – fallback to 24 if we cannot query it */
 std::size_t terminalLines() {
