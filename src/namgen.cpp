@@ -2,6 +2,7 @@
 #include <cctype>    // for tolower
 #include <cstddef>  // for std::size_t
 #include <cstdlib>
+#include <unordered_set>  // for excluded characters set
 #include <filesystem>
 #include <fstream>
 #include <iostream>  // for std::cerr
@@ -135,6 +136,8 @@ struct CommandLineOptions {
     bool nullSeparator = false;
     bool separatorSet = false; 
     std::string separator;
+    std::string excludeChars;
+    bool excludeSet = false;
     size_t count = 0;
     bool countSet = false;
     bool debug = false;
@@ -194,6 +197,28 @@ std::vector<fs::path> collectFiles(const fs::path& folder) {
         std::exit(1);
     }
     return files;
+}
+
+/* Filter words containing excluded characters */
+std::vector<std::string> filterWords(const std::vector<std::string>& words, 
+                                  const std::string& excludeChars) {
+    std::unordered_set<char> excluded(excludeChars.begin(), excludeChars.end());
+    std::vector<std::string> filtered;
+    
+    for (const auto& word : words) {
+        bool valid = true;
+        for (char c : word) {
+            if (excluded.count(c)) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) {
+            filtered.push_back(word);
+        }
+    }
+    
+    return filtered;
 }
 
 /* Helper: pick a random element from a vector */
@@ -294,6 +319,14 @@ int main(int argc, char* argv[]) {
             }
         } else if (arg == "--capcasing") {    // new flag
             optCapcasing = true;
+        } else if (arg == "--exclude" || arg == "-e") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --exclude requires an argument.\n";
+                return 1;
+            }
+            ++i;
+            opts.excludeSet = true;
+            opts.excludeChars = argv[i];
         } else if (arg == "--camelcasing") { // new flag
             optCamelcasing = true;
         } else if (arg == "--debug") {
@@ -302,6 +335,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Usage: ./namgen [options]\n\n";
             std::cout << "Options:\n";
             std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\n";
+            std::cout << "  -e, --exclude STRING     Exclude any words containing these characters\n";
             std::cout << "  -n, --noun-file FILE     Path to custom nouns file\n";
             std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\n";
             std::cout << "  -x, --null-separator       Do not print the separator\n";
@@ -437,8 +471,22 @@ int main(int argc, char* argv[]) {
     // Main loop – generate names
     std::size_t countzero = 0;
     while (countzero < counto) {
-        const auto rawNoun = randomChoice(nounLines, rng);
-        const auto rawAdj = randomChoice(adjLines, rng);
+        // Filter out words with excluded characters if needed
+        std::vector<std::string> filteredNouns = nounLines;
+        std::vector<std::string> filteredAdjectives = adjLines;
+
+        if (opts.excludeSet) {
+            filteredNouns = filterWords(nounLines, opts.excludeChars);
+            filteredAdjectives = filterWords(adjLines, opts.excludeChars);
+
+            if (filteredNouns.empty() || filteredAdjectives.empty()) {
+                std::cerr << "Error: No valid words after applying exclude filters.\n";
+                return 1;
+            }
+        }
+
+        const auto rawNoun = randomChoice(filteredNouns, rng);
+        const auto rawAdj = randomChoice(filteredAdjectives, rng);
 
         // Prepare components with proper formatting
         const auto [adjective, noun] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
