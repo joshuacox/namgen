@@ -91,7 +91,8 @@ std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
 std::string generateName(const std::string& adjective,
                         const std::string& noun,
                         bool nullSeparator,
-                        const std::string& separator) {
+                        const std::string& separator,
+                        bool camelcasing) {
     if (nullSeparator || separator.empty()) {
         return adjective + noun;
     }
@@ -430,7 +431,7 @@ int main(int argc, char* argv[]) {
         const auto [adjective, noun] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
 
         // Generate and print the name
-        const std::string name = generateName(adjective, noun, nullSeparator, separator);
+        const std::string name = generateName(adjective, noun, nullSeparator, separator, camelcasing);
         printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder, separator);
 
         ++countzero;
