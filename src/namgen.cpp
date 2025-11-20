@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <cotype>  // for std::size_t
+#include <cstddef>  // for std::size_t
 #include <cstdlib>
 #include <filesystem>
 #if defined(_WIN32) || defined(_WIN64)
