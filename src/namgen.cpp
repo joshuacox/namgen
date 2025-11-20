@@ -345,30 +345,64 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Main loop – generate names
-    std::size_t countzero = 0;
-    while (countzero < counto) {
-        std::string rawNoun = randomChoice(nounLines, rng);
-        std::string rawAdj  = randomChoice(adjLines, rng);
-
+    // Helper: prepare components with proper casing
+    std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
+                                                         const std::string& rawNoun,
+                                                         bool capcasing,
+                                                         bool camelcasing) {
+        std::string adjective = rawAdj;
         std::string noun = toLower(rawNoun);
-        std::string adjective = rawAdj; // keep original case
-
-        debugger(adjective, noun, adjFile, adjFolder, nounFile, nounFolder, countzero, counto);
 
         if (capcasing) {
             capitalizeFirst(adjective);
             capitalizeFirst(noun);
-        }
-        else if (camelcasing) {
+        } else if (camelcasing) {
             capitalizeFirst(noun);
         }
+
+        return {adjective, noun};
+    }
+
+    // Helper: generate a single name combination
+    std::string generateName(const std::string& adjective,
+                            const std::string& noun,
+                            bool nullSeparator,
+                            const std::string& separator) {
         if (nullSeparator) {
-            std::cout << adjective << noun << "\n";
+            return adjective + noun;
         }
-        else {
-            std::cout << adjective << separator << noun << "\n";
-        }
+        return adjective + separator + noun;
+    }
+
+    // Helper: print generated name with debug info
+    void printGeneratedName(const std::string& name,
+                           size_t currentCount,
+                           size_t totalNames,
+                           const fs::path& adjFile,
+                           const fs::path& adjFolder,
+                           const fs::path& nounFile,
+                           const fs::path& nounFolder) {
+        // Extract original components for debugging (assuming separator is '-')
+        std::string adj = name.substr(0, name.find(separator));
+        std::string noun = name.substr(name.find(separator) + 1);
+    
+        debugger(adj, noun, adjFile, adjFolder, nounFile, nounFolder,
+                 currentCount, totalNames);
+        std::cout << name << "\n";
+    }
+
+    // Main loop – generate names
+    std::size_t countzero = 0;
+    while (countzero < counto) {
+        const auto rawNoun = randomChoice(nounLines, rng);
+        const auto rawAdj = randomChoice(adjLines, rng);
+
+        // Prepare components with proper formatting
+        const auto [adjective, noun] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
+
+        // Generate and print the name
+        const std::string name = generateName(adjective, noun, nullSeparator, separator);
+        printGeneratedName(name, countzero, counto, adjFile, adjFolder, nounFile, nounFolder);
 
         ++countzero;
     }
