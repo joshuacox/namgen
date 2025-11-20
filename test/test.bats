@@ -90,6 +90,16 @@ setup() {
   echo $result
   [[ "$result" == "test_test" ]]
 }
+@test "test default exclude test/test" {
+  result=$(counto=1 NOUN_FILE=test/excludes ADJ_FILE=test/excludes SEPARATOR='^' CAPCASING=true ./namgen)
+  echo $result
+  [[ "$result" == "Test^Test" ]]
+}
+@test "test exclude test/test" {
+  result=$(counto=1 NOUN_FILE=test/excludes ADJ_FILE=test/excludes SEPARATOR='^' CAPCASING=true ./namgen --exclude "-'")
+  echo $result
+  [[ "$result" == "Test^Test" ]]
+}
 @test "sudo make install" {
   sudo make install
 }

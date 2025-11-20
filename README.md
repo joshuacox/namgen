@@ -3,6 +3,8 @@ A Name Generator
 
 A flexible name generator that combines adjectives and nouns to create unique names. Supports various formatting options and custom assets.
 
+A sister project to [name-generator](https://github.com/joshuacox/name-generator), the difference between this project and that one is that this is taking the C plus plus version and adding more features CapCasing and camelCasing and more. 
+
 ## Features
 - Combine words from adjective and noun lists
 - Custom separator support
