@@ -480,7 +480,7 @@ int main(int argc, char* argv[]) {
             filteredAdjectives = filterWords(adjLines, opts.excludeChars);
 
             if (filteredNouns.empty() || filteredAdjectives.empty()) {
-                std::cerr << "Error: No valid words after applying exclude filters.\n";
+                std::cerr << "Error: No valid words remaining after excluding specified characters.\n";
                 return 1;
             }
         }
