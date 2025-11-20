@@ -94,12 +94,12 @@ std::string generateName(const std::string& adjective,
                         const std::string& separator,
                         bool camelcasing) {
     if (nullSeparator || separator.empty()) {
-        return adjective + noun;
+        return (camelcasing ? toLower(adjective) : adjective) + noun;
     }
-    // Ensure proper camel casing when using a separator
-    if (camelcasing) {
-        return toLower(adjective) + separator + noun;
-    }
+    
+    // When using both separator and camel casing:
+    // - Keep adjective as-is from prepareComponents
+    // - Only apply separator without forcing lower case
     return adjective + separator + noun;
 }
 
@@ -263,7 +263,7 @@ int main(int argc, char* argv[]) {
             }
             ++i;                                   // move to the separator value
             opts.separatorSet = true;
-            opts.separatorSet = true;
+            opts.separator = argv[i];
         } else if (arg == "--count" || arg == "-c") {
             // Expect a following argument that contains the numeric count
             if (i + 1 >= argc) {
