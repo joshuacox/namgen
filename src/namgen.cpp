@@ -11,6 +11,28 @@
 #include <string>
 #include <vector>
 
+struct CommandLineOptions {
+    string adjFile;
+    bool adjFileSet = false;
+    string nounFile;
+    bool nounFileSet = false;
+    bool nullSeparator = false;
+    bool separatorSet = false; 
+    string separator;
+    size_t count = 0;
+    bool countSet = false;
+    bool debug = false;
+    bool capcasing = false;
+    bool camelcasing = false;
+};
+
+CommandLineOptions parseCommandLine(int argc, char* argv[]) {
+    CommandLineOptions opts;
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    return opts;
+}
+
 namespace fs = std::filesystem;
 
 #ifndef INSTALL_PREFIX
