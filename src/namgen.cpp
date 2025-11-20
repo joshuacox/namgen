@@ -199,23 +199,20 @@ std::vector<fs::path> collectFiles(const fs::path& folder) {
     return files;
 }
 
-/* Filter words containing excluded characters */
+/* Remove excluded characters from words */
 std::vector<std::string> filterWords(const std::vector<std::string>& words, 
                                   const std::string& excludeChars) {
     std::unordered_set<char> excluded(excludeChars.begin(), excludeChars.end());
     std::vector<std::string> filtered;
     
     for (const auto& word : words) {
-        bool valid = true;
+        std::string cleaned;
         for (char c : word) {
-            if (excluded.count(c)) {
-                valid = false;
-                break;
+            if (!excluded.count(c)) {
+                cleaned += c;
             }
         }
-        if (valid) {
-            filtered.push_back(word);
-        }
+        filtered.push_back(cleaned);
     }
     
     return filtered;
@@ -335,7 +332,7 @@ int main(int argc, char* argv[]) {
             std::cout << "Usage: ./namgen [options]\n\n";
             std::cout << "Options:\n";
             std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\n";
-            std::cout << "  -e, --exclude STRING     Exclude any words containing these characters\n";
+            std::cout << "  -e, --exclude STRING     Remove these characters from adjective and noun words\n";
             std::cout << "  -n, --noun-file FILE     Path to custom nouns file\n";
             std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\n";
             std::cout << "  -x, --null-separator       Do not print the separator\n";
