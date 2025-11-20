@@ -218,6 +218,11 @@ std::vector<std::string> filterWords(const std::vector<std::string>& words,
         }
     }
     
+    // If no words survive the filter, return a default value
+    if (filtered.empty()) {
+        filtered.push_back("unknown");
+    }
+    
     return filtered;
 }
 
