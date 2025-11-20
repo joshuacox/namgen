@@ -113,13 +113,13 @@ void printGeneratedName(const std::string& name,
 }
 
 struct CommandLineOptions {
-    string adjFile;
+    std::string adjFile;
     bool adjFileSet = false;
-    string nounFile;
+    std::string nounFile;
     bool nounFileSet = false;
     bool nullSeparator = false;
     bool separatorSet = false; 
-    string separator;
+    std::string separator;
     size_t count = 0;
     bool countSet = false;
     bool debug = false;
@@ -257,7 +257,7 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the adjective file value
-            opts.adjFile = argv[i];
+            opts.adjFileSet = true;
             opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
             // Expect a following argument that contains the noun file path
@@ -266,7 +266,7 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the noun file value
-            opts.nounFile = argv[i];
+            opts.nounFileSet = true;
             opts.nounFileSet = true;
         } else if (arg == "--separator" || arg == "-s") {
             // Expect a following argument that contains the separator string
@@ -275,7 +275,7 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the separator value
-            opts.separator = argv[i];
+            opts.separatorSet = true;
             opts.separatorSet = true;
         } else if (arg == "--count" || arg == "-c") {
             // Expect a following argument that contains the numeric count
@@ -322,7 +322,9 @@ int main(int argc, char* argv[]) {
     // Resolve configuration (environment variables with defaults)
     std::string separator;
     if (opts.separatorSet) {
-        separator = opts.separator;                     // CLI overrides everything
+        if (opts.separatorSet) {
+            separator = opts.separator;
+        }
     } else {
         separator = getEnv("SEPARATOR", "-");         // fall back to env / default
     }
