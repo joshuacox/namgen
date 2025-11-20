@@ -75,7 +75,11 @@ std::pair<std::string, std::string> prepareComponents(const std::string& rawAdj,
         capitalizeFirst(adjective);
         capitalizeFirst(noun);
     } else if (camelcasing) {
-        capitalizeFirst(noun);
+        // Keep adjective lowercase and only capitalize first letter of noun
+        for (auto& c : adjective) {
+            c = tolower(c);
+        }
+        properCapcasing(noun);
     }
 
     return {adjective, noun};
@@ -88,8 +92,12 @@ std::string generateName(const std::string& adjective,
                         const std::string& noun,
                         bool nullSeparator,
                         const std::string& separator) {
-    if (nullSeparator) {
+    if (nullSeparator || separator.empty()) {
         return adjective + noun;
+    }
+    // Ensure proper camel casing when using a separator
+    if (camelcasing) {
+        return toLower(adjective) + separator + noun;
     }
     return adjective + separator + noun;
 }
