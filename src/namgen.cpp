@@ -245,7 +245,6 @@ int main(int argc, char* argv[]) {
             }
             ++i;                                   // move to the adjective file value
             opts.adjFileSet = true;
-            opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
             // Expect a following argument that contains the noun file path
             if (i + 1 >= argc) {
@@ -253,7 +252,6 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             ++i;                                   // move to the noun file value
-            opts.nounFileSet = true;
             opts.nounFileSet = true;
         } else if (arg == "--separator" || arg == "-s") {
             // Expect a following argument that contains the separator string
@@ -288,8 +286,8 @@ int main(int argc, char* argv[]) {
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\n\n";
             std::cout << "Options:\n";
-            std::cout << "  -a FILE, --adj-file FILE   Path to custom adjectives file\n";
-            std::cout << "  -n FILE, --noun-file FILE   Path to custom nouns file\n";
+            std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\n";
+            std::cout << "  -n, --noun-file FILE     Path to custom nouns file\n";
             std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\n";
             std::cout << "  -x, --null-separator       Do not print the separator\n";
             std::cout << "  -c COUNT, --count COUNT    Number of names to generate (default: terminal height)\n";
