@@ -153,7 +153,6 @@ fs::path resolveFile(const std::string& envVar,
 int main(int argc, char* argv[]) {
     CommandLineOptions opts = parseCommandLine(argc, argv);
     std::mt19937 rng(std::random_device{}());
-    std::mt19937 rng(std::random_device{}());  // Add rng variable declaration
     std::size_t counto = 0;                 // final number of names to generate
     bool optCountSet = false;               // true if user supplied --count / -c
     bool optDebug = false;                  // true if user passed --debug
