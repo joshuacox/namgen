@@ -27,9 +27,9 @@ std::string toLower(const std::string& str) {
     return result;
 }
 
-/* Helper: capitalize first letter and make the rest lowercase */
 void capitalizeFirst(std::string& str) {
     if (!str.empty()) {
+        // Capitalize first letter and make rest lowercase
         str[0] = toupper(str[0]);
         for (size_t i = 1; i < str.size(); ++i) {
             str[i] = tolower(str[i]);
@@ -37,14 +37,9 @@ void capitalizeFirst(std::string& str) {
     }
 }
 
-/* Helper: create exclusion set from string */
-std::unordered_set<char> createExclusionSet(const std::string& excludeChars) {
-    return std::unordered_set<char>(excludeChars.begin(), excludeChars.end());
-}
-
-/* Helper: capitalize only the first letter */
 void properCapcasing(std::string& str) {
     if (!str.empty()) {
+        // Only capitalize first letter without changing the rest
         str[0] = toupper(str[0]);
     }
 }
@@ -204,6 +199,15 @@ std::vector<fs::path> collectFiles(const fs::path& folder) {
     return files;
 }
 
+/* Create a set of characters to exclude from words */
+std::unordered_set<char> createExclusionSet(const std::string& chars) {
+    std::unordered_set<char> set;
+    for (char c : chars) {
+        set.insert(tolower(c));
+    }
+    return set;
+}
+
 /* Remove excluded characters from words */
 std::vector<std::string> filterWords(const std::vector<std::string>& words, 
                                   const std::string& excludeChars) {
@@ -235,11 +239,8 @@ std::vector<std::string> filterWords(const std::vector<std::string>& words,
 /* Helper: pick a random element from a vector */
 template <typename T>
 const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
-    std::uniform_int_distribution<std::size_t> dist(0, vec.size() - 1);
-    return vec[dist(rng)];
+    return vec[rng() % vec.size()];
 }
-
-
 
 /* Determine terminal height – fallback to 24 if we cannot query it */
 std::size_t terminalLines() {
@@ -280,42 +281,33 @@ int main(int argc, char* argv[]) {
         if (arg == "--null-separator" || arg == "-x") {
             opts.nullSeparator = true;
         } else if (arg == "--adj-file" || arg == "-a") {
-            // Expect a following argument that contains the adjective file path
             if (i + 1 >= argc) {
                 std::cerr << "Error: " << arg << " requires an argument.\n";
                 return 1;
             }
-            if (i + 1 < argc) {  // Ensure we don't read beyond argv
-                ++i;             // move to the adjective file value
-            } else {
-                std::cerr << "Error: Could not read argument for " << arg << "\n";
-                return 1;
-            }
+            ++i;
             opts.adjFileSet = true;
         } else if (arg == "--noun-file" || arg == "-n") {
-            // Expect a following argument that contains the noun file path
             if (i + 1 >= argc) {
                 std::cerr << "Error: " << arg << " requires an argument.\n";
                 return 1;
             }
-            ++i;                                   // move to the noun file value
+            ++i;
             opts.nounFileSet = true;
         } else if (arg == "--separator" || arg == "-s") {
-            // Expect a following argument that contains the separator string
             if (i + 1 >= argc) {
                 std::cerr << "Error: " << arg << " requires an argument.\n";
                 return 1;
             }
-            ++i;                                   // move to the separator value
+            ++i;
             opts.separatorSet = true;
             opts.separator = argv[i];
         } else if (arg == "--count" || arg == "-c") {
-            // Expect a following argument that contains the numeric count
             if (i + 1 >= argc) {
                 std::cerr << "Error: " << arg << " requires a numeric argument.\n";
                 return 1;
             }
-            ++i;                                   // move to the count value
+            ++i;
             optCountArg = argv[i];
             try {
                 counto = static_cast<std::size_t>(std::stoul(optCountArg));
@@ -328,7 +320,7 @@ int main(int argc, char* argv[]) {
                           << "'. Must be a positive integer." << '\n';
                 return 1;
             }
-        } else if (arg == "--capcasing") {    // new flag
+        } else if (arg == "--capcasing") {
             optCapcasing = true;
         } else if (arg == "--exclude" || arg == "-e") {
             if (i + 1 >= argc) {
@@ -338,38 +330,35 @@ int main(int argc, char* argv[]) {
             ++i;
             opts.excludeSet = true;
             opts.excludeChars = argv[i];
-        } else if (arg == "--camelcasing") { // new flag
+        } else if (arg == "--camelcasing") {
             optCamelcasing = true;
         } else if (arg == "--debug") {
             optDebug = true;
         } else if (arg == "--help" || arg == "-h") {
-            std::cout << "Usage: ./namgen [options]\n\n";
-            std::cout << "Options:\n";
-            std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\n";
-            std::cout << "  -e, --exclude STRING     Remove these characters from adjective and noun words\n";
-            std::cout << "  -n, --noun-file FILE     Path to custom nouns file\n";
-            std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\n";
-            std::cout << "  -x, --null-separator       Do not print the separator\n";
-            std::cout << "  -c COUNT, --count COUNT    Number of names to generate (default: terminal height)\n";
-            std::cout << "      --capcasing            Capitalize first letter of adjective and noun\n";
-            std::cout << "      --camelcasing          CamelCase style with only noun capitalized\n";
-            std::cout << "      --debug                Enable debug output\n";
-            std::cout << "      --help                 Show this help message and exit\n\n";
-            std::cout << "Examples:\n";
-            std::cout << "./namgen -c 5                  Generate 5 names\n";
-            std::cout << "./namgen -a custom_adjectives.txt -n custom_nouns.txt\n";
-            std::cout << "SEPARATOR='-' ./namgen          Use custom separator\n";
+            std::cout << "Usage: ./namgen [options]\\n\\n";
+            std::cout << "Options:\\n";
+            std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\\n";
+            std::cout << "  -e, --exclude STRING     Remove these characters from adjective and noun words\\n";
+            std::cout << "  -n, --noun-file FILE     Path to custom nouns file\\n";
+            std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\\n";
+            std::cout << "  -x, --null-separator       Do not print the separator\\n";
+            std::cout << "  -c COUNT, --count COUNT    Number of names to generate (default: terminal height)\\n";
+            std::cout << "      --capcasing            Capitalize first letter of adjective and noun\\n";
+            std::cout << "      --camelcasing          CamelCase style with only noun capitalized\\n";
+            std::cout << "      --debug                Enable debug output\\n";
+            std::cout << "      --help                 Show this help message and exit\\n\\n";
+            std::cout << "Examples:\\n";
+            std::cout << "./namgen -c 5                  Generate 5 names\\n";
+            std::cout << "./namgen -a custom_adjectives.txt -n custom_nouns.txt\\n";
+            std::cout << "SEPARATOR='-' ./namgen          Use custom separator\\n";
             return 0;
         }
     }
-    // --------------------------------------------------------------------
 
     // Resolve configuration (environment variables with defaults)
     std::string separator;
     if (opts.separatorSet) {
-        if (opts.separatorSet) {
-            separator = opts.separator;
-        }
+        separator = opts.separator;
     } else {
         separator = getEnv("SEPARATOR", "-");         // fall back to env / default
     }
@@ -378,9 +367,10 @@ int main(int argc, char* argv[]) {
     const std::string capcasingEnv = getEnv("CAPCASING", "false");
     const bool capcasing = optCapcasing || (capcasingEnv == "true");
     const std::string camelcasingEnv = getEnv("CAMELCASING", "false");
-    const bool camelcasing = optCamelcasing || (camelcasingEnv == "true"); // <-- UPDATED
+    const bool camelcasing = optCamelcasing || (camelcasingEnv == "true");
+
     // Resolve count (number of names to generate)
-    if (!optCountSet) {                     // CLI didn’t set it → fall back to env / default
+    if (!optCountSet) {
         const std::string countoEnv = getEnv("counto", "");
         if (!countoEnv.empty()) {
             try {
@@ -402,16 +392,7 @@ int main(int argc, char* argv[]) {
 #endif
     }
 
-
-    // -------------------------------------------------------------
-    // Locate the installed assets directory.
-    //   * If the user sets the environment variable ASSETS_DIR, we honour it.
-    //   * Otherwise we fall back to a folder named “assets” located next to the
-    //     current working directory (this works for typical source‑tree builds).
-    //   * From the assets directory we derive the default noun and adjective
-    //     folders (assets/nouns and assets/adjectives).  The user can still
-    //     override these defaults with NOUN_FOLDER / ADJ_FOLDER.
-    // -------------------------------------------------------------
+    // ------ Locate the installed assets directory.
     const fs::path here = fs::current_path();
 
     // Primary assets location (env or ./assets)
@@ -430,8 +411,6 @@ int main(int argc, char* argv[]) {
     }
 
     // Resolve noun and adjective folders, allowing per‑type overrides.
-    // If the resolved folder does not exist, fall back to the same
-    // “share/assets” tree.
     fs::path nounFolder = fs::path(
         getEnv("NOUN_FOLDER", (assetsFolder / "nouns").string()));
     if (!fs::exists(nounFolder) || !fs::is_directory(nounFolder)) {
@@ -445,8 +424,6 @@ int main(int argc, char* argv[]) {
     }
 
     // Resolve the actual files, respecting NOUN_FILE / ADJ_FILE env vars
-    // Resolve noun file from command line first, then fall back to NOUN_FILE and folder
-    // Resolve adjective file from command line first
     fs::path adjFile;
     if (opts.adjFileSet) {
         adjFile = fs::absolute(opts.adjFile);
@@ -458,7 +435,6 @@ int main(int argc, char* argv[]) {
         adjFile = resolveFile("ADJ_FILE", adjFolder, rng);
     }
 
-    // Resolve noun file from command line first
     fs::path nounFile;
     if (opts.nounFileSet) {
         nounFile = fs::absolute(opts.nounFile);
@@ -479,65 +455,48 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::size_t countzero = 0;
-    // Generate requested number of names
-    for (; countzero < counto; ) {
-        // Filter out words with excluded characters if needed
-        std::vector<std::string> filteredNouns = nounLines;
-        std::vector<std::string> filteredAdjectives = adjLines;
+    // Pre-filter the words once outside the loop
+    std::vector<std::string> filteredNouns = nounLines;
+    std::vector<std::string> filteredAdjectives = adjLines;
 
-        if (opts.excludeSet) {
-            filteredNouns = filterWords(nounLines, opts.excludeChars);
-            filteredAdjectives = filterWords(adjLines, opts.excludeChars);
+    if (opts.excludeSet) {
+        filteredNouns = filterWords(nounLines, opts.excludeChars);
+        filteredAdjectives = filterWords(adjLines, opts.excludeChars);
 
-            if (filteredNouns.empty() || filteredAdjectives.empty()) {
-                std::cerr << "Error: No valid words remaining after removing default ' and - or specified exclude characters.\n";
-                return 1;
-            }
+        if (filteredNouns.empty() || filteredAdjectives.empty()) {
+            std::cerr << "Error: No valid words remaining after removing default ' and - or specified exclude characters.\n";
+            return 1;
+        }
+    }
+
+    // Variables to hold the current adjective and noun after optional casing
+    std::string adjective;
+    std::string noun;
+    bool needCapcasing = capcasing || camelcasing;
+
+    // Generate requested number of names with optimized loop
+    for (std::size_t countzero = 0; countzero < counto; ++countzero) {
+        const uint64_t rand_num = rng();
+        const auto& rawNoun = filteredNouns[rand_num % filteredNouns.size()];
+        const auto& rawAdj  = filteredAdjectives[rand_num % filteredAdjectives.size()];
+
+        if (needCapcasing) {
+            auto [adjCased, nounCased] = prepareComponents(rawAdj, rawNoun, capcasing, camelcasing);
+            adjective = std::move(adjCased);
+            noun = std::move(nounCased);
+        } else {
+            adjective = rawAdj;
+            noun = rawNoun;
         }
 
-        const auto rawNoun = randomChoice(filteredNouns, rng);
-        const auto rawAdj = randomChoice(filteredAdjectives, rng);
-
-        // Prepare components with proper formatting
-        std::string adjective = rawAdj;
-        std::string noun = rawNoun;
-
-        if (capcasing || camelcasing) {
-            // Ensure both components are properly capitalized and special characters are handled
-            capitalizeFirst(adjective);
-            if (!camelcasing) {
-                capitalizeFirst(noun);
-            } else {
-                for (auto& c : adjective) {
-                    c = tolower(c);
-                }
-                properCapcasing(noun);
-
-                // Ensure apostrophes are properly capitalized
-                std::string tempNoun;
-                bool nextUpper = true;
-                for (char c : noun) {
-                    if (nextUpper && isalpha(c)) {
-                        tempNoun += toupper(c);
-                        nextUpper = false;
-                    } else {
-                        tempNoun += tolower(c);
-                        if (c == '\'') {
-                            nextUpper = true;
-                        }
-                    }
-                }
-                noun = tempNoun;
-            }
-        }
-
-        // Generate and print the name
         const std::string name = generateName(adjective, noun, nullSeparator, separator, camelcasing);
-        printGeneratedName(name, static_cast<std::size_t>(countzero), counto, 
-                          adjFile, adjFolder, nounFile, nounFolder, separator);
-
-        ++countzero;
+        
+        if (optDebug) {
+            printGeneratedName(name, static_cast<std::size_t>(countzero), counto,
+                              adjFile, adjFolder, nounFile, nounFolder, separator);
+        } else {
+            std::cout << name << "\n";
+        }
     }
 
     return 0;
