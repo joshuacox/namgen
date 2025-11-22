@@ -320,7 +320,7 @@ int main(int argc, char* argv[]) {
                           << "'. Must be a positive integer." << '\n';
                 return 1;
             }
-        } else if (arg == "--capcasing") {
+        } else if (arg == "--capcasing" || arg == "--cap") {
             optCapcasing = true;
         } else if (arg == "--exclude" || arg == "-e") {
             if (i + 1 >= argc) {
@@ -330,7 +330,7 @@ int main(int argc, char* argv[]) {
             ++i;
             opts.excludeSet = true;
             opts.excludeChars = argv[i];
-        } else if (arg == "--camelcasing") {
+        } else if (arg == "--camelcasing" || arg == "--camel") {
             optCamelcasing = true;
         } else if (arg == "--debug") {
             optDebug = true;
@@ -340,17 +340,21 @@ int main(int argc, char* argv[]) {
             std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\\n";
             std::cout << "  -e, --exclude STRING     Remove these characters from adjective and noun words\\n";
             std::cout << "  -n, --noun-file FILE     Path to custom nouns file\\n";
-            std::cout << "  -s SEP, --separator SEP    Custom separator string (default: -)\\n";
-            std::cout << "  -x, --null-separator       Do not print the separator\\n";
-            std::cout << "  -c COUNT, --count COUNT    Number of names to generate (default: terminal height)\\n";
-            std::cout << "      --capcasing            Capitalize first letter of adjective and noun\\n";
-            std::cout << "      --camelcasing          CamelCase style with only noun capitalized\\n";
-            std::cout << "      --debug                Enable debug output\\n";
-            std::cout << "      --help                 Show this help message and exit\\n\\n";
+            std::cout << "  -s SEP, --separator SEP  Custom separator string (default: -)\\n";
+            std::cout << "  -x, --null-separator     Do not print the separator\\n";
+            std::cout << "  -c COUNT, --count COUNT  Number of names to generate (default: terminal height)\\n";
+            std::cout << "  --cap --capcasing        Capitalize first letter of adjective and noun\\n";
+            std::cout << "  --camel --camelcasing    CamelCase style with only noun capitalized\\n";
+            std::cout << "  --debug                  Enable debug output\\n";
+            std::cout << "  --help                   Show this help message and exit\\n\\n";
             std::cout << "Examples:\\n";
-            std::cout << "./namgen -c 5                  Generate 5 names\\n";
+            std::cout << "./namgen -c 5              Generate 5 names\\n";
+            std::cout << "./namgen -c 5 -x --cap     Generate 5 names with capcasing and no separator\\n";
+            std::cout << "./namgen -c 5 -x --camel   Generate 5 names with camelcasing and no separator\\n";
+            std::cout << "./namgen -e 'aeiou'       Generate names with no vowels\\n";
             std::cout << "./namgen -a custom_adjectives.txt -n custom_nouns.txt\\n";
             std::cout << "SEPARATOR='-' ./namgen          Use custom separator\\n";
+            std::cout << "./namgen -c 50000|sort|uniq -c|sort -n              Generate 50,000 names and count the duplicates and sort to see which occurred the most\\n";
             return 0;
         }
     }
