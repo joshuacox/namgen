@@ -16,119 +16,141 @@
 .\" along with this program; if not, see <https://www.gnu.org/licenses/>.
 .\"
 
-.TH NAMGEN 1 "November 2023" "namgen" "User Commands"
+.TH NAMGEN 1 "November 2023" "namgen 1.0" "User Commands"
 .SH NAME
-namgen \- A flexible name generator combining adjectives and nouns
-
+namgen \- a flexible name generator combining adjectives and nouns
 .SH SYNOPSIS
 .B namgen
-[options]
-
+[\fIoptions\fR]
 .SH DESCRIPTION
-A name generator that combines words from adjective and noun lists to create unique names. It supports various formatting options, custom assets, and configuration through environment variables.
-
+\fBnamgen\fR creates random, human‑readable identifiers by combining an
+adjective and a noun.  By default the output format is
+\fBadjective-noun\fR, but the separator, capitalisation and many other
+behaviours can be customised via command‑line options or environment
+variables.
 .PP
-The program randomly selects combinations of adjectives and nouns and formats them according to specified rules. By default, it generates names in the format "adjective-noun", but this can be customized using various options.
-
+The program reads word lists from the installed assets directory (or
+from files supplied by the user), optionally filters characters, and
+produces the requested number of names.
 .SH OPTIONS
 .TP
-.B \-a, --adj-file FILE
-Path to custom adjectives file (default: assets/adjectives/adjectives.list)
-
+.B \-a, \-\-adj-file \fIFILE\fR
+Path to a custom adjectives file.  If omitted the program selects a file
+from the assets directory (default:
+\fIassets/adjectives/adjectives.list\fR).
 .TP
-.B \-n, --noun-file FILE
-Path to custom nouns file (default: assets/nouns/nouns.list)
-
+.B \-n, \-\-noun-file \fIFILE\fR
+Path to a custom nouns file.  If omitted the program selects a file
+from the assets directory (default:
+\fIassets/nouns/nouns.list\fR).
 .TP
-.B \-s, --separator SEP
-Use custom separator string (default: "-")
-
+.B \-s, \-\-separator \fISEP\fR
+String used to separate adjective and noun.  The default separator is
+a hyphen (\fB-\fR).  An empty string disables the separator when used
+with \fB\-\-null-separator\fR.
 .TP
-.B \-x, --null-separator
-Do not print any separator between adjective and noun
-
+.B \-x, \-\-null-separator
+Do not print any separator between adjective and noun.  This overrides
+the value supplied with \fB\-\-separator\fR.
 .TP
-.B \-c, --count COUNT
-Number of names to generate (default: terminal height)
-
+.B \-c, \-\-count \fICOUNT\fR
+Number of names to generate.  If omitted the program defaults to the
+height of the terminal (or 24 lines if the height cannot be detected).
 .TP
-.B \--capcasing, --cap
-Capitalize the first letter of both adjective and noun
-
+.B \-\-capcasing, \-\-cap
+Capitalize the first letter of both adjective and noun (e.g.
+\fBHappyDog\fR when used with \fB\-\-null-separator\fR).
 .TP
-.B \--camelcasing, --camel
-CamelCase style with only noun capitalized
-
+.B \-\-camelcasing, \-\-camel
+Generate names in CamelCase style with only the noun capitalised
+(e.g. \fBhappyDog\fR).  This option implies \fB\-\-null-separator\fR.
 .TP
-.B \-v, --debug
-Enable debug output
-
+.B \-e, \-\-exclude \fICHARS\fR
+Remove the characters listed in \fICHARS\fR from both adjective and noun
+words before they are combined.  By default the characters apostrophe
+(\fB'\fR) and hyphen (\fB-\fR) are excluded.
 .TP
-.B \--help
-Show this help message and exit
-
+.B \-\-debug
+Enable debug output.  When this flag is set the program prints a
+diagnostic line to \fBstderr\fR for each generated name, showing the
+raw adjective, noun and the files they originated from.
+.TP
+.B \-\-help
+Show a short help message and exit.
 .SH CONFIGURATION
-The behavior of namgen can be controlled through several environment variables:
-
+The behaviour of \fBnamgen\fR can also be controlled through environment
+variables.  Command‑line options always take precedence over these
+variables.
 .TP
 .B ASSETS_DIR
-Path to assets directory containing adjectives/nouns subfolders (default: ./assets)
-
+Path to the assets directory containing the \fBadjectives\fR and
+\fBnouns\fR subfolders (default: \fI./assets\fR).
 .TP
 .B ADJ_FILE
-Path to default adjectives file (overrides ADJ_FOLDER if set)
-
+Path to the default adjectives file (overrides \fBADJ_FOLDER\fR if set).
 .TP
 .B NOUN_FILE
-Path to default nouns file (overrides NOUN_FOLDER if set)
-
-.TP
-.B NOUN_FOLDER
-Path to nouns file/folder (default: assets/nouns)
-
+Path to the default nouns file (overrides \fBNOUN_FOLDER\fR if set).
 .TP
 .B ADJ_FOLDER
-Path to adjectives file/folder (default: assets/adjectives)
-
+Path to the adjectives folder (default: \fIassets/adjectives\fR).
+.TP
+.B NOUN_FOLDER
+Path to the nouns folder (default: \fIassets/nouns\fR).
 .TP
 .B NULL_SEPARATOR
-Enable null separator mode (true/false)
-
+Enable null‑separator mode when set to \fBtrue\fR (equivalent to
+\fB\-\-null-separator\fR).
 .TP
 .B SEPARATOR
-Custom separator string
-
+Custom separator string (equivalent to \fB\-\-separator\fR).
 .TP
 .B CAPCASING
-Enable capcasing style (true/false)
-
+Enable capcasing style when set to \fBtrue\fR (equivalent to
+\fB\-\-capcasing\fR).
 .TP
 .B CAMELCASING
-Enable camel casing style (true/false)
-
+Enable camel‑casing style when set to \fBtrue\fR (equivalent to
+\fB\-\-camelcasing\fR).
+.TP
+.B EXCLUDE
+String of characters to exclude (equivalent to \fB\-\-exclude\fR).
 .SH EXAMPLES
-Generate 5 names:
-.sp
-   namgen -c 5
-
-Use custom files:
-.sp
-   namgen -a custom_adjectives.txt -n custom_nouns.txt --camelcasing --count 10
-
-Set environment variable for separator:
-.sp
-   SEPARATOR='-' namgen
-
-Produce CamelCase style names:
-.sp
-   namgen --camelcasing
-
-Enable null separator mode:
-.sp
-   NULL_SEPARATOR=true namgen
-
+Generate five random names:
+.PP
+.nf
+   namgen \-c 5
+.fi
+.PP
+Use custom word lists and produce CamelCase output:
+.PP
+.nf
+   namgen \-a custom_adjectives.txt \-n custom_nouns.txt \\
+          \-\-camelcasing \-\-count 10
+.fi
+.PP
+Set a custom separator via an environment variable:
+.PP
+.nf
+   SEPARATOR='_' namgen
+.fi
+.PP
+Generate names with no vowels (exclude a, e, i, o, u):
+.PP
+.nf
+   namgen \-\-exclude 'aeiou' \-\-count 8
+.fi
+.PP
+Enable debug output to see the source files for each name:
+.PP
+.nf
+   namgen \-\-debug \-\-count 3
+.fi
+.SH AUTHOR
+Your Name <your.email@domain>
+.SH VERSION
+Version 1.0 (November 2023)
 .SH BUGS
-Please report bugs to <your.email@domain>
-
+Please report bugs to <your.email@domain>.
 .SH SEE ALSO
 README.md for more detailed information and installation instructions.
