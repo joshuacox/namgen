@@ -1,9 +1,16 @@
-cmake_minimum_required(VERSION 3.10)
-project(namgen)
+# Minimum CMake version required
+cmake_minimum_required(VERSION 3.14)
+
+# Project definition
+project(namgen LANGUAGES CXX)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# --------------------------------------------------------------
+# Build the executable
+# --------------------------------------------------------------
 add_executable(namgen
     src/namgen.cpp
     src/pets-marine_mammals_lib.cpp   # <-- added source file
@@ -49,10 +56,31 @@ add_executable(namgen
     src/final_fantasy-roegadyns_lib.cpp
     src/pets-marine_mammals_lib.cpp
     src/doctor_who-raxacoricofallapatorians_lib.cpp
+    src/inheritance_cycle-dragons_lib.cpp
+    src/pop_culture-homestucks_lib.cpp   # <-- new source file
 )
+
+# expose the install prefix (e.g. /usr/local) to the C++ code
+target_compile_definitions(namgen PRIVATE
+    INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}"
+)
+
+# Require C++17 (or newer) – adjust if you need a different standard
+target_compile_features(namgen PUBLIC cxx_std_17)
+
 
 # Installation
 install(TARGETS namgen DESTINATION bin)
 
 # Install the man page
 install(FILES man/namgen.1 DESTINATION share/man/man1)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+    DESTINATION share/namgen/assets
+    FILES_MATCHING PATTERN "*"
+)
+
+message(STATUS "Install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Binary will be installed to: ${CMAKE_INSTALL_PREFIX}/bin")
+message(STATUS "Assets will be installed to: ${CMAKE_INSTALL_PREFIX}/share/namgen/assets")

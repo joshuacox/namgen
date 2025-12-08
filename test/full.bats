@@ -226,3 +226,11 @@ setup() {
   result="$(counto=10 ./namgen --doctor_who-raxacoricofallapatorians|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --inheritance_cycle-dragons at 10" {
+  result="$(counto=10 ./namgen --inheritance_cycle-dragons|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --pop_culture-homestucks at 10" {
+  result="$(counto=10 ./namgen --pop_culture-homestucks|wc -l)"
+  [[ "$result" -eq 10 ]]
+}

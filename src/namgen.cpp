@@ -52,6 +52,8 @@
 #include "pets-marine_mammals_lib.h"
 #include "rift-bahmis_lib.h"
 #include "doctor_who-raxacoricofallapatorians_lib.h"
+#include "inheritance_cycle-dragons_lib.h"
+#include "pop_culture-homestucks_lib.h"   
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -238,6 +240,8 @@ struct CommandLineOptions {
     bool petsMarineMammals = false;
     bool riftBahmis = false;
     bool doctor_who_raxacoricofallapatorians = false;
+    bool inheritanceCycleDragons = false;   
+    bool popCultureHomestucks = false;      
 };
 
 /* Helper: get environment variable or fallback */
@@ -502,6 +506,10 @@ int main(int argc, char* argv[]) {
             opts.riftBahmis = true;
         } else if (arg == "--doctor_who-raxacoricofallapatorians") {
             opts.doctor_who_raxacoricofallapatorians = true;
+        } else if (arg == "--inheritance_cycle-dragons") {
+            opts.inheritanceCycleDragons = true;   
+        } else if (arg == "--pop_culture-homestucks") {
+            opts.popCultureHomestucks = true;      
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -515,8 +523,6 @@ int main(int argc, char* argv[]) {
             std::cout << "  --camel --camelcasing    CamelCase style with only noun capitalized\\n";
             std::cout << "  --debug                  Enable debug output\\n";
             std::cout << "  --elf                    Generate fantasy‑elf style names using the built‑in ELF name generator (ignores adjective/noun files)\\n";
-            std::cout << "  --halo-forerunners       Generate Halo “forerunners” style names (ignores adjective/noun files)\\n";
-            std::cout << "  --fantasy-animatronics   Generate fantasy “animatronics” style names (ignores adjective/noun files)\\n";
             std::cout << "  --destiny-awokens        Generate fantasy‑destiny awoken style names\\n";
             std::cout << "  --destiny-cabals         Generate fantasy‑destiny cabals style names\\n";
             std::cout << "  --destiny-exos           Generate fantasy‑destiny exos style names\\n";
@@ -528,6 +534,8 @@ int main(int argc, char* argv[]) {
             std::cout << "  --diablo-demons          Generate Diablo demons style names\\n";
             std::cout << "  --diablo-khazras         Generate Diablo khazras style names\\n";
             std::cout << "  --diablo-nephalems       Generate Diablo nephalems style names\\n";
+            std::cout << "  --doctor_who-silurians   Generate Doctor Who Silurians style names\\n";
+            std::cout << "  --doctor_who_raxacoricofallapatorians Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --dragon_ball-others     Generate Dragon Ball “other …” style names\\n";
             std::cout << "  --dragon_ball-frieza_clans Generate Dragon Ball Frieza Clans names\\n";
             std::cout << "  --dragon_ball-hakaishins Generate Dragon Ball Hakaishins names\\n";
@@ -546,11 +554,12 @@ int main(int argc, char* argv[]) {
             std::cout << "  --fantasy-amazons        Generate fantasy “amazons” names\\n";
             std::cout << "  --fantasy-angels         Generate fantasy “angels” names\\n";
             std::cout << "  --fantasy-animal_species Generate fantasy “animal species” names\\n";
+            std::cout << "  --fantasy-animatronics   Generate fantasy “animatronics” style names (ignores adjective/noun files)\\n";
+            std::cout << "  --halo-forerunners       Generate Halo “forerunners” style names (ignores adjective/noun files)\\n";
+            std::cout << "  --inheritance_cycle-dragons Generate inheritance‑cycle dragons names\\n";
             std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
-            std::cout << "  --doctor_who-silurians   Generate Doctor Who Silurians style names\\n";
             std::cout << "  --pets-marine_mammals    Generate a marine‑mammal name (uses built‑in marine‑mammal generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
-            std::cout << "  --doctor_who_raxacoricofallapatorians Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --help, -h               Show this help message and exit\\n";
             return 0;
         } else if (arg.rfind("-", 0) == 0) {
@@ -1112,6 +1121,31 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << doctor_who_raxacoricofallapatoriansName << "\n";
+            }
+            continue;
+        }
+        if (opts.inheritanceCycleDragons) {
+            // New generator – inheritance_cycle dragons
+            std::string icName = generate_inheritance_cycle_dragons_name(rng, 0);
+            if (optDebug) {
+                printGeneratedName(icName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator needed
+            } else {
+                std::cout << icName << "\n";
+            }
+            continue;
+        }
+        if (opts.popCultureHomestucks) {
+            std::string homestucksName = generate_pop_culture_homestucks_name(rng);
+            if (optDebug) {
+                printGeneratedName(homestucksName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator needed
+            } else {
+                std::cout << homestucksName << "\n";
             }
             continue;
         }
