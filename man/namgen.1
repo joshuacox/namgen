@@ -1,134 +1,159 @@
-.\" Namgen manual page
-.\"
-.\" Copyright 2023 Your Name <your.email@domain>
-.\"
-.\" This is free documentation; you can redistribute it and/or
-.\" modify it under the terms of the GNU General Public License
-.\" as published by the Free Software Foundation; either version
-.\" 2 of the License, or (at your option) any later version.
-.\"
-.\" This program is distributed in the hope that it will be useful,
-.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
-.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-.\" GNU General Public License for more details.
-.\"
-.\" You should have received a copy of the GNU General Public License
-.\" along with this program; if not, see <https://www.gnu.org/licenses/>.
-.\"
-
-.TH NAMGEN 1 "November 2023" "namgen" "User Commands"
+.TH NAMGEN 1 "September 2024" "namgen 1.0" "User Commands"
 .SH NAME
-namgen \- A flexible name generator combining adjectives and nouns
-
+namgen \- generate fantasy names from a variety of sources
 .SH SYNOPSIS
 .B namgen
-[options]
-
+[\fIOPTIONS\fR]...
 .SH DESCRIPTION
-A name generator that combines words from adjective and noun lists to create unique names. It supports various formatting options, custom assets, and configuration through environment variables.
-
-.PP
-The program randomly selects combinations of adjectives and nouns and formats them according to specified rules. By default, it generates names in the format "adjective-noun", but this can be customized using various options.
-
+.B namgen
+produces a single name per line, optionally applying casing, separators,
+or debug information.  The name source can be the classic adjective/noun
+lists or any of the many built‑in generators.
 .SH OPTIONS
 .TP
-.B \-a, --adj-file FILE
-Path to custom adjectives file (default: assets/adjectives/adjectives.list)
-
+.B \-a, \-\-adj-file FILE
+Path to custom adjectives file
 .TP
-.B \-n, --noun-file FILE
-Path to custom nouns file (default: assets/nouns/nouns.list)
-
+.B \-e, \-\-exclude STRING
+Remove these characters from adjective and noun words
 .TP
-.B \-s, --separator SEP
-Use custom separator string (default: "-")
-
+.B \-n, \-\-noun FILE
+Path to custom nouns file
 .TP
-.B \-x, --null-separator
-Do not print any separator between adjective and noun
-
+.B \-s SEP, \-\-separator SEP
+Custom separator string (default: \-)
 .TP
-.B \-c, --count COUNT
+.B \-x, \-\-null-separator
+Do not print the separator
+.TP
+.B \-c COUNT, \-\-count COUNT
 Number of names to generate (default: terminal height)
-
 .TP
-.B \--capcasing
-Capitalize the first letter of both adjective and noun
-
+.B \-\-cap \-\-capcasing
+Capitalize first letter of both adjective and noun
 .TP
-.B \--camelcasing
+.B \-\-camel \-\-camelcasing
 CamelCase style with only noun capitalized
-
 .TP
-.B \-v, --debug
+.B \-\-debug
 Enable debug output
-
 .TP
-.B \--help
+.B \-\-elf
+Generate fantasy\-elf style names using the built\-in ELF name generator (ignores adjective/noun files)
+.TP
+.B \-\-halo-forerunners
+Generate Halo “forerunners” style names (ignores adjective/noun files)
+.TP
+.B \-\-fantasy-animatronics
+Generate fantasy “animatronics” style names (ignores adjective/noun files)
+.TP
+.B \-\-destiny-awokens
+Generate fantasy‑destiny awoken style names
+.TP
+.B \-\-destiny-cabals
+Generate fantasy‑destiny cabals style names
+.TP
+.B \-\-destiny-exos
+Generate fantasy‑destiny exos style names
+.TP
+.B \-\-destiny-fallens
+Generate fantasy‑destiny fallens style names
+.TP
+.B \-\-destiny-hives
+Generate fantasy‑destiny hives style names
+.TP
+.B \-\-destiny-humans
+Generate fantasy‑destiny humans style names
+.TP
+.B \-\-destiny-vexs
+Generate fantasy‑destiny vexs style names
+.TP
+.B \-\-diablo-angels
+Generate Diablo angels style names
+.TP
+.B \-\-diablo-demons
+Generate Diablo demons style names
+.TP
+.B \-\-diablo-khazras
+Generate Diablo khazras style names
+.TP
+.B \-\-diablo-nephalems
+Generate Diablo nephalems style names
+.TP
+.B \-\-dragon_ball-others
+Generate Dragon Ball “other …” style names
+.TP
+.B \-\-dragon_ball-frieza_clans
+Generate Dragon Ball Frieza Clans names
+.TP
+.B \-\-dragon_ball-hakaishins
+Generate Dragon Ball Hakaishins names
+.TP
+.B \-\-dragon_ball-humans
+Generate Dragon Ball human names (male/female)
+.TP
+.B \-\-dragon_ball-saiyans
+Generate Dragon Ball Saiyan names
+.TP
+.B \-\-dragon_ball-skians
+Generate Dragon Ball Skians names
+.TP
+.B \-\-dragon_ball-tuffles
+Generate Dragon Ball Tuffles names
+.TP
+.B \-\-dungeon_and_dragons-devas
+Generate Dungeons & Dragons “devas” names
+.TP
+.B \-\-dungeon_and_dragons-dragonborns
+Generate Dungeons & Dragons “dragonborns” names
+.TP
+.B \-\-dungeon_and_dragons-drows
+Generate Dungeons & Dragons “drows” names
+.TP
+.B \-\-dungeon_and_dragons-dwarfs
+Generate Dungeons & Dragons “dwarfs” names
+.TP
+.B \-\-dungeon_and_dragons-eladrins
+Generate Dungeons & Dragons “eladrins” names
+.TP
+.B \-\-dungeon_and_dragons-elfs
+Generate Dungeons & Dragons “elfs” names
+.TP
+.B \-\-dungeon_and_dragons-githzerais
+Generate Dungeons & Dragons “githzerais” names
+.TP
+.B \-\-fantasy-aliens
+Generate fantasy “aliens” names
+.TP
+.B \-\-fantasy-amazons
+Generate fantasy “amazons” names
+.TP
+.B \-\-fantasy-angels
+Generate fantasy “angels” names
+.TP
+.B \-\-fantasy-animal_species
+Generate fantasy “animal species” names
+.TP
+.B \-\-military-united_states
+Generate United States military call‑sign style names (two random NATO phonetic alphabet words)
+.TP
+.B \-\-doctor_who-silurians
+Generate Doctor Who Silurians style names
+.TP
+.B \-\-doctor_who-raxacoricofallapatorians
+Generate Doctor Who Raxacoricofallapatorians style names (new)
+.TP
+.B \-\-pets-marine_mammals
+Generate a marine‑mammal name (uses built‑in marine‑mammal generator)
+.TP
+.B \-\-rift-bahmis
+Generate a Rift‑Bahmis name (uses built‑in generator)
+.TP
+.B \-\-help, \-h
 Show this help message and exit
-
-.SH CONFIGURATION
-The behavior of namgen can be controlled through several environment variables:
-
-.TP
-.B ASSETS_DIR
-Path to assets directory containing adjectives/nouns subfolders (default: ./assets)
-
-.TP
-.B ADJ_FILE
-Path to default adjectives file (overrides ADJ_FOLDER if set)
-
-.TP
-.B NOUN_FILE
-Path to default nouns file (overrides NOUN_FOLDER if set)
-
-.TP
-.B NOUN_FOLDER
-Path to nouns file/folder (default: assets/nouns)
-
-.TP
-.B ADJ_FOLDER
-Path to adjectives file/folder (default: assets/adjectives)
-
-.TP
-.B NULL_SEPARATOR
-Enable null separator mode (true/false)
-
-.TP
-.B SEPARATOR
-Custom separator string
-
-.TP
-.B CAPCASING
-Enable capcasing style (true/false)
-
-.TP
-.B CAMELCASING
-Enable camel casing style (true/false)
-
-.SH EXAMPLES
-Generate 5 names:
-.sp
-   namgen -c 5
-
-Use custom files:
-.sp
-   namgen -a custom_adjectives.txt -n custom_nouns.txt --camelcasing --count 10
-
-Set environment variable for separator:
-.sp
-   SEPARATOR='-' namgen
-
-Produce CamelCase style names:
-.sp
-   namgen --camelcasing
-
-Enable null separator mode:
-.sp
-   NULL_SEPARATOR=true namgen
-
-.SH BUGS
-Please report bugs to <your.email@domain>
-
+.SH AUTHOR
+Written by the namgen project maintainers.
+.SH COPYRIGHT
+Copyright © 2024 namgen contributors.
 .SH SEE ALSO
-README.md for more detailed information and installation instructions.
+\fBnamgen\fR(1)
