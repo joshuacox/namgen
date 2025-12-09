@@ -2,7 +2,7 @@ name: namgen tests
 run-name: ${{ github.actor }} is running tests for namgen 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
