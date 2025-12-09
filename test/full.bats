@@ -15,6 +15,11 @@ setup() {
     export counto=1
 }
 
+@test "cmake ." {
+  cmake .
+  result=$?
+  [[ "$result" -eq 0 ]]
+}
 @test "make" {
   make
   result=$?
