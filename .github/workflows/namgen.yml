@@ -17,5 +17,5 @@ jobs:
           ls ${{ github.workspace }}
       - name: Test build in the repository
         run: |
-          cd ${{ github.workspace }} && cmake . && make && make install
+          cd ${{ github.workspace }} && cmake . && make && sudo make install
       - run: echo "🍏 This job's status is ${{ job.status }}."
