@@ -15,10 +15,10 @@ jobs:
       - name: Test build in the repository
         run: |
           cd ${{ github.workspace }} && cmake . && make && sudo make install
-      - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Install Bats
         run: |
           sudo apt-get update && sudo apt-get -yqq install bats
       - name: Bats Test
         run: |
           cd ${{ github.workspace }} && bats -x test/full.bats 
+      - run: echo "🍏 This job's status is ${{ job.status }}."
