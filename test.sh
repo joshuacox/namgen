@@ -4,3 +4,4 @@ set -eu
 #make clean
 make
 bats test/full.bats
+bats test/docker.bats

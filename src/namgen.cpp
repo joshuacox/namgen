@@ -54,6 +54,8 @@
 #include "doctor_who-raxacoricofallapatorians_lib.h"
 #include "inheritance_cycle-dragons_lib.h"
 #include "pop_culture-homestucks_lib.h"   
+#include "warhammer_40k-sisters_of_battles_lib.h"
+#include "towns_and_cities-east_european_towns_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -242,6 +244,8 @@ struct CommandLineOptions {
     bool doctor_who_raxacoricofallapatorians = false;
     bool inheritanceCycleDragons = false;   
     bool popCultureHomestucks = false;      
+    bool warhammer40kSistersOfBattles = false;
+    bool townsAndCitiesEastEuropeanTowns = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -510,6 +514,10 @@ int main(int argc, char* argv[]) {
             opts.inheritanceCycleDragons = true;   
         } else if (arg == "--pop_culture-homestucks") {
             opts.popCultureHomestucks = true;      
+        } else if (arg == "--warhammer_40k-sisters_of_battles") {
+            opts.warhammer40kSistersOfBattles = true;
+        } else if (arg == "--towns_and_cities-east_european_towns") {
+            opts.townsAndCitiesEastEuropeanTowns = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -560,6 +568,8 @@ int main(int argc, char* argv[]) {
             std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
             std::cout << "  --pets-marine_mammals    Generate a marine‑mammal name (uses built‑in marine‑mammal generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
+            std::cout << "  --warhammer_40k-sisters_of_battles Generate Warhammer 40k Sisters of Battles names\\n";
+            std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
             std::cout << "  --help, -h               Show this help message and exit\\n";
             return 0;
         } else if (arg.rfind("-", 0) == 0) {
@@ -1146,6 +1156,32 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator needed
             } else {
                 std::cout << homestucksName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.warhammer40kSistersOfBattles) {
+            std::string name = generate_warhammer_40k_sisters_of_battles_name(rng);
+            if (optDebug) {
+                printGeneratedName(name, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << name << "\n";
+            }
+            continue;
+        }
+
+        if (opts.townsAndCitiesEastEuropeanTowns) {
+            std::string name = generate_towns_and_cities_east_european_towns_name(rng);
+            if (optDebug) {
+                printGeneratedName(name, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << name << "\n";
             }
             continue;
         }

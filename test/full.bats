@@ -234,3 +234,11 @@ setup() {
   result="$(counto=10 ./namgen --pop_culture-homestucks|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --warhammer_40k-sisters_of_battles at 10" {
+  result="$(counto=10 ./namgen --warhammer_40k-sisters_of_battles|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --towns_and_cities-east_european_towns at 10" {
+  result="$(counto=10 ./namgen --towns_and_cities-east_european_towns|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
