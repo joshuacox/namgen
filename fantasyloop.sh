@@ -11,7 +11,6 @@ for h_lib in $(ls ./src/*lib.h); do
   reads="$reads --read ${h_lib}"
 done
 }
-    #--agent \
 
 do_aider () {
   this_new_name=$1
@@ -24,7 +23,16 @@ do_aider () {
   else
     set -eu
     echo "doing ${this_lib_file}"
-    git checkout -b ${this_new_name}
+    # Check for uncommitted changes
+    if [[ $(git status --porcelain) ]]; then
+      echo "Git working directory is dirty. Executing command..."
+      git add .
+      git commit -am 'tidy up'
+    else
+      echo "Git working directory is clean."
+    fi
+    git checkout main 
+    git checkout -b "${this_new_name}"
     envsubst '${this_new_flag}' \
       < test/test.tpl \
       >> test/full.bats
