@@ -1,171 +1,39 @@
 .TH NAMGEN 1 "September 2024" "namgen 1.0" "User Commands"
 .SH NAME
-namgen \- generate fantasy names from a variety of sources
+namgen \- fantasy name generator
+
 .SH SYNOPSIS
 .B namgen
-[\fIOPTIONS\fR]...
+[\fIOPTIONS\fR]
+
 .SH DESCRIPTION
-.B namgen
-produces a single name per line, optionally applying casing, separators,
-or debug information.  The name source can be the classic adjective/noun
-lists or any of the many built‑in generators.
+Generate random fantasy names from a variety of sources.  By default
+it combines an adjective and a noun from the asset lists, but many
+specialised generators are available via flags.
+
 .SH OPTIONS
 .TP
 .B \-a, \-\-adj-file FILE
-Path to custom adjectives file
+Path to custom adjective list.
 .TP
 .B \-e, \-\-exclude STRING
-Remove these characters from adjective and noun words
+Characters to strip from generated words.
 .TP
 .B \-n, \-\-noun FILE
-Path to custom nouns file
+Path to custom noun list.
 .TP
 .B \-s SEP, \-\-separator SEP
-Custom separator string (default: \-)
+Custom separator string (default: \-).
 .TP
-.B \-x, \-\-null-separator
-Do not print the separator
+.B \-x \-\-null-separator
+Do not print the **separator**.
 .TP
-.B \-c COUNT, \-\-count COUNT
-Number of names to generate (default: terminal height)
+.B \-c \-  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \  \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
+
 .TP
-.B \-\-cap \-\-capcasing
-Capitalize first letter of both adjective and noun
+.B \-\-doctor\_who-ice\_warriors
+Generate Doctor Who “Ice Warriors” style names (uses built‑in generator).
+
 .TP
-.B \-\-camel \-\-camelcasing
-CamelCase style with only noun capitalized
-.TP
-.B \-\-debug
-Enable debug output
-.TP
-.B \-\-elf
-Generate fantasy‑elf style names using the built‑in ELF name generator (ignores adjective/noun files)
-.TP
-.B \-\-pop_culture-homestucks
-Generate Homestucks‑style names using the built‑in pop‑culture generator (ignores adjective/noun files)
-.TP
-.B \-\-halo-forerunners
-Generate Halo “forerunners” style names (ignores adjective/noun files)
-.TP
-.B \-\-fantasy-animatronics
-Generate fantasy “animatronics” style names (ignores adjective/noun files)
-.TP
-.B \-\-destiny-awokens
-Generate fantasy‑destiny awoken style names
-.TP
-.B \-\-destiny-cabals
-Generate fantasy‑destiny cabals style names
-.TP
-.B \-\-destiny-exos
-Generate fantasy‑destiny exos style names
-.TP
-.B \-\-destiny-fallens
-Generate fantasy‑destiny fallens style names
-.TP
-.B \-\-destiny-hives
-Generate fantasy‑destiny hives style names
-.TP
-.B \-\-destiny-humans
-Generate fantasy‑destiny humans style names
-.TP
-.B \-\-destiny-vexs
-Generate fantasy‑destiny vexs style names
-.TP
-.B \-\-diablo-angels
-Generate Diablo angels style names
-.TP
-.B \-\-diablo-demons
-Generate Diablo demons style names
-.TP
-.B \-\-diablo-khazras
-Generate Diablo khazras style names
-.TP
-.B \-\-diablo-nephalems
-Generate Diablo nephalems style names
-.TP
-.B \-\-dragon_ball-others
-Generate Dragon Ball “other …” style names
-.TP
-.B \-\-dragon_ball-frieza_clans
-Generate Dragon Ball Frieza Clans names
-.TP
-.B \-\-dragon_ball-hakaishins
-Generate Dragon Ball Hakaishins names
-.TP
-.B \-\-dragon_ball-humans
-Generate Dragon Ball human names (male/female)
-.TP
-.B \-\-dragon_ball-saiyans
-Generate Dragon Ball Saiyan names
-.TP
-.B \-\-dragon_ball-skians
-Generate Dragon Ball Skians names
-.TP
-.B \-\-dragon_ball-tuffles
-Generate Dragon Ball Tuffles names
-.TP
-.B \-\-dungeon_and_dragons-devas
-Generate Dungeons & Dragons “devas” names
-.TP
-.B \-\-dungeon_and_dragons-dragonborns
-Generate Dungeons & Dragons “dragonborns” names
-.TP
-.B \-\-dungeon_and_dragons-drows
-Generate Dungeons & Dragons “drows” names
-.TP
-.B \-\-dungeon_and_dragons-dwarfs
-Generate Dungeons & Dragons “dwarfs” names
-.TP
-.B \-\-dungeon_and_dragons-eladrins
-Generate Dungeons & Dragons “eladrins” names
-.TP
-.B \-\-dungeon_and_dragons-elfs
-Generate Dungeons & Dragons “elfs” names
-.TP
-.B \-\-dungeon_and_dragons-githzerais
-Generate Dungeons & Dragons “githzerais” names
-.TP
-.B \-\-fantasy-aliens
-Generate fantasy “aliens” names
-.TP
-.B \-\-fantasy-amazons
-Generate fantasy “amazons” names
-.TP
-.B \-\-fantasy-angels
-Generate fantasy “angels” names
-.TP
-.B \-\-fantasy-animal_species
-Generate fantasy “animal species” names
-.TP
-.B \-\-fantasy-apocalypse_mutants
-Generate fantasy “apocalypse mutants” style names (ignores adjective/noun files)
-.TP
-.B \-\-military-united_states
-Generate United States military call‑sign style names (two random NATO phonetic alphabet words)
-.TP
-.B \-\-pets-marine_mammals
-Generate a marine‑mammal name (uses built‑in marine‑mammal generator)
-.TP
-.B \-\-rift-bahmis
-Generate a Rift‑Bahmis name (uses built‑in generator)
-.TP
-.B \-\-doctor_who-silurians
-Generate Doctor Who Silurians style names
-.TP
-.B \-\-doctor_who-raxacoricofallapatorians
-Generate a Rift‑Bahmis name (uses built‑in generator)
-.TP
-.B \-\-inheritance_cycle-dragons
-Generate inheritance‑cycle dragons names
-.TP
-.B \-\-warhammer_40k-sisters_of_battles
-Generate Warhammer 40k Sisters of Battles names.
-.TP
-.B \-\-help, \-h
-Show this help message and exit
-.SH AUTHOR
-Written by Joshua Edward McLaughlin Cox and the namgen project maintainers.
-.SH COPYRIGHT
-Copyright © 2025 namgen contributors.
-.SH SEE ALSO
-\fBnamgen\fR(1)
+.B \-\-halo-mgalekgolos
+Generate Halo “Mgalekgolos” style names (uses built‑in generator).

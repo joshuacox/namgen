@@ -247,3 +247,19 @@ setup() {
   result="$(counto=10 ./namgen --towns_and_cities-east_european_towns|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --real-norwegians at 10" {
+  result="$(counto=10 ./namgen --real-norwegians|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --rift-eths at 10" {
+  result="$(counto=10 ./namgen --rift-eths|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --halo-mgalekgolos at 10" {
+  result="$(counto=10 ./namgen --halo-mgalekgolos|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --doctor_who-ice_warriors at 10" {
+  result="$(counto=10 ./namgen --doctor_who-ice_warriors|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
