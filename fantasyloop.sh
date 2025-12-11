@@ -2,6 +2,7 @@
 SOURCE_DIR=".javascript-fantasy-names-deprecated/generators"
 source .venv/bin/activate
 : ${counto:=0}
+: ${VERBOSITY:=0}
 reads=''
 mass_reader () {
 for cpp_lib in $(ls ./src/*lib.cpp); do
