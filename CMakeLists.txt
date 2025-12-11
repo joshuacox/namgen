@@ -40,6 +40,7 @@ add_executable(namgen
     src/fantasy-apocalypse_mutants_lib.cpp
     src/halo-forerunners_lib.cpp
     src/military-united_states_lib.cpp
+    src/diablo-angels_lib.cpp
     src/warhammer-ogres_lib.cpp
     src/doctor_who-silurians_lib.cpp
     src/towns_and_cities-ancient_greek_towns_lib.cpp
@@ -52,9 +53,14 @@ add_executable(namgen
     src/warhammer_40k-sisters_of_battles_lib.cpp
     src/towns_and_cities-east_european_towns_lib.cpp
     src/real-norwegians_lib.cpp
-    src/rift-eths_lib.cpp               # <-- new source file
-    src/halo-mgalekgolos_lib.cpp        # <-- new source file
-    src/doctor_who-ice_warriors_lib.cpp # <-- new source file
+    src/rift-eths_lib.cpp
+    src/halo-mgalekgolos_lib.cpp
+    src/doctor_who-ice_warriors_lib.cpp
+    src/warhammer-daemons_of_chaos_lib.cpp
+    src/elder_scrolls-bosmers_lib.cpp
+    src/harry_potter-goblins_lib.cpp
+    src/eve_online-gallentes_lib.cpp
+    src/star_wars_the_old_republic-cathars_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

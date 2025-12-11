@@ -263,3 +263,23 @@ setup() {
   result="$(counto=10 ./namgen --doctor_who-ice_warriors|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --warhammer-daemons_of_chaos at 10" {
+  result="$(counto=10 ./namgen --warhammer-daemons_of_chaos|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --elder_scrolls-bosmers at 10" {
+  result="$(counto=10 ./namgen --elder_scrolls-bosmers|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --harry_potter-goblins at 10" {
+  result="$(counto=10 ./namgen --harry_potter-goblins|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --eve_online-gallentes at 10" {
+  result="$(counto=10 ./namgen --eve_online-gallentes|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --star_wars_the_old_republic-cathars at 10" {
+  result="$(counto=10 ./namgen --star_wars_the_old_republic-cathars|wc -l)"
+  [[ "$result" -eq 10 ]]
+}

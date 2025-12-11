@@ -53,13 +53,18 @@
 #include "rift-bahmis_lib.h"
 #include "doctor_who-raxacoricofallapatorians_lib.h"
 #include "inheritance_cycle-dragons_lib.h"
-#include "pop_culture-homestucks_lib.h"   
+#include "pop_culture-homestucks_lib.h"
 #include "warhammer_40k-sisters_of_battles_lib.h"
 #include "towns_and_cities-east_european_towns_lib.h"
 #include "real-norwegians_lib.h"
-#include "rift-eths_lib.h"   // <-- new include
-#include "halo-mgalekgolos_lib.h" // <-- new include
-#include "doctor_who-ice_warriors_lib.h" // <-- new include
+#include "rift-eths_lib.h"
+#include "halo-mgalekgolos_lib.h"
+#include "doctor_who-ice_warriors_lib.h"
+#include "warhammer-daemons_of_chaos_lib.h"
+#include "elder_scrolls-bosmers_lib.h"
+#include "harry_potter-goblins_lib.h"
+#include "eve_online-gallentes_lib.h"
+#include "star_wars_the_old_republic-cathars_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -254,6 +259,11 @@ struct CommandLineOptions {
     bool realNorwegians = false;
     bool haloMgalekgolos = false;        // <-- new flag
     bool doctor_who_ice_warriors = false; // <-- new flag
+    bool warhammerDaemonsOfChaos = false; // <-- new flag
+    bool elderScrollsBosmers = false;    // <-- new flag
+    bool harryPotterGoblins = false;     // <-- new flag
+    bool eveOnlineGallentes = false;
+    bool starWarsTheOldRepublicCathars = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -334,7 +344,7 @@ std::vector<std::string> filterWords(const std::vector<std::string>& words,
     return filtered;
 }
 
-/* Helper: pick a random element from a vector */
+/* Helper: pick a random element from a vector using the supplied RNG */
 template <typename T>
 const T& randomChoice(const std::vector<T>& vec, std::mt19937& rng) {
     return vec[rng() % vec.size()];
@@ -442,6 +452,8 @@ int main(int argc, char* argv[]) {
             opts.haloForerunners = true;
         } else if (arg == "--halo-mgalekgolos") {               // <-- new flag handling
             opts.haloMgalekgolos = true;
+        } else if (arg == "--warhammer-daemons_of_chaos") {    // <-- new flag handling
+            opts.warhammerDaemonsOfChaos = true;
         } else if (arg == "--fantasy-animatronics") {
             opts.fantasyAnimatronics = true;
         } else if (arg == "--destiny-awokens") {
@@ -491,7 +503,7 @@ int main(int argc, char* argv[]) {
         } else if (arg == "--dungeon_and_dragons-eladrins") {
             opts.dungeonAndDragonsEladrins = true;
         } else if (arg == "--dungeon_and_dragons-elfs") {
-            opts.dungeonAndDragonsElfs = true; // <-- new flag handling
+            opts.dungeonAndDragonsElfs = true;
         } else if (arg == "--dungeon_and_dragons-githzerais") {
             opts.dungeonAndDragonsGithzerais = true;
         } else if (arg == "--fantasy-aliens") {
@@ -518,11 +530,11 @@ int main(int argc, char* argv[]) {
             opts.petsMarineMammals = true;
         } else if (arg == "--rift-bahmis") {
             opts.riftBahmis = true;
-        } else if (arg == "--rift-eths") {               // <-- new flag handling
+        } else if (arg == "--rift-eths") {
             opts.riftEths = true;
         } else if (arg == "--doctor_who-raxacoricofallapatorians") {
             opts.doctor_who_raxacoricofallapatorians = true;
-        } else if (arg == "--doctor_who-ice_warriors") { // <-- new flag handling
+        } else if (arg == "--doctor_who-ice_warriors") {
             opts.doctor_who_ice_warriors = true;
         } else if (arg == "--inheritance_cycle-dragons") {
             opts.inheritanceCycleDragons = true;   
@@ -534,6 +546,14 @@ int main(int argc, char* argv[]) {
             opts.townsAndCitiesEastEuropeanTowns = true;
         } else if (arg == "--real-norwegians") {
             opts.realNorwegians = true;
+        } else if (arg == "--elder_scrolls-bosmers") {
+            opts.elderScrollsBosmers = true;
+        } else if (arg == "--harry_potter-goblins") {
+            opts.harryPotterGoblins = true;
+        } else if (arg == "--eve_online-gallentes") {
+            opts.eveOnlineGallentes = true;
+        } else if (arg == "--star_wars_the_old_republic-cathars") {
+            opts.starWarsTheOldRepublicCathars = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -546,9 +566,53 @@ int main(int argc, char* argv[]) {
             std::cout << "  --cap --capcasing        Capitalize first letter of both adjective and noun\\n";
             std::cout << "  --camel --camelcasing    CamelCase style (adjective lower‑cased, noun capitalized)\\n";
             std::cout << "  --debug                  Enable debug output\\n";
+            std::cout << "  --destiny-awokens        Generate fantasy‑destiny awoken style names\\n";
+            std::cout << "  --destiny-cabals         Generate fantasy‑destiny cabals style names\\n";
+            std::cout << "  --destiny-exos           Generate fantasy‑destiny exos style names\\n";
+            std::cout << "  --destiny-fallens        Generate fantasy‑destiny fallens style names\\n";
+            std::cout << "  --destiny-hives          Generate fantasy‑destiny hives style names\\n";
+            std::cout << "  --destiny-humans         Generate fantasy‑destiny humans style names\\n";
+            std::cout << "  --destiny-vexs           Generate fantasy‑destiny vexs style names\\n";
+            std::cout << "  --diablo-angels          Generate Diablo angels style names\\n";
+            std::cout << "  --diablo-demons          Generate Diablo demons style names\\n";
+            std::cout << "  --diablo-khazras         Generate Diablo khazras style names\\n";
+            std::cout << "  --diablo-nephalems       Generate Diablo nephalems style names\\n";
+            std::cout << "  --doctor_who-silurians   Generate Doctor Who Silurians style names\\n";
+            std::cout << "  --doctor_who_raxacoricofallapatorians Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
+            std::cout << "  --dragon_ball-others     Generate Dragon Ball “other …” style names\\n";
+            std::cout << "  --dragon_ball-frieza_clans Generate Dragon Ball Frieza Clans names\\n";
+            std::cout << "  --dragon_ball-hakaishins Generate Dragon Ball Hakaishins names\\n";
+            std::cout << "  --dragon_ball-humans     Generate Dragon Ball human names (male/female)\\n";
+            std::cout << "  --dragon_ball-saiyans    Generate Dragon Ball Saiyan names\\n";
+            std::cout << "  --dragon_ball-skians     Generate Dragon Ball Skians names\\n";
+            std::cout << "  --dragon_ball-tuffles    Generate Dragon Ball Tuffles names\\n";
+            std::cout << "  --dungeon_and_dragons-devas Generate Dungeons & Dragons “devas” names\\n";
+            std::cout << "  --dungeon_and_dragons-dragonborns Generate Dungeons & Dragons “dragonborns” names\\n";
+            std::cout << "  --dungeon_and_dragons-drows Generate Dungeons & Dragons “drows” names\\n";
+            std::cout << "  --dungeon_and_dragons-dwarfs Generate Dungeons & Dragons “dwarfs” names\\n";
+            std::cout << "  --dungeon_and_dragons-eladrins Generate Dungeons & Dragons “eladrins” names\\n";
+            std::cout << "  --dungeon_and_dragons-elfs Generate Dungeons & Dragons “elfs” names\\n";
+            std::cout << "  --dungeon_and_dragons-githzerais Generate Dungeons & Dragons “githzerais” names\\n";
             std::cout << "  --elf                    Generate fantasy‑elf style names (uses built‑in generator)\\n";
+            std::cout << "  --elder_scrolls-bosmers  Generate Elder Scrolls Bosmer style names (uses built‑in generator)\\n";
+            std::cout << "  --eve_online-gallentes   Generate Gallentes style names (uses built‑in generator)\\n";
+            std::cout << "  --fantasy-aliens         Generate fantasy “aliens” names\\n";
+            std::cout << "  --fantasy-amazons        Generate fantasy “amazons” names\\n";
+            std::cout << "  --fantasy-angels         Generate fantasy “angels” names\\n";
+            std::cout << "  --fantasy-animal_species Generate fantasy “animal species” names\\n";
+            std::cout << "  --fantasy-animatronics   Generate fantasy “animatronics” style names (ignores adjective/noun files)\\n";
+            std::cout << "  --halo-forerunners       Generate Halo “forerunners” style names (ignores adjective/noun files)\\n";
             std::cout << "  --halo-mgalekgolos       Generate Halo “Mgalekgolos” style names (uses built‑in generator)\\n";
-            // ... other help lines omitted for brevity
+            std::cout << "  --harry_potter-goblins   Generate Harry Potter “Goblins” style names (uses built‑in generator)\\n";
+            std::cout << "  --inheritance_cycle-dragons Generate inheritance‑cycle dragons names\\n";
+            std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
+            std::cout << "  --pets-marine_mammals    Generate a marine‑mammal name (uses built‑in marine‑mammal generator)\\n";
+            std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
+            std::cout << "  --star_wars_the_old_republic-cathars   Generate Cathars style names (uses built‑in generator)\\n";
+            std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
+            std::cout << "  --warhammer-daemons_of_chaos  Generate Warhammer “Daemons of Chaos” style names (uses built‑in generator)\\n";
+            std::cout << "  --warhammer_40k-sisters_of_battles Generate Warhammer 40k Sisters of Battles names\\n";
+            std::cout << "  --help, -h               Show this help message and exit\\n";
             return 0;
         } else if (arg.rfind("-", 0) == 0) {
             // Unrecognized option starting with '-'
@@ -651,7 +715,6 @@ int main(int argc, char* argv[]) {
         nounFile = resolveFile("NOUN_FILE", nounFolder, rng);
     }
 
-    // Load ... (unchanged)
     const std::vector<std::string> nounLines = readLines(nounFile);
     const std::vector<std::string> adjLines  = readLines(adjFile);
 
@@ -793,6 +856,19 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
+        if (opts.warhammerDaemonsOfChaos) {               // <-- new handling block
+            std::string chaosName = generate_warhammer_daemons_of_chaos_name(rng);
+            if (optDebug) {
+                printGeneratedName(chaosName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << chaosName << "\n";
+            }
+            continue;
+        }
+
         if (opts.fantasyAnimatronics) {
             std::string animName = generate_fantasy_animatronics_name(rng, 0);
             if (optDebug) {
@@ -835,7 +911,59 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        // ... (the rest of the generation loop remains unchanged)
+        if (opts.elderScrollsBosmers) {
+            // Elder Scrolls Bosmers mode – ignore adjective/noun files.
+            std::string bosmerName = generate_elder_scrolls_bosmers_name(rng);
+            if (optDebug) {
+                printGeneratedName(bosmerName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << bosmerName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.harryPotterGoblins) {
+            std::string goblinName = generate_harry_potter_goblins_name(rng);
+            if (optDebug) {
+                printGeneratedName(goblinName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << goblinName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.eveOnlineGallentes) {
+            std::string goblinName = generate_eve_online_gallentes_name(rng);
+            if (optDebug) {
+                printGeneratedName(goblinName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << goblinName << "\n";
+            }
+            continue;
+        }
+	
+        if (opts.starWarsTheOldRepublicCathars) {
+            std::string goblinName = generate_star_wars_the_old_republic_cathars_name(rng);
+            if (optDebug) {
+                printGeneratedName(goblinName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << goblinName << "\n";
+            }
+            continue;
+        }
+
         // Default adjective + noun generation
         uint64_t randChoice = rng();
         const auto& randAdj = randomChoice(filteredAdjectives, rng);

@@ -12,6 +12,16 @@ for h_lib in $(ls ./src/*lib.h); do
 done
 }
 
+clean_dirty_git () {
+  if [[ $(git status --porcelain) ]]; then
+    echo "Git working directory is dirty. committing everything..."
+    git add .
+    aider-ce --commit
+  else
+    echo "Git working directory is clean."
+  fi
+}
+
 do_aider () {
   this_new_name=$1
   export this_new_flag=$2
@@ -24,13 +34,7 @@ do_aider () {
     set -eu
     echo "doing ${this_lib_file}"
     # Check for uncommitted changes
-    if [[ $(git status --porcelain) ]]; then
-      echo "Git working directory is dirty. Executing command..."
-      git add .
-      git commit -am 'tidy up'
-    else
-      echo "Git working directory is clean."
-    fi
+    clean_dirty_git
     git checkout main 
     git checkout -b "${this_new_name}"
     envsubst '${this_new_flag}' \
@@ -48,8 +52,16 @@ do_aider () {
     --file CMakeLists.txt \
     --file README.md \
     -m "I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
-    bats test/full.bats
+    clean_dirty_git
     set +e
+    bats test/full.bats
+    if [[ ! $? -eq 0 ]]; then
+      loopster -t ./test.sh -l ./iter.sh
+    else
+      clean_dirty_git
+      git checkout -b "${this_new_name}_success"
+    fi
+    set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
     if [[ ! $? -eq 0 ]]; then
       reads="$reads --read src/$this_lib_file"
@@ -58,15 +70,14 @@ do_aider () {
     if [[ ! $? -eq 0 ]]; then
       reads="$reads --read src/$this_lib_h_file"
     fi
-    set -e
-    if [[ ! $? -eq 0 ]]; then
-      loopster -t ./test.sh -l ./iter.sh
-    fi
   fi
 }
 
 main () {
 set -u
+if [[ ${VERBOSITY} -gt 10 ]];then
+  set -x
+fi
 GEN_DIRS=$(find ${SOURCE_DIR} -maxdepth 1 -mindepth 1 -type d|shuf)
 
 countzero=0
