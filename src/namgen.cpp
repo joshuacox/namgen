@@ -44,6 +44,7 @@
 #include "fantasy-apocalypse_mutants_lib.h" 
 #include "halo-forerunners_lib.h"         
 #include "military-united_states_lib.h"   
+#include "military-royal_navy_lib.h"
 #include "diablo-angels_lib.h"
 #include "warhammer-ogres_lib.h"          
 #include "doctor_who-silurians_lib.h"    
@@ -250,20 +251,21 @@ struct CommandLineOptions {
     bool finalFantasyRoegadyns = false;   
     bool petsMarineMammals = false;
     bool riftBahmis = false;
-    bool riftEths = false;               // <-- new flag
+    bool riftEths = false;
     bool doctor_who_raxacoricofallapatorians = false;
     bool inheritanceCycleDragons = false;   
     bool popCultureHomestucks = false;      
     bool warhammer40kSistersOfBattles = false;
     bool townsAndCitiesEastEuropeanTowns = false;
     bool realNorwegians = false;
-    bool haloMgalekgolos = false;        // <-- new flag
-    bool doctor_who_ice_warriors = false; // <-- new flag
-    bool warhammerDaemonsOfChaos = false; // <-- new flag
-    bool elderScrollsBosmers = false;    // <-- new flag
-    bool harryPotterGoblins = false;     // <-- new flag
+    bool haloMgalekgolos = false;
+    bool doctor_who_ice_warriors = false;
+    bool warhammerDaemonsOfChaos = false;
+    bool elderScrollsBosmers = false;
+    bool harryPotterGoblins = false;
     bool eveOnlineGallentes = false;
     bool starWarsTheOldRepublicCathars = false;
+    bool militaryRoyalNavy = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -554,6 +556,8 @@ int main(int argc, char* argv[]) {
             opts.eveOnlineGallentes = true;
         } else if (arg == "--star_wars_the_old_republic-cathars") {
             opts.starWarsTheOldRepublicCathars = true;
+        } else if (arg == "--military-royal_navy") {
+            opts.militaryRoyalNavy = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -606,6 +610,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --harry_potter-goblins   Generate Harry Potter “Goblins” style names (uses built‑in generator)\\n";
             std::cout << "  --inheritance_cycle-dragons Generate inheritance‑cycle dragons names\\n";
             std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
+            std::cout << "  --military-royal_navy    Generate Royal Navy military call‑sign style names \\n";
             std::cout << "  --pets-marine_mammals    Generate a marine‑mammal name (uses built‑in marine‑mammal generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --star_wars_the_old_republic-cathars   Generate Cathars style names (uses built‑in generator)\\n";
@@ -960,6 +965,31 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << goblinName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.militaryRoyalNavy) {
+            std::string militaryRoyalNavyName = generate_military_royal_navy_name(rng);
+            if (optDebug) {
+                printGeneratedName(militaryRoyalNavyName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << militaryRoyalNavyName << "\n";
+            }
+            continue;
+        }
+        if (opts.militaryUnitedStates) {
+            std::string militaryUnitedStatesName = generate_military_united_states_name(rng);
+            if (optDebug) {
+                printGeneratedName(militaryUnitedStatesName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << militaryUnitedStatesName << "\n";
             }
             continue;
         }

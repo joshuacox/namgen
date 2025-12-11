@@ -283,3 +283,7 @@ setup() {
   result="$(counto=10 ./namgen --star_wars_the_old_republic-cathars|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --military-royal_navy at 10" {
+  result="$(counto=10 ./namgen --military-royal_navy|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
