@@ -287,3 +287,7 @@ setup() {
   result="$(counto=10 ./namgen --military-royal_navy|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --towns_and_cities-west_european_towns at 10" {
+  result="$(counto=10 ./namgen --towns_and_cities-west_european_towns|wc -l)"
+  [[ "$result" -eq 10 ]]
+}

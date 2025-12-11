@@ -62,6 +62,7 @@ add_executable(namgen
     src/eve_online-gallentes_lib.cpp
     src/star_wars_the_old_republic-cathars_lib.cpp
     src/military-royal_navy_lib.cpp
+    src/towns_and_cities-west_european_towns_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

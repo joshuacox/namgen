@@ -57,6 +57,7 @@
 #include "pop_culture-homestucks_lib.h"
 #include "warhammer_40k-sisters_of_battles_lib.h"
 #include "towns_and_cities-east_european_towns_lib.h"
+#include "towns_and_cities-west_european_towns_lib.h"
 #include "real-norwegians_lib.h"
 #include "rift-eths_lib.h"
 #include "halo-mgalekgolos_lib.h"
@@ -248,6 +249,8 @@ struct CommandLineOptions {
     bool warhammerOgres = false;   
     bool doctor_who_silurians = false; 
     bool townsAndCitiesAncientGreekTowns = false; 
+    bool townsAndCitiesEastEuropeanTowns = false;
+    bool townsAndCitiesWestEuropeanTowns = false;
     bool finalFantasyRoegadyns = false;   
     bool petsMarineMammals = false;
     bool riftBahmis = false;
@@ -256,7 +259,6 @@ struct CommandLineOptions {
     bool inheritanceCycleDragons = false;   
     bool popCultureHomestucks = false;      
     bool warhammer40kSistersOfBattles = false;
-    bool townsAndCitiesEastEuropeanTowns = false;
     bool realNorwegians = false;
     bool haloMgalekgolos = false;
     bool doctor_who_ice_warriors = false;
@@ -526,6 +528,8 @@ int main(int argc, char* argv[]) {
             opts.doctor_who_silurians = true;
         } else if (arg == "--towns_and_cities-ancient_greek_towns") {
             opts.townsAndCitiesAncientGreekTowns = true;
+        } else if (arg == "--towns_and_cities-west_european_towns") {
+            opts.townsAndCitiesWestEuropeanTowns = true;
         } else if (arg == "--final_fantasy-roegadyns") {
             opts.finalFantasyRoegadyns = true;
         } else if (arg == "--pets-marine_mammals") {
@@ -981,6 +985,7 @@ int main(int argc, char* argv[]) {
             }
             continue;
         }
+
         if (opts.militaryUnitedStates) {
             std::string militaryUnitedStatesName = generate_military_united_states_name(rng);
             if (optDebug) {
@@ -990,6 +995,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << militaryUnitedStatesName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.townsAndCitiesWestEuropeanTowns) {   // <-- new handling block
+            std::string townName = generate_west_european_town_name(rng);
+            if (optDebug) {
+                printGeneratedName(townName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << townName << "\n";
             }
             continue;
         }
