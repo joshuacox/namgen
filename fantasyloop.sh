@@ -32,7 +32,8 @@ do_aider () {
   if [[ -f src/${this_lib_file} ]]; then
     echo "skipping ${this_lib_file}"
   else
-    set -eu
+    #set -eu
+    set -u
     echo "doing ${this_lib_file}"
     # Check for uncommitted changes
     clean_dirty_git
@@ -62,7 +63,7 @@ do_aider () {
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
     fi
-    set -e
+    #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
     if [[ ! $? -eq 0 ]]; then
       reads="$reads --read src/$this_lib_file"
