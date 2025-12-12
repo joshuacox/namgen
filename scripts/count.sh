@@ -60,4 +60,4 @@ for gendir in ${GEN_DIRS}; do
 done
 }
 
-main $@
+main $@ |wc -l
