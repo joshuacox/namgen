@@ -1,35 +1,212 @@
 .TH NAMGEN 1 "September 2024" "namgen 1.0" "User Commands"
 .SH NAME
 namgen \- fantasy name generator
-
 .SH SYNOPSIS
 .B namgen
 [\fIOPTIONS\fR]
-
 .SH DESCRIPTION
-Generate random fantasy names from a variety of sources. 
-by  
-
+Generate random fantasy names from a variety of sources.  By default
+it combines an adjective and a noun from the asset lists, but many
+specialised generators are available via flags.
 .SH OPTIONS
 .TP
 .B \-a, \-\-adj-file FILE
-Path  
-
+Path to a custom adjective list file.
 .TP
-.B \-e, \-\-exclude  
-
+.B \-e, \-\-exclude STRING
+Characters to strip from generated words.
 .TP
-.B \-n  
-
+.B \-n, \-\-noun FILE
+Path to a custom noun list file.
 .TP
-
-
-
-...
+.B \-s SEP, \-\-separator SEP
+Custom separator string (default: \-).
 .TP
-.B \-\-harry\  
-
-
-
-...
-```
+.B \-x, \-\-null-separator
+Do not print the separator (produces a concatenated name).
+.TP
+.B \-c COUNT, \-\-count COUNT
+Number of names to generate (default: terminal height).
+.TP
+.B \-\-cap, \-\-capcasing
+Capitalize the first letter of **both** adjective and noun (CapWords style).
+.TP
+.B \-\-camel, \-\-camelcasing
+CamelCase style – adjective lower‑cased, noun capitalized.
+.TP
+.B \-\-debug
+Enable debug output (sets the \fBDEBUG=true\fR environment variable).
+.TP
+.B \-\-elf, \-\-lotr-elf, \-\-lord_of_the_rings-elfs
+Generate fantasy‑elf style names (uses the built‑in ELF generator).
+.TP
+.B \-\-halo-forerunners
+Generate Halo “forerunners” style names (ignores adjective/noun files).
+.TP
+.B \-\-halo-mgalekgolos
+Generate Halo “Mgalekgolos” style names (built‑in generator).
+.TP
+.B \-\-warhammer-daemons_of_chaos
+Generate Warhammer “Daemons of Chaos” style names (built‑in generator).
+.TP
+.B \-\-fantasy-animatronics
+Generate fantasy “animatronics” style names (ignores adjective/noun files).
+.TP
+.B \-\-destiny-awokens
+Generate fantasy‑destiny “awokens” style names.
+.TP
+.B \-\-destiny-cabals
+Generate fantasy‑destiny “cabals” style names.
+.TP
+.B \-\-destiny-exos
+Generate fantasy‑destiny “exos” style names.
+.TP
+.B \-\-destiny-fallens
+Generate fantasy‑destiny “fallens” style names.
+.TP
+.B \-\-destiny-hives
+Generate fantasy‑destiny “hives” style names.
+.TP
+.B \-\-destiny-humans
+Generate fantasy‑destiny “humans” style names.
+.TP
+.B \-\-destiny-vexs
+Generate fantasy‑destiny “vexs” style names.
+.TP
+.B \-\-diablo-angels
+Generate Diablo “angels” style names.
+.TP
+.B \-\-diablo-demons
+Generate Diablo “demons” style names.
+.TP
+.B \-\-diablo-khazras
+Generate Diablo “khazras” style names.
+.TP
+.B \-\-diablo-nephalems
+Generate Diablo “nephalems” style names.
+.TP
+.B \-\-doctor_who-silurians
+Generate Doctor Who “Silurians” style names.
+.TP
+.B \-\-doctor_who-raxacoricofallapatorians
+Generate Doctor Who “Raxacoricofallapatorians” (Rift‑Bahmis) style names.
+.TP
+.B \-\-dragon_age-dwarfs
+Generate Dragon Age dwarf names (legacy JavaScript generator).
+.TP
+.B \-\-dragon_ball-others
+Generate Dragon Ball “other …” style names.
+.TP
+.B \-\-dragon_ball-frieza_clans
+Generate Dragon Ball “Frieza Clans” style names.
+.TP
+.B \-\-dragon_ball-hakaishins
+Generate Dragon Ball “Hakaishins” style names.
+.TP
+.B \-\-dragon_ball-humans
+Generate Dragon Ball human names (male/female).
+.TP
+.B \-\-dragon_ball-saiyans
+Generate Dragon Ball “Saiyans” style names.
+.TP
+.B \-\-dragon_ball-skians
+Generate Dragon Ball “Skians” style names.
+.TP
+.B \-\-dragon_ball-tuffles
+Generate Dragon Ball “Tuffles” style names.
+.TP
+.B \-\-dungeon_and_dragons-devas
+Generate Dungeons & Dragons “devas” style names.
+.TP
+.B \-\-dungeon_and_dragons-dragonborns
+Generate Dungeons & Dragons “dragonborns” style names.
+.TP
+.B \-\-dungeon_and_dragons-drows
+Generate Dungeons & Dragons “drows” style names.
+.TP
+.B \-\-dungeon_and_dragons-dwarfs
+Generate Dungeons & Dragons “dwarfs” style names.
+.TP
+.B \-\-dungeon_and_dragons-eladrins
+Generate Dungeons & Dragons “eladrins” style names.
+.TP
+.B \-\-dungeon_and_dragons-elfs
+Generate Dungeons & Dragons “elfs” style names.
+.TP
+.B \-\-dungeon_and_dragons-githzerais
+Generate Dungeons & Dragons “githzerais” style names.
+.TP
+.B \-\-fantasy-aliens
+Generate fantasy “aliens” style names.
+.TP
+.B \-\-fantasy-amazons
+Generate fantasy “amazons” style names.
+.TP
+.B \-\-fantasy-angels
+Generate fantasy “angels” style names.
+.TP
+.B \-\-fantasy-animal_species
+Generate fantasy “animal species” style names.
+.TP
+.B \-\-fantasy-apocalypse_mutants
+Generate fantasy “apocalypse mutants” style names.
+.TP
+.B \-\-elder_scrolls-bosmers
+Generate Elder Scrolls “Bosmers” style names (built‑in generator).
+.TP
+.B \-\-eve_online-gallentes
+Generate Eve Online “Gallentes” style names (built‑in generator).
+.TP
+.B \-\-harry_potter-goblins
+Generate Harry Potter “Goblins” style names (built‑in generator).
+.TP
+.B \-\-places-plazas
+Generate plaza names.
+.TP
+.B \-\-military-united_states
+Generate United States military call‑sign style names (two random NATO phonetic alphabet words).
+.TP
+.B \-\-military-royal_navy
+Generate Royal Navy military call‑sign style names.
+.TP
+.B \-\-warhammer-ogres
+Generate Warhammer “ogres” style names.
+.TP
+.B \-\-towns_and_cities-ancient_greek_towns
+Generate ancient Greek town and city names.
+.TP
+.B \-\-final_fantasy-roegadyns
+Generate Final Fantasy “Roegadyn” style names.
+.TP
+.B \-\-pets-marine_mammals
+Generate marine‑mammal names (built‑in generator).
+.TP
+.B \-\-rift-bahmis
+Generate Rift “Bahmis” names (built‑in generator).
+.TP
+.B \-\-rift-eths
+Generate Rift “Eths” names (built‑in generator).
+.TP
+.B \-\-inheritance_cycle-dragons
+Generate inheritance‑cycle dragon names.
+.TP
+.B \-\-pop_culture-homestucks
+Generate pop‑culture “Homestucks” names.
+.TP
+.B \-\-warhammer_40k-sisters_of_battles
+Generate Warhammer 40k “Sisters of Battles” names.
+.TP
+.B \-\-towns_and_cities-east_european_towns
+Generate East European town and city names.
+.TP
+.B \-\-real-norwegians
+Generate real Norwegian names.
+.TP
+.B \-\-star_wars_the_old_republic-cathars
+Generate Star Wars: The Old Republic “Cathars” style names (built‑in generator).
+.TP
+.B \-\-pets-reptiles
+Generate reptile pet names (legacy JavaScript generator).
+.TP
+.B \-\-help, \-h
+Show this help message and exit.

@@ -69,6 +69,7 @@
 #include "star_wars_the_old_republic-cathars_lib.h"
 #include "places-plazas_lib.h"
 #include "dragon_age-dwarfs_lib.h"
+#include "pets-reptiles_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -272,6 +273,7 @@ struct CommandLineOptions {
     bool militaryRoyalNavy = false;
     bool placesPlazas = false;
     bool dragonAgeDwarfs = false;
+    bool petsReptiles = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -568,8 +570,10 @@ int main(int argc, char* argv[]) {
             opts.starWarsTheOldRepublicCathars = true;
         } else if (arg == "--military-royal_navy") {
             opts.militaryRoyalNavy = true;
-        } else if (arg == "--dragon_age-dwarfs") {               // <-- new flag
+        } else if (arg == "--dragon_age-dwarfs") {
             opts.dragonAgeDwarfs = true;
+        } else if (arg == "--pets-reptiles") {
+            opts.petsReptiles = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -625,6 +629,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
             std::cout << "  --military-royal_navy    Generate Royal Navy military call‑sign style names \\n";
             std::cout << "  --pets-marine_mammals    Generate a marine‑mammal name (uses built‑in marine‑mammal generator)\\n";
+            std::cout << "  --pets-reptiles          Generate reptile pet names (legacy JS generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --star_wars_the_old_republic-cathars   Generate Cathars style names (uses built‑in generator)\\n";
             std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
@@ -1044,6 +1049,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << dwarfName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.petsReptiles) {
+            std::string petName = generate_pets_reptiles_name(rng, 0);
+            if (optDebug) {
+                printGeneratedName(petName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << petName << "\n";
             }
             continue;
         }

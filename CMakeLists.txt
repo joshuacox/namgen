@@ -65,6 +65,7 @@ add_executable(namgen
     src/towns_and_cities-west_european_towns_lib.cpp
     src/places-plazas_lib.cpp
     src/dragon_age-dwarfs_lib.cpp
+    src/pets-reptiles_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

@@ -299,3 +299,7 @@ setup() {
   result="$(counto=10 ./namgen --dragon_age-dwarfs|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --pets-reptiles at 10" {
+  result="$(counto=10 ./namgen --pets-reptiles|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
