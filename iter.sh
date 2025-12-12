@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-aider-ce \
+#aider-ce \
+aider \
   --file src/namgen.cpp \
   --message '/test ./test.sh'
   #--agent \
