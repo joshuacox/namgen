@@ -303,3 +303,11 @@ setup() {
   result="$(counto=10 ./namgen --pets-reptiles|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test out of dir" {
+  cd /tmp
+  unset ADJ_FILE
+  unset NOUN_FILE
+  result=$(namgen -c 11|wc -l)
+  echo $result
+  [[ "$result" -eq 11 ]]
+}

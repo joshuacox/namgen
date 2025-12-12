@@ -699,20 +699,22 @@ int main(int argc, char* argv[]) {
 
     // 2️⃣  If still not found...
     if (!fs::exists(assetsFolder) && !fs::is_directory(assetsFolder)) {
-        assetsFolder = fs::path("/usr/local") / "share" / "namename" / "assets";
+        assetsFolder = fs::path("/usr/local") / "share" / "namgen" / "assets";
     }
 
     // Resolve ... (unchanged code for adjective/noun handling)
     fs::path nounFolder = fs::path(
         getEnv("NOUN_FOLDER", (assetsFolder / "nouns").string()));
     if (!fs::exists(nounFolder) && !fs::is_directory(nounFolder)) {
-        nounFolder = fs::path("/usr32") / "share" / "namename" / "assets" / "nouns";
+        std::cerr << "Error: noun folder not found!\n";
+        nounFolder = assetsFolder / "nouns";
     }
 
     fs::path adjFolder = fs::path(
         getEnv("ADJ_FOLDER", (assetsFolder / "adjectives").string()));
     if (!fs::exists(adjFolder) && !fs::is_directory(adjFolder)) {
-        adjFolder = fs::path("/usr32") / "share" / "namename" / "assets" / "adjectives";
+        std::cerr << "Error: adj folder not found!\n";
+        adjFolder = assetsFolder / "adjectives";
     }
 
     // Resolve the actual files, respecting NOUN_FILE / ADJ_FILE env vars
