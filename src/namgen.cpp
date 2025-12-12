@@ -70,6 +70,7 @@
 #include "places-plazas_lib.h"
 #include "dragon_age-dwarfs_lib.h"
 #include "pets-reptiles_lib.h"
+#include "wildstar-mordeshs_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -274,6 +275,7 @@ struct CommandLineOptions {
     bool placesPlazas = false;
     bool dragonAgeDwarfs = false;
     bool petsReptiles = false;
+    bool wildstarMordeshs = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -574,6 +576,8 @@ int main(int argc, char* argv[]) {
             opts.dragonAgeDwarfs = true;
         } else if (arg == "--pets-reptiles") {
             opts.petsReptiles = true;
+        } else if (arg == "--wildstar-mordeshs") {
+            opts.wildstarMordeshs = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -635,6 +639,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
             std::cout << "  --warhammer-daemons_of_chaos  Generate Warhammer “Daemons of Chaos” style names (uses built‑in generator)\\n";
             std::cout << "  --warhammer_40k-sisters_of_battles Generate Warhammer 40k Sisters of Battles names\\n";
+            std::cout << "  --wildstar-mordeshs Generate Wildstar Mordeshs names\\n";
             std::cout << "  --help, -h               Show this help message and exit\\n";
             return 0;
         } else if (arg.rfind("-", 0) == 0) {
@@ -1064,6 +1069,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << petName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.wildstarMordeshs) {
+            std::string wsName = generate_wildstar_mordeshs_name(rng);
+            if (optDebug) {
+                printGeneratedName(wsName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << wsName << "\n";
             }
             continue;
         }

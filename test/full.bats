@@ -311,3 +311,7 @@ setup() {
   echo $result
   [[ "$result" -eq 11 ]]
 }
+@test "test namgen --wildstar-mordeshs at 10" {
+  result="$(counto=10 ./namgen --wildstar-mordeshs|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
