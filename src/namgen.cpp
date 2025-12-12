@@ -67,6 +67,7 @@
 #include "harry_potter-goblins_lib.h"
 #include "eve_online-gallentes_lib.h"
 #include "star_wars_the_old_republic-cathars_lib.h"
+#include "places-plazas_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -268,6 +269,7 @@ struct CommandLineOptions {
     bool eveOnlineGallentes = false;
     bool starWarsTheOldRepublicCathars = false;
     bool militaryRoyalNavy = false;
+    bool placesPlazas = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -520,6 +522,8 @@ int main(int argc, char* argv[]) {
             opts.fantasyAnimalSpecies = true;
         } else if (arg == "--fantasy-apocalypse_mutants") {
             opts.fantasyApocalypseMutants = true;
+        } else if (arg == "--places-plazas") {
+            opts.placesPlazas = true;
         } else if (arg == "--military-united_states") {
             opts.militaryUnitedStates = true;
         } else if (arg == "--warhammer-ogres") {
@@ -999,7 +1003,20 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        if (opts.townsAndCitiesWestEuropeanTowns) {   // <-- new handling block
+        if (opts.townsAndCitiesWestEuropeanTowns) {
+            std::string townName = generate_west_european_town_name(rng);
+            if (optDebug) {
+                printGeneratedName(townName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << townName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.placesPlazas) {
             std::string townName = generate_west_european_town_name(rng);
             if (optDebug) {
                 printGeneratedName(townName, countzero, counto,

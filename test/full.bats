@@ -291,3 +291,7 @@ setup() {
   result="$(counto=10 ./namgen --towns_and_cities-west_european_towns|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --places-plazas at 10" {
+  result="$(counto=10 ./namgen --places-plazas|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
