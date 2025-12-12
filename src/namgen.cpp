@@ -68,6 +68,7 @@
 #include "eve_online-gallentes_lib.h"
 #include "star_wars_the_old_republic-cathars_lib.h"
 #include "places-plazas_lib.h"
+#include "dragon_age-dwarfs_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;   
@@ -270,6 +271,7 @@ struct CommandLineOptions {
     bool starWarsTheOldRepublicCathars = false;
     bool militaryRoyalNavy = false;
     bool placesPlazas = false;
+    bool dragonAgeDwarfs = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -566,6 +568,8 @@ int main(int argc, char* argv[]) {
             opts.starWarsTheOldRepublicCathars = true;
         } else if (arg == "--military-royal_navy") {
             opts.militaryRoyalNavy = true;
+        } else if (arg == "--dragon_age-dwarfs") {               // <-- new flag
+            opts.dragonAgeDwarfs = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -591,6 +595,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --diablo-nephalems       Generate Diablo nephalems style names\\n";
             std::cout << "  --doctor_who-silurians   Generate Doctor Who Silurians style names\\n";
             std::cout << "  --doctor_who_raxacoricofallapatorians Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
+            std::cout << "  --dragon_age-dwarfs      Generate Dragon Age dwarf names (legacy JS generator)\\n";
             std::cout << "  --dragon_ball-others     Generate Dragon Ball “other …” style names\\n";
             std::cout << "  --dragon_ball-frieza_clans Generate Dragon Ball Frieza Clans names\\n";
             std::cout << "  --dragon_ball-hakaishins Generate Dragon Ball Hakaishins names\\n";
@@ -1025,6 +1030,20 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << townName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.dragonAgeDwarfs) {
+            std::string dwarfName = generate_dragon_age_dwarfs_name(rng);
+            if (optDebug) {
+                // No adjective/noun files involved, so we pass empty paths.
+                printGeneratedName(dwarfName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << dwarfName << "\n";
             }
             continue;
         }

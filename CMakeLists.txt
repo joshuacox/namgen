@@ -64,6 +64,7 @@ add_executable(namgen
     src/military-royal_navy_lib.cpp
     src/towns_and_cities-west_european_towns_lib.cpp
     src/places-plazas_lib.cpp
+    src/dragon_age-dwarfs_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

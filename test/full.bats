@@ -295,3 +295,7 @@ setup() {
   result="$(counto=10 ./namgen --places-plazas|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --dragon_age-dwarfs at 10" {
+  result="$(counto=10 ./namgen --dragon_age-dwarfs|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
