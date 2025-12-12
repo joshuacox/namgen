@@ -67,6 +67,7 @@ add_executable(namgen
     src/dragon_age-dwarfs_lib.cpp
     src/pets-reptiles_lib.cpp
     src/wildstar-mordeshs_lib.cpp
+    src/towns_and_cities-dwarven_citys_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

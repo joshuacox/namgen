@@ -48,7 +48,6 @@
 #include "diablo-angels_lib.h"
 #include "warhammer-ogres_lib.h"          
 #include "doctor_who-silurians_lib.h"    
-#include "towns_and_cities-ancient_greek_towns_lib.h"   
 #include "final_fantasy-roegadyns_lib.h"   
 #include "pets-marine_mammals_lib.h"
 #include "rift-bahmis_lib.h"
@@ -56,6 +55,8 @@
 #include "inheritance_cycle-dragons_lib.h"
 #include "pop_culture-homestucks_lib.h"
 #include "warhammer_40k-sisters_of_battles_lib.h"
+#include "towns_and_cities-ancient_greek_towns_lib.h"   
+#include "towns_and_cities-dwarven_citys_lib.h"
 #include "towns_and_cities-east_european_towns_lib.h"
 #include "towns_and_cities-west_european_towns_lib.h"
 #include "real-norwegians_lib.h"
@@ -276,6 +277,7 @@ struct CommandLineOptions {
     bool dragonAgeDwarfs = false;
     bool petsReptiles = false;
     bool wildstarMordeshs = false;
+    bool townsAndCitiesDwarvenCitys = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -578,6 +580,8 @@ int main(int argc, char* argv[]) {
             opts.petsReptiles = true;
         } else if (arg == "--wildstar-mordeshs") {
             opts.wildstarMordeshs = true;
+        } else if (arg == "--towns_and_cities-dwarven_citys") {
+            opts.townsAndCitiesDwarvenCitys = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -636,6 +640,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --pets-reptiles          Generate reptile pet names (legacy JS generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --star_wars_the_old_republic-cathars   Generate Cathars style names (uses built‑in generator)\\n";
+            std::cout << "  --towns_and_cities-dwarven_citys  Generate dwarven city names (towns_and_cities‑dwarven_citys)\\n";
             std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
             std::cout << "  --warhammer-daemons_of_chaos  Generate Warhammer “Daemons of Chaos” style names (uses built‑in generator)\\n";
             std::cout << "  --warhammer_40k-sisters_of_battles Generate Warhammer 40k Sisters of Battles names\\n";
@@ -1082,6 +1087,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << wsName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.townsAndCitiesDwarvenCitys) {
+            std::string dwarfName = generate_towns_and_cities_dwarven_citys_name(rng);
+            if (optDebug) {
+                printGeneratedName(dwarfName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << dwarfName << "\n";
             }
             continue;
         }
