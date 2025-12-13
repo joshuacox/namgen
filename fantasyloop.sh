@@ -13,6 +13,23 @@ for h_lib in $(ls ./src/*lib.h); do
 done
 }
 
+add_score() {
+    SCORE_MESSAGE=$1
+    echo "${this_new_name},${model_name},${diff},${loopster_count},${SCORE_MESSAGE}" >> score.csv
+}
+
+# Function to be called when Ctrl+C is pressed
+ctrl_c() {
+    echo -e "\n** Ouch! SIGINT received (Ctrl+C). Performing cleanup..." >&2
+    # Add your cleanup logic here (e.g., remove temporary files, stop services)
+    add_score "interrupt-fail"
+    #echo "${this_new_name},${model_name},${diff},${loopster_count},interrupt-fail" >> score.csv
+    echo "** Cleanup complete. Exiting script." >&2
+    exit 1  # Exit the script after handling the signal
+}
+# Set the trap: call the ctrl_c function when SIGINT (INT) is received
+trap ctrl_c INT
+
 clean_dirty_git () {
   if [[ $(git status --porcelain) ]]; then
     echo "Git working directory is dirty. committing everything..."
@@ -69,7 +86,8 @@ do_aider () {
     set +e
     bats test/full.bats
     if [[ ! $? -eq 0 ]]; then
-      echo "${this_new_name},${model_name},${diff},fail" > score.csv
+      add_score "initial-fail"
+      #echo "${this_new_name},${model_name},${diff},${loopster_count},initial-fail" >> score.csv
       loopster -c 5 \
         --success-cleanup ./successLoopster.sh \
         --fail-cleanup ./failLoopster.sh \
@@ -78,7 +96,8 @@ do_aider () {
     else
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
-      echo "${this_new_name},${model_name},${diff},${loopster_count},eagle" >> score.csv
+      add_score "eagle"
+      #echo "${this_new_name},${model_name},${diff},${loopster_count},eagle" >> score.csv
     fi
     #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
