@@ -1,5 +1,5 @@
-game_of_thrones-dothrakis,gpt-oss:120b,2025-12-13-07:25:19,1765632393,209.741475266,fail
-pathfinder-dwarfs,llama3.1:70b,2025-12-13-07:25:19,1765632393,1455.352428919,fail
+game_of_thrones-dothrakis,gpt-oss:120b,2025-12-13-07:25:19,1765632393,209.741475266,0,fail
+pathfinder-dwarfs,llama3.1:70b,2025-12-13-07:25:19,1765632393,1455.352428919,0,fail
 world_of_warcraft-orc,rnj-1:8b-instruct-fp16,2025-12-13-07:28:28,1765632508,12.997306988,0,initial-fail
 world_of_warcraft-orc,rnj-1:8b-instruct-fp16,2025-12-13-07:35:21,1765632921,432.906168840,0,interrupt-fail
 pets-aliens,llama3.2:latest,2025-12-13-07:53:00,1765633980,478.153634754,0,interrupt-fail
