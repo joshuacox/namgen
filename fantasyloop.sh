@@ -25,7 +25,6 @@ ctrl_c() {
     time2=$(date +%s.%N)
     export time_delta=$(echo "scale=40;${time2} - ${time1}" | bc)
     add_score "interrupt-fail"
-    #echo "${this_new_name},${model_name},${time_delta},${loopster_count},interrupt-fail" >> score.csv
     echo "** Cleanup complete. Exiting script." >&2
     exit 1  # Exit the script after handling the signal
 }
@@ -83,7 +82,6 @@ do_aider () {
     bats test/full.bats
     if [[ ! $? -eq 0 ]]; then
       add_score "initial-fail"
-      #echo "${this_new_name},${model_name},${time_delta},${loopster_count},initial-fail" >> score.csv
       loopster -c 5 \
         --success-cleanup ./successLoopster.sh \
         --fail-cleanup ./failLoopster.sh \
@@ -94,7 +92,6 @@ do_aider () {
       git checkout -b "${this_new_name}_success"
       add_score "eagle"
       scripts/reset2main.sh
-      #echo "${this_new_name},${model_name},${time_delta},${loopster_count},eagle" >> score.csv
     fi
     #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
