@@ -2,6 +2,7 @@
 SOURCE_DIR=".javascript-fantasy-names-deprecated/generators"
 source .venv/bin/activate
 : ${counto:=0}
+: ${diff:=0}
 : ${VERBOSITY:=0}
 reads=''
 mass_reader () {
@@ -21,7 +22,8 @@ add_score() {
 # Function to be called when Ctrl+C is pressed
 ctrl_c() {
     echo -e "\n** Ouch! SIGINT received (Ctrl+C). Performing cleanup..." >&2
-    # Add your cleanup logic here (e.g., remove temporary files, stop services)
+    time2=$(date +%s.%N)
+    export diff=$(echo "scale=40;${time2} - ${time1}" | bc)
     add_score "interrupt-fail"
     #echo "${this_new_name},${model_name},${diff},${loopster_count},interrupt-fail" >> score.csv
     echo "** Cleanup complete. Exiting script." >&2
@@ -74,7 +76,7 @@ do_aider () {
     time ${AIDER_CMD} -m "${MESSAGE}"
 
     time2=$(date +%s.%N)
-    diff=$(echo "scale=40;${time2} - ${time1}" | bc)
+    export diff=$(echo "scale=40;${time2} - ${time1}" | bc)
     clean_dirty_git
     set +e
     bats test/full.bats
