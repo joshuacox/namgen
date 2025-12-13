@@ -5,3 +5,5 @@ world_of_warcraft-orc,rnj-1:8b-instruct-fp16,2025-12-13-07:35:21,1765632921,432.
 pets-aliens,llama3.2:latest,2025-12-13-07:53:00,1765633980,478.153634754,0,interrupt-fail
 armour-belts,qwen3-next:80b-a3b-thinking-q8_0,2025-12-13-08:08:43,1765634923,606.127127799,0,initial-fail
 armour-belts,qwen3-next:80b-a3b-thinking-q8_0,2025-12-13-09:50:07,1765641007,6701.389418518,0,interrupt-fail
+the_witcher-halflings,mistral-nemo:latest,2025-12-13-10:53:24,1765644804,3050.197221979,0,initial-fail
+the_witcher-halflings,mistral-nemo:latest,2025-12-13-10:55:52,1765644952,3205.905191970,0,interrupt-fail
