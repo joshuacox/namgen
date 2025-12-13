@@ -25,6 +25,7 @@ clean_dirty_git () {
 
 do_aider () {
   this_new_name=$1
+  loopster_count=0
   export this_new_flag=$2
   this_genscript=$3
   export model_name=$(shuf -n 1 models)
@@ -69,11 +70,15 @@ do_aider () {
     bats test/full.bats
     if [[ ! $? -eq 0 ]]; then
       echo "${this_new_name},${model_name},${diff},fail" > score.csv
-      loopster -t ./test.sh -l ./iter.sh
+      loopster -c 5 \
+        --success-cleanup ./successLoopster.sh \
+        --fail-cleanup ./failLoopster.sh \
+        -t ./test.sh \
+        -l ./iter.sh
     else
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
-      echo "${this_new_name},${model_name},${diff},success" > score.csv
+      echo "${this_new_name},${model_name},${diff},${loopster_count},eagle" >> score.csv
     fi
     #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
