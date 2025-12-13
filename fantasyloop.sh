@@ -70,7 +70,7 @@ do_aider () {
     export READS="--read test/full.bats --read ${genscript} ${reads}"
     export MODELS="--model ollama_chat/${model_name} --editor-model ollama_chat/${model_name} --weak-model ollama_chat/${weak_model_name}"
     export MESSAGE="I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
-    export AIDER_OPTS="${FILES} ${READS} ${MODELS}"
+    export AIDER_OPTS="${MODELS} ${FILES} ${READS}"
     export AIDER_CMD="aider-ce ${AIDER_OPTS}"
 
     time ${AIDER_CMD} -m "${MESSAGE}"
