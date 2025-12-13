@@ -27,8 +27,8 @@ do_aider () {
   this_new_name=$1
   export this_new_flag=$2
   this_genscript=$3
-  model_name$(shuf -n 1 models)
-  weak_model_name$(shuf -n 1 weak_models)
+  model_name=$(shuf -n 1 models)
+  weak_model_name=$(shuf -n 1 weak_models)
   this_lib_file="${this_new_name}_lib.cpp"
   this_lib_h_file="${this_new_name}_lib.h"
   if [[ -f src/${this_lib_file} ]]; then
@@ -46,9 +46,9 @@ do_aider () {
       >> test/full.bats
     ./ignorer.sh
     time aider-ce \
-    --model "ollama_chat/${model_name}"
-    --editor-model "ollama_chat/${model_name}"
-    --weak-model "ollama_chat/${weak_model_name}"
+    --model "ollama_chat/${model_name}"           \
+    --editor-model "ollama_chat/${model_name}"    \
+    --weak-model "ollama_chat/${weak_model_name}" \
     --read test/full.bats \
     --read "${genscript}"  \
     $reads \
