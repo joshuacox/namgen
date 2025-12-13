@@ -1,0 +1,14 @@
+NAME
+rnj-1:8b-instruct-fp16
+nous-hermes2:latest
+mistral-nemo:latest
+llama3.2:latest
+devstral-small-2:24b-instruct-2512-fp16
+nomic-embed-text-v2-moe:latest
+mixtral:latest
+devstral-2:123b
+qwen2.5-coder:32b-base-fp16
+gpt-oss:120b
+llama4:scout
+DeepSeek-R1:70b
+llama3.1:70b
