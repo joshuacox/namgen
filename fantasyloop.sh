@@ -45,6 +45,8 @@ do_aider () {
       < test/test.tpl \
       >> test/full.bats
     ./ignorer.sh
+    time1=$(date +%s.%N)
+
     time aider-ce \
     --model "ollama_chat/${model_name}"           \
     --editor-model "ollama_chat/${model_name}"    \
@@ -59,15 +61,19 @@ do_aider () {
     --file CMakeLists.txt \
     --file README.md \
     -m "I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
+
+    time2=$(date +%s.%N)
+    diff=$(echo "scale=40;${time2} - ${time1}" | bc)
     clean_dirty_git
     set +e
     bats test/full.bats
     if [[ ! $? -eq 0 ]]; then
+      echo "${this_new_name},${model_name},${diff},fail" > score.csv
       loopster -t ./test.sh -l ./iter.sh
     else
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
-      echo "${this_new_name},${model_name},success" > score.csv
+      echo "${this_new_name},${model_name},${diff},success" > score.csv
     fi
     #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null

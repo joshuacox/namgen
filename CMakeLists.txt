@@ -69,6 +69,7 @@ add_executable(namgen
     src/wildstar-mordeshs_lib.cpp
     src/towns_and_cities-dwarven_citys_lib.cpp
     src/real-anglo_saxons_lib.cpp
+    src/harry_potter-dragon_species_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

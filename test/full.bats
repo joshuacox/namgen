@@ -323,3 +323,7 @@ setup() {
   result="$(counto=10 ./namgen --real-anglo_saxons|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --harry_potter-dragon_species at 10" {
+  result="$(counto=10 ./namgen --harry_potter-dragon_species|wc -l)"
+  [[ "$result" -eq 10 ]]
+}

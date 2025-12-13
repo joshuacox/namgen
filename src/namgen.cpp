@@ -66,6 +66,9 @@
 #include "warhammer-daemons_of_chaos_lib.h"
 #include "elder_scrolls-bosmers_lib.h"
 #include "harry_potter-goblins_lib.h"
+#include "harry_potter-dragon_species_lib.h"
+
+// Add new flag to CommandLineOptions
 #include "eve_online-gallentes_lib.h"
 #include "star_wars_the_old_republic-cathars_lib.h"
 #include "places-plazas_lib.h"
@@ -279,7 +282,8 @@ struct CommandLineOptions {
     bool petsReptiles = false;
     bool wildstarMordeshs = false;
     bool townsAndCitiesDwarvenCitys = false;
-    bool realAngloSaxons = false; // New flag for Anglo-Saxon names
+    bool realAngloSaxons = false;
+    bool harryPotterDragonSpecies = false; // New flag for Harry Potter Dragon Species
 };
 
 /* Helper: get environment variable or fallback */
@@ -584,8 +588,10 @@ int main(int argc, char* argv[]) {
             opts.wildstarMordeshs = true;
         } else if (arg == "--towns_and_cities-dwarven_citys") {
             opts.townsAndCitiesDwarvenCitys = true;
-        } else if (arg == "--real-anglo_saxons") { // New flag for Anglo-Saxon names
+        } else if (arg == "--real-anglo_saxons") {
             opts.realAngloSaxons = true;
+        } else if (arg == "--harry_potter-dragon_species") {
+            opts.harryPotterDragonSpecies = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -637,6 +643,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --halo-forerunners       Generate Halo “forerunners” style names (ignores adjective/noun files)\\n";
             std::cout << "  --halo-mgalekgolos       Generate Halo “Mgalekgolos” style names (uses built‑in generator)\\n";
             std::cout << "  --harry_potter-goblins   Generate Harry Potter “Goblins” style names (uses built‑in generator)\\n";
+            std::cout << "  --harry_potter-dragon_species Generate harry_potter-dragon_species style names\n";
             std::cout << "  --inheritance_cycle-dragons Generate inheritance‑cycle dragons names\\n";
             std::cout << "  --military-united_states Generate United States military call‑sign style names (two random NATO phonetic alphabet words)\\n";
             std::cout << "  --military-royal_navy    Generate Royal Navy military call‑sign style names \\n";
@@ -784,6 +791,19 @@ int main(int argc, char* argv[]) {
 
     // ------ Main generation loop ------
     for (std::size_t countzero = 0; countzero < counto; ++countzero) {
+        if (opts.harryPotterDragonSpecies) {
+            std::string dragonName = generate_harry_potter_dragon_species_name(rng);
+            if (optDebug) {
+                printGeneratedName(dragonName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << dragonName << "\n";
+            }
+            continue;
+        }
+
         if (opts.realAngloSaxons) { // New Anglo-Saxon names handling
             std::string angloSaxonName = generate_real_anglo_saxons_name(rng);
             if (optDebug) {
