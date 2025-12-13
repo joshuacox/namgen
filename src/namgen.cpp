@@ -68,8 +68,6 @@
 #include "harry_potter-goblins_lib.h"
 #include "harry_potter-dragon_species_lib.h"
 #include "game_of_thrones-dothrakis_lib.h"
-
-// Add new flag to CommandLineOptions
 #include "eve_online-gallentes_lib.h"
 #include "star_wars_the_old_republic-cathars_lib.h"
 #include "places-plazas_lib.h"
@@ -77,6 +75,7 @@
 #include "pets-reptiles_lib.h"
 #include "wildstar-mordeshs_lib.h"
 #include "real-anglo_saxons_lib.h"
+#include "descriptions-prophecys_lib.h"
 
 using namespace std::filesystem;
 namespace fs = std::filesystem;
@@ -286,6 +285,7 @@ struct CommandLineOptions {
     bool realAngloSaxons = false;
     bool harryPotterDragonSpecies = false;
     bool gameOfThronesDothrakis = false;
+    bool descriptionsProphecys = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -548,6 +548,8 @@ int main(int argc, char* argv[]) {
             opts.doctor_who_silurians = true;
         } else if (arg == "--towns_and_cities-ancient_greek_towns") {
             opts.townsAndCitiesAncientGreekTowns = true;
+        } else if (arg == "--descriptions-prophecys") {
+            opts.descriptionsProphecys = true;
         } else if (arg == "--towns_and_cities-west_european_towns") {
             opts.townsAndCitiesWestEuropeanTowns = true;
         } else if (arg == "--final_fantasy-roegadyns") {
@@ -1143,6 +1145,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << dwarfName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.descriptionsProphecys) {
+            std::string prophecy = generate_descriptions_prophecys_name(rng);
+            if (optDebug) {
+                printGeneratedName(prophecy, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << prophecy << "\n";
             }
             continue;
         }

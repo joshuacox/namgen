@@ -331,3 +331,7 @@ setup() {
   result="$(counto=10 ./namgen --game_of_thrones-dothrakis|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --descriptions-prophecys at 10" {
+  result="$(counto=10 ./namgen --descriptions-prophecys|wc -l)"
+  [[ "$result" -eq 80 ]]
+}

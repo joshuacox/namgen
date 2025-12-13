@@ -35,7 +35,8 @@ clean_dirty_git () {
   if [[ $(git status --porcelain) ]]; then
     echo "Git working directory is dirty. committing everything..."
     git add .
-    aider-ce --commit
+    time ${AIDER_CMD} ${AIDER_OPTS} \
+      --commit 
   else
     echo "Git working directory is clean."
   fi
@@ -127,7 +128,7 @@ for gendir in ${GEN_DIRS}; do
     filename_no_ext="${filename%.*}"
     new_name="$(echo ${basedir}-${filename_no_ext}|sed 's/wildstar_//')"
     new_flag="--${new_name}"
-    echo do_aider ${new_name} ${new_flag} ${genscript}
+    #echo do_aider ${new_name} ${new_flag} ${genscript}
     do_aider ${new_name} ${new_flag} ${genscript}
     #set -x
     ((++countone))

@@ -71,6 +71,7 @@ add_executable(namgen
     src/real-anglo_saxons_lib.cpp
     src/harry_potter-dragon_species_lib.cpp
     src/game_of_thrones-dothrakis_lib.cpp
+    src/descriptions-prophecys_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)
