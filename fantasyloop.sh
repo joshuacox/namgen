@@ -16,7 +16,7 @@ done
 
 add_score() {
     SCORE_MESSAGE=$1
-    echo "${this_new_name},${model_name},$(date +%Y-%m-%d-%H:%M:%S),$(date +%s),${time_delta},${loopster_count},${SCORE_MESSAGE}" >> score.csv
+    echo "${this_new_name},${AIDER_CMD},${model_name},${edit_format},$(date +%Y-%m-%d-%H:%M:%S),$(date +%s),${time_delta},${loopster_count},${SCORE_MESSAGE}" >> score.csv
 }
 
 # Function to be called when Ctrl+C is pressed
@@ -48,6 +48,7 @@ do_aider () {
   export this_new_flag=$2
   this_genscript=$3
   export model_name=$(shuf -n 1 models)
+  export edit_format=$(shuf -n 1 edit-formats)
   export weak_model_name=$(shuf -n 1 weak_models)
   this_lib_file="${this_new_name}_lib.cpp"
   this_lib_h_file="${this_new_name}_lib.h"
@@ -71,9 +72,9 @@ do_aider () {
     export MODELS="--model ollama_chat/${model_name} --editor-model ollama_chat/${model_name} --weak-model ollama_chat/${weak_model_name}"
     export MESSAGE="I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
     export AIDER_OPTS="${MODELS} ${FILES} ${READS}"
-    export AIDER_CMD="aider-ce ${AIDER_OPTS}"
+    export AIDER_CMD=$(shuf -n 1 aider-cmds)
 
-    time ${AIDER_CMD} -m "${MESSAGE}"
+    time ${AIDER_CMD} ${AIDER_OPTS} -m "${MESSAGE}"
 
     time2=$(date +%s.%N)
     export time_delta=$(echo "scale=40;${time2} - ${time1}" | bc)
