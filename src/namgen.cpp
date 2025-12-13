@@ -67,6 +67,7 @@
 #include "elder_scrolls-bosmers_lib.h"
 #include "harry_potter-goblins_lib.h"
 #include "harry_potter-dragon_species_lib.h"
+#include "game_of_thrones-dothrakis_lib.h"
 
 // Add new flag to CommandLineOptions
 #include "eve_online-gallentes_lib.h"
@@ -283,7 +284,8 @@ struct CommandLineOptions {
     bool wildstarMordeshs = false;
     bool townsAndCitiesDwarvenCitys = false;
     bool realAngloSaxons = false;
-    bool harryPotterDragonSpecies = false; // New flag for Harry Potter Dragon Species
+    bool harryPotterDragonSpecies = false;
+    bool gameOfThronesDothrakis = false;
 };
 
 /* Helper: get environment variable or fallback */
@@ -592,6 +594,8 @@ int main(int argc, char* argv[]) {
             opts.realAngloSaxons = true;
         } else if (arg == "--harry_potter-dragon_species") {
             opts.harryPotterDragonSpecies = true;
+        } else if (arg == "--game_of_thrones-dothrakis") {
+            opts.gameOfThronesDothrakis = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -640,6 +644,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --fantasy-angels         Generate fantasy “angels” names\\n";
             std::cout << "  --fantasy-animal_species Generate fantasy “animal species” names\\n";
             std::cout << "  --fantasy-animatronics   Generate fantasy “animatronics” style names (ignores adjective/noun files)\\n";
+            std::cout << "  --game_of_thrones-dothrakis   Generate Dothrakis style names\\n";
             std::cout << "  --halo-forerunners       Generate Halo “forerunners” style names (ignores adjective/noun files)\\n";
             std::cout << "  --halo-mgalekgolos       Generate Halo “Mgalekgolos” style names (uses built‑in generator)\\n";
             std::cout << "  --harry_potter-goblins   Generate Harry Potter “Goblins” style names (uses built‑in generator)\\n";
