@@ -27,8 +27,8 @@ do_aider () {
   this_new_name=$1
   export this_new_flag=$2
   this_genscript=$3
-  model_name=$(shuf -n 1 models)
-  weak_model_name=$(shuf -n 1 weak_models)
+  export model_name=$(shuf -n 1 models)
+  export weak_model_name=$(shuf -n 1 weak_models)
   this_lib_file="${this_new_name}_lib.cpp"
   this_lib_h_file="${this_new_name}_lib.h"
   if [[ -f src/${this_lib_file} ]]; then

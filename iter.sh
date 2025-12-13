@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-#aider-ce \
-aider \
+#aider \
+aider-ce \
   --file src/namgen.cpp \
+  --model "ollama_chat/${model_name}"           \
+  --editor-model "ollama_chat/${model_name}"    \
+  --weak-model "ollama_chat/${weak_model_name}" \
   --message '/test ./test.sh'
   #--agent \
   #--test \
