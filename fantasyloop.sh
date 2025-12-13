@@ -16,7 +16,7 @@ done
 
 add_score() {
     SCORE_MESSAGE=$1
-    echo "${this_new_name},${model_name},$(date +%Y-%m-%d-%H:%M:%S),${time_delta},${loopster_count},${SCORE_MESSAGE}" >> score.csv
+    echo "${this_new_name},${model_name},$(date +%Y-%m-%d-%H:%M:%S),$(date +%s),${time_delta},${loopster_count},${SCORE_MESSAGE}" >> score.csv
 }
 
 # Function to be called when Ctrl+C is pressed
