@@ -1,212 +1,252 @@
-.TH NAMGEN 1 "September 2024" "namgen 1.0" "User Commands"
+.TH NAMGEN 1 "2023" "namgen" "User Commands"
 .SH NAME
-namgen \- fantasy name generator
+namgen \- Generate fantasy names
 .SH SYNOPSIS
 .B namgen
-[\fIOPTIONS\fR]
+[OPTIONS]
 .SH DESCRIPTION
-Generate random fantasy names from a variety of sources.  By default
-it combines an adjective and a noun from the asset lists, but many
-specialised generators are available via flags.
+.B namgen
+generates fantasy names using various algorithms and word lists.
 .SH OPTIONS
 .TP
-.B \-a, \-\-adj-file FILE
-Path to a custom adjective list file.
+.B \-a, \-\-adj\-file FILE
+Path to custom adjectives file
 .TP
 .B \-e, \-\-exclude STRING
-Characters to strip from generated words.
+Characters to strip from generated words
 .TP
-.B \-n, \-\-noun FILE
-Path to a custom noun list file.
+.B \-n, \-\-noun\-file FILE
+Path to custom noun file
 .TP
 .B \-s SEP, \-\-separator SEP
-Custom separator string (default: \-).
+Custom separator string (default: \-)
 .TP
-.B \-x, \-\-null-separator
-Do not print the separator (produces a concatenated name).
+.B \-x, \-\-null\-separator
+Do not print the separator
 .TP
 .B \-c COUNT, \-\-count COUNT
-Number of names to generate (default: terminal height).
+Number of names to generate (default: terminal height)
 .TP
 .B \-\-cap, \-\-capcasing
-Capitalize the first letter of **both** adjective and noun (CapWords style).
+Capitalize first letter of both adjective and noun
 .TP
 .B \-\-camel, \-\-camelcasing
-CamelCase style – adjective lower‑cased, noun capitalized.
+CamelCase style (adjective lower\-cased, noun capitalized)
 .TP
 .B \-\-debug
-Enable debug output (sets the \fBDEBUG=true\fR environment variable).
+Enable debug output
 .TP
-.B \-\-elf, \-\-lotr-elf, \-\-lord_of_the_rings-elfs
-Generate fantasy‑elf style names (uses the built‑in ELF generator).
+.B \-\-destiny\-awokens
+Generate fantasy\-destiny awoken style names
 .TP
-.B \-\-halo-forerunners
-Generate Halo “forerunners” style names (ignores adjective/noun files).
+.B \-\-destiny\-cabals
+Generate fantasy\-destiny cabals style names
 .TP
-.B \-\-halo-mgalekgolos
-Generate Halo “Mgalekgolos” style names (built‑in generator).
+.B \-\-destiny\-exos
+Generate fantasy\-destiny exos style names
 .TP
-.B \-\-warhammer-daemons_of_chaos
-Generate Warhammer “Daemons of Chaos” style names (built‑in generator).
+.B \-\-destiny\-fallens
+Generate fantasy\-destiny fallens style names
 .TP
-.B \-\-fantasy-animatronics
-Generate fantasy “animatronics” style names (ignores adjective/noun files).
+.B \-\-destiny\-hives
+Generate fantasy\-destiny hives style names
 .TP
-.B \-\-destiny-awokens
-Generate fantasy‑destiny “awokens” style names.
+.B \-\-destiny\-humans
+Generate fantasy\-destiny humans style names
 .TP
-.B \-\-destiny-cabals
-Generate fantasy‑destiny “cabals” style names.
+.B \-\-destiny\-vexs
+Generate fantasy\-destiny vexs style names
 .TP
-.B \-\-destiny-exos
-Generate fantasy‑destiny “exos” style names.
+.B \-\-diablo\-angels
+Generate Diablo angels style names
 .TP
-.B \-\-destiny-fallens
-Generate fantasy‑destiny “fallens” style names.
+.B \-\-diablo\-demons
+Generate Diablo demons style names
 .TP
-.B \-\-destiny-hives
-Generate fantasy‑destiny “hives” style names.
+.B \-\-diablo\-khazras
+Generate Diablo khazras style names
 .TP
-.B \-\-destiny-humans
-Generate fantasy‑destiny “humans” style names.
+.B \-\-diablo\-nephalems
+Generate Diablo nephalems style names
 .TP
-.B \-\-destiny-vexs
-Generate fantasy‑destiny “vexs” style names.
+.B \-\-doctor_who\-silurians
+Generate Doctor Who Silurians style names
 .TP
-.B \-\-diablo-angels
-Generate Diablo “angels” style names.
+.B \-\-doctor_who\-raxacoricofallapatorians
+Generate Doctor Who Raxacoricofallapatorians style names
 .TP
-.B \-\-diablo-demons
-Generate Diablo “demons” style names.
+.B \-\-dragon_age\-dwarfs
+Generate Dragon Age dwarf names (legacy JS generator)
 .TP
-.B \-\-diablo-khazras
-Generate Diablo “khazras” style names.
+.B \-\-dragon_ball\-others
+Generate Dragon Ball "other ..." style names
 .TP
-.B \-\-diablo-nephalems
-Generate Diablo “nephalems” style names.
+.B \-\-dragon_ball\-frieza_clans
+Generate Dragon Ball Frieza Clans names
 .TP
-.B \-\-doctor_who-silurians
-Generate Doctor Who “Silurians” style names.
+.B \-\-dragon_ball\-hakaishins
+Generate Dragon Ball Hakaishins names
 .TP
-.B \-\-doctor_who-raxacoricofallapatorians
-Generate Doctor Who “Raxacoricofallapatorians” (Rift‑Bahmis) style names.
+.B \-\-dragon_ball\-humans
+Generate Dragon Ball human names (male/female)
 .TP
-.B \-\-dragon_age-dwarfs
-Generate Dragon Age dwarf names (legacy JavaScript generator).
+.B \-\-dragon_ball\-saiyans
+Generate Dragon Ball Saiyan names
 .TP
-.B \-\-dragon_ball-others
-Generate Dragon Ball “other …” style names.
+.B \-\-dragon_ball\-skians
+Generate Dragon Ball Skians names
 .TP
-.B \-\-dragon_ball-frieza_clans
-Generate Dragon Ball “Frieza Clans” style names.
+.B \-\-dragon_ball\-tuffles
+Generate Dragon Ball Tuffles names
 .TP
-.B \-\-dragon_ball-hakaishins
-Generate Dragon Ball “Hakaishins” style names.
+.B \-\-dungeon_and_dragons\-devas
+Generate Dungeons & Dragons "devas" names
 .TP
-.B \-\-dragon_ball-humans
-Generate Dragon Ball human names (male/female).
+.B \-\-dungeon_and_dragons\-dragonborns
+Generate Dungeons & Dragons "dragonborns" names
 .TP
-.B \-\-dragon_ball-saiyans
-Generate Dragon Ball “Saiyans” style names.
+.B \-\-dungeon_and_dragons\-drows
+Generate Dungeons & Dragons "drows" names
 .TP
-.B \-\-dragon_ball-skians
-Generate Dragon Ball “Skians” style names.
+.B \-\-dungeon_and_dragons\-dwarfs
+Generate Dungeons & Dragons "dwarfs" names
 .TP
-.B \-\-dragon_ball-tuffles
-Generate Dragon Ball “Tuffles” style names.
+.B \-\-dungeon_and_dragons\-eladrins
+Generate Dungeons & Dragons "eladrins" names
 .TP
-.B \-\-dungeon_and_dragons-devas
-Generate Dungeons & Dragons “devas” style names.
+.B \-\-dungeon_and_dragons\-elfs
+Generate Dungeons & Dragons "elfs" names
 .TP
-.B \-\-dungeon_and_dragons-dragonborns
-Generate Dungeons & Dragons “dragonborns” style names.
+.B \-\-dungeon_and_dragons\-githzerais
+Generate Dungeons & Dragons "githzerais" names
 .TP
-.B \-\-dungeon_and_dragons-drows
-Generate Dungeons & Dragons “drows” style names.
+.B \-\-elf, \-\-lotr\-elf, \-\-lord_of_the_rings\-elfs
+Generate fantasy\-elf style names (uses built\-in generator)
 .TP
-.B \-\-dungeon_and_dragons-dwarfs
-Generate Dungeons & Dragons “dwarfs” style names.
+.B \-\-elder_scrolls\-bosmers
+Generate Elder Scrolls Bosmer style names (uses built\-in generator)
 .TP
-.B \-\-dungeon_and_dragons-eladrins
-Generate Dungeons & Dragons “eladrins” style names.
+.B \-\-eve_online\-gallentes
+Generate Eve Online Gallentes style names (uses built\-in generator)
 .TP
-.B \-\-dungeon_and_dragons-elfs
-Generate Dungeons & Dragons “elfs” style names.
+.B \-\-fantasy\-aliens
+Generate fantasy "aliens" names
 .TP
-.B \-\-dungeon_and_dragons-githzerais
-Generate Dungeons & Dragons “githzerais” style names.
+.B \-\-fantasy\-amazons
+Generate fantasy "amazons" names
 .TP
-.B \-\-fantasy-aliens
-Generate fantasy “aliens” style names.
+.B \-\-fantasy\-angels
+Generate fantasy "angels" names
 .TP
-.B \-\-fantasy-amazons
-Generate fantasy “amazons” style names.
+.B \-\-fantasy\-animal_species
+Generate fantasy "animal species" names
 .TP
-.B \-\-fantasy-angels
-Generate fantasy “angels” style names.
+.B \-\-fantasy\-animatronics
+Generate fantasy "animatronics" style names (ignores adjective/noun files)
 .TP
-.B \-\-fantasy-animal_species
-Generate fantasy “animal species” style names.
+.B \-\-halo\-forerunners
+Generate Halo "forerunners" style names (ignores adjective/noun files)
 .TP
-.B \-\-fantasy-apocalypse_mutants
-Generate fantasy “apocalypse mutants” style names.
+.B \-\-halo\-mgalekgolos
+Generate Halo "Mgalekgolos" style names (uses built\-in generator)
 .TP
-.B \-\-elder_scrolls-bosmers
-Generate Elder Scrolls “Bosmers” style names (built‑in generator).
+.B \-\-harry_potter\-goblins
+Generate Harry Potter "Goblins" style names (uses built\-in generator)
 .TP
-.B \-\-eve_online-gallentes
-Generate Eve Online “Gallentes” style names (built‑in generator).
+.B \-\-inheritance_cycle\-dragons
+Generate Inheritance Cycle dragons names
 .TP
-.B \-\-harry_potter-goblins
-Generate Harry Potter “Goblins” style names (built‑in generator).
+.B \-\-military\-united_states
+Generate United States military call\-sign style names (two random NATO phonetic alphabet words)
 .TP
-.B \-\-places-plazas
-Generate plaza names.
+.B \-\-military\-royal_navy
+Generate Royal Navy military call\-sign style names
 .TP
-.B \-\-military-united_states
-Generate United States military call‑sign style names (two random NATO phonetic alphabet words).
+.B \-\-pets\-marine_mammals
+Generate marine mammal names (uses built\-in marine\-mammal generator)
 .TP
-.B \-\-military-royal_navy
-Generate Royal Navy military call‑sign style names.
+.B \-\-pets\-reptiles
+Generate reptile pet names (legacy JS generator)
 .TP
-.B \-\-warhammer-ogres
-Generate Warhammer “ogres” style names.
+.B \-\-rift\-bahmis
+Generate Rift Bahmi names (uses built\-in generator)
 .TP
-.B \-\-towns_and_cities-ancient_greek_towns
-Generate ancient Greek town and city names.
+.B \-\-star_wars_the_old_republic\-cathars
+Generate Star Wars: The Old Republic Cathar names (uses built\-in generator)
 .TP
-.B \-\-final_fantasy-roegadyns
-Generate Final Fantasy “Roegadyn” style names.
+.B \-\-towns_and_cities\-dwarven_citys
+Generate dwarven city names (towns_and_cities\-dwarven_citys)
 .TP
-.B \-\-pets-marine_mammals
-Generate marine‑mammal names (built‑in generator).
+.B \-\-towns_and_cities\-east_european_towns
+Generate East European Towns and Cities
 .TP
-.B \-\-rift-bahmis
-Generate Rift “Bahmis” names (built‑in generator).
+.B \-\-towns_and_cities\-west_european_towns
+Generate West European Towns and Cities
 .TP
-.B \-\-rift-eths
-Generate Rift “Eths” names (built‑in generator).
+.B \-\-warhammer\-daemons_of_chaos
+Generate Warhammer "Daemons of Chaos" style names (uses built\-in generator)
 .TP
-.B \-\-inheritance_cycle-dragons
-Generate inheritance‑cycle dragon names.
+.B \-\-warhammer_40k\-sisters_of_battles
+Generate Warhammer 40k Sisters of Battles names
 .TP
-.B \-\-pop_culture-homestucks
-Generate pop‑culture “Homestucks” names.
+.B \-\-wildstar\-mordeshs
+Generate Wildstar Mordesh names
 .TP
-.B \-\-warhammer_40k-sisters_of_battles
-Generate Warhammer 40k “Sisters of Battles” names.
+.B \-\-real\-anglo_saxons
+Generate real Anglo-Saxon names (male and female)
 .TP
-.B \-\-towns_and_cities-east_european_towns
-Generate East European town and city names.
+.B \-h, \-\-help
+Show this help message and exit
+.SH ENVIRONMENT
 .TP
-.B \-\-real-norwegians
-Generate real Norwegian names.
+.B ASSETS_DIR
+Path to assets directory (default: ./assets)
 .TP
-.B \-\-star_wars_the_old_republic-cathars
-Generate Star Wars: The Old Republic “Cathars” style names (built‑in generator).
+.B ADJ_FOLDER
+Path to adjectives folder (default: ${ASSETS_DIR}/adjectives)
 .TP
-.B \-\-pets-reptiles
-Generate reptile pet names (legacy JavaScript generator).
+.B NOUN_FOLDER
+Path to nouns folder (default: ${ASSETS_DIR}/nouns)
 .TP
-.B \-\-help, \-h
-Show this help message and exit.
+.B ADJ_FILE
+Path to specific adjective file (overrides random selection from folder)
+.TP
+.B NOUN_FILE
+Path to specific noun file (overrides random selection from folder)
+.TP
+.B SEPARATOR
+Separator to use between adjective and noun (default: \-)
+.TP
+.B NULL_SEPARATOR
+Set to "true" to disable separator (overrides \-x flag)
+.TP
+.B CAPCASING
+Set to "true" to capitalize first letter of both adjective and noun
+.TP
+.B CAMELCASING
+Set to "true" to use CamelCase style (adjective lower\-cased, noun capitalized)
+.TP
+.B counto
+Number of names to generate (overrides \-c flag)
+.SH EXAMPLES
+.Generate 5 fantasy names:
+.EX
+namgen \-c 5
+.EE
+.Generate 3 names with custom separator:
+.EX
+namgen \-c 3 \-s "_"
+.EE
+.Generate Anglo-Saxon names:
+.EX
+namgen \-\-real\-anglo_saxons \-c 5
+.EE
+.SH AUTHOR
+Written by the namgen development team.
+.SH "REPORTING BUGS"
+Report bugs to the project maintainers.
+.SH "COPYRIGHT"
+Copyright © 2023 namgen developers
+.LP
+This is free software; see the source for copying conditions. There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

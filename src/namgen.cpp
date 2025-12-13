@@ -11,51 +11,51 @@
 #include <vector>
 
 #include "lord_of_the_rings-elfs_lib.h"
-#include "destiny-awokens_lib.h"          
-#include "destiny-cabals_lib.h"           
-#include "destiny-exos_lib.h"             
-#include "destiny-fallens_lib.h"          
-#include "destiny-hives_lib.h"            
-#include "destiny-humans_lib.h"           
-#include "destiny-vexs_lib.h"             
-#include "diablo-angels_lib.h"            
-#include "diablo-demons_lib.h"            
-#include "diablo-khazras_lib.h"           
-#include "diablo-nephalems_lib.h"         
-#include "dragon_ball-others_lib.h"       
-#include "dragon_ball-frieza_clans_lib.h" 
-#include "dragon_ball-hakaishins_lib.h"   
-#include "dragon_ball-humans_lib.h"       
-#include "dragon_ball-saiyans_lib.h"      
-#include "dragon_ball-skians_lib.h"       
-#include "dragon_ball-tuffles_lib.h"      
-#include "dungeon_and_dragons-devas_lib.h" 
-#include "dungeon_and_dragons-dragonborns_lib.h" 
-#include "dungeon_and_dragons-drows_lib.h" 
-#include "dungeon_and_dragons-dwarfs_lib.h" 
-#include "dungeon_and_dragons-eladrins_lib.h" 
-#include "dungeon_and_dragons-elfs_lib.h" 
-#include "dungeon_and_dragons-githzerais_lib.h" 
-#include "fantasy-aliens_lib.h"           
-#include "fantasy-amazons_lib.h"          
-#include "fantasy-angels_lib.h"           
-#include "fantasy-animal_species_lib.h"   
-#include "fantasy-animatronics_lib.h"    
-#include "fantasy-apocalypse_mutants_lib.h" 
-#include "halo-forerunners_lib.h"         
-#include "military-united_states_lib.h"   
+#include "destiny-awokens_lib.h"
+#include "destiny-cabals_lib.h"
+#include "destiny-exos_lib.h"
+#include "destiny-fallens_lib.h"
+#include "destiny-hives_lib.h"
+#include "destiny-humans_lib.h"
+#include "destiny-vexs_lib.h"
+#include "diablo-angels_lib.h"
+#include "diablo-demons_lib.h"
+#include "diablo-khazras_lib.h"
+#include "diablo-nephalems_lib.h"
+#include "dragon_ball-others_lib.h"
+#include "dragon_ball-frieza_clans_lib.h"
+#include "dragon_ball-hakaishins_lib.h"
+#include "dragon_ball-humans_lib.h"
+#include "dragon_ball-saiyans_lib.h"
+#include "dragon_ball-skians_lib.h"
+#include "dragon_ball-tuffles_lib.h"
+#include "dungeon_and_dragons-devas_lib.h"
+#include "dungeon_and_dragons-dragonborns_lib.h"
+#include "dungeon_and_dragons-drows_lib.h"
+#include "dungeon_and_dragons-dwarfs_lib.h"
+#include "dungeon_and_dragons-eladrins_lib.h"
+#include "dungeon_and_dragons-elfs_lib.h"
+#include "dungeon_and_dragons-githzerais_lib.h"
+#include "fantasy-aliens_lib.h"
+#include "fantasy-amazons_lib.h"
+#include "fantasy-angels_lib.h"
+#include "fantasy-animal_species_lib.h"
+#include "fantasy-animatronics_lib.h"
+#include "fantasy-apocalypse_mutants_lib.h"
+#include "halo-forerunners_lib.h"
+#include "military-united_states_lib.h"
 #include "military-royal_navy_lib.h"
 #include "diablo-angels_lib.h"
-#include "warhammer-ogres_lib.h"          
-#include "doctor_who-silurians_lib.h"    
-#include "final_fantasy-roegadyns_lib.h"   
+#include "warhammer-ogres_lib.h"
+#include "doctor_who-silurians_lib.h"
+#include "final_fantasy-roegadyns_lib.h"
 #include "pets-marine_mammals_lib.h"
 #include "rift-bahmis_lib.h"
 #include "doctor_who-raxacoricofallapatorians_lib.h"
 #include "inheritance_cycle-dragons_lib.h"
 #include "pop_culture-homestucks_lib.h"
 #include "warhammer_40k-sisters_of_battles_lib.h"
-#include "towns_and_cities-ancient_greek_towns_lib.h"   
+#include "towns_and_cities-ancient_greek_towns_lib.h"
 #include "towns_and_cities-dwarven_citys_lib.h"
 #include "towns_and_cities-east_european_towns_lib.h"
 #include "towns_and_cities-west_european_towns_lib.h"
@@ -72,9 +72,10 @@
 #include "dragon_age-dwarfs_lib.h"
 #include "pets-reptiles_lib.h"
 #include "wildstar-mordeshs_lib.h"
+#include "real-anglo_saxons_lib.h"
 
 using namespace std::filesystem;
-namespace fs = std::filesystem;   
+namespace fs = std::filesystem;
 
 static constexpr int DEFAULT_TERMINAL_LINES = 24; // Used as fallback when terminal height detection fails
 
@@ -217,52 +218,52 @@ struct CommandLineOptions {
     bool debug = false;
     bool capcasing = false;
     bool camelcasing = false;
-    bool elfFlag = false;          
-    bool haloForerunners = false;  
-    bool fantasyAnimatronics = false; 
-    bool destinyAwokens = false;   
-    bool destinyCabals = false;    
-    bool destinyExos = false;      
-    bool destinyFallens = false;   
-    bool destinyHives = false;     
-    bool destinyHumans = false;    
-    bool destinyVexs = false;      
-    bool diabloAngels = false;     
-    bool diabloDemons = false;     
-    bool diabloKhazras = false;    
-    bool diabloNephalems = false;  
-    bool dragonBallOthers = false; 
-    bool dragonBallFriezaClans = false; 
-    bool dragonBallHakaishins = false; 
-    bool dragonBallHumans = false; 
-    bool dragonBallSaiyans = false; 
-    bool dragonBallSkians = false; 
-    bool dragonBallTuffles = false; 
-    bool dungeonAndDragonsDevas = false; 
-    bool dungeonAndDragonsDragonborns = false; 
-    bool dungeonAndDragonsDrows = false; 
-    bool dungeonAndDragonsDwarfs = false; 
-    bool dungeonAndDragonsEladrins = false; 
-    bool dungeonAndDragonsElfs = false; 
-    bool dungeonAndDragonsGithzerais = false; 
-    bool fantasyAliens = false;    
-    bool fantasyAmazons = false;   
-    bool fantasyAngels = false;    
-    bool fantasyAnimalSpecies = false; 
-    bool fantasyApocalypseMutants = false; 
-    bool militaryUnitedStates = false; 
-    bool warhammerOgres = false;   
-    bool doctor_who_silurians = false; 
-    bool townsAndCitiesAncientGreekTowns = false; 
+    bool elfFlag = false;
+    bool haloForerunners = false;
+    bool fantasyAnimatronics = false;
+    bool destinyAwokens = false;
+    bool destinyCabals = false;
+    bool destinyExos = false;
+    bool destinyFallens = false;
+    bool destinyHives = false;
+    bool destinyHumans = false;
+    bool destinyVexs = false;
+    bool diabloAngels = false;
+    bool diabloDemons = false;
+    bool diabloKhazras = false;
+    bool diabloNephalems = false;
+    bool dragonBallOthers = false;
+    bool dragonBallFriezaClans = false;
+    bool dragonBallHakaishins = false;
+    bool dragonBallHumans = false;
+    bool dragonBallSaiyans = false;
+    bool dragonBallSkians = false;
+    bool dragonBallTuffles = false;
+    bool dungeonAndDragonsDevas = false;
+    bool dungeonAndDragonsDragonborns = false;
+    bool dungeonAndDragonsDrows = false;
+    bool dungeonAndDragonsDwarfs = false;
+    bool dungeonAndDragonsEladrins = false;
+    bool dungeonAndDragonsElfs = false;
+    bool dungeonAndDragonsGithzerais = false;
+    bool fantasyAliens = false;
+    bool fantasyAmazons = false;
+    bool fantasyAngels = false;
+    bool fantasyAnimalSpecies = false;
+    bool fantasyApocalypseMutants = false;
+    bool militaryUnitedStates = false;
+    bool warhammerOgres = false;
+    bool doctor_who_silurians = false;
+    bool townsAndCitiesAncientGreekTowns = false;
     bool townsAndCitiesEastEuropeanTowns = false;
     bool townsAndCitiesWestEuropeanTowns = false;
-    bool finalFantasyRoegadyns = false;   
+    bool finalFantasyRoegadyns = false;
     bool petsMarineMammals = false;
     bool riftBahmis = false;
     bool riftEths = false;
     bool doctor_who_raxacoricofallapatorians = false;
-    bool inheritanceCycleDragons = false;   
-    bool popCultureHomestucks = false;      
+    bool inheritanceCycleDragons = false;
+    bool popCultureHomestucks = false;
     bool warhammer40kSistersOfBattles = false;
     bool realNorwegians = false;
     bool haloMgalekgolos = false;
@@ -278,6 +279,7 @@ struct CommandLineOptions {
     bool petsReptiles = false;
     bool wildstarMordeshs = false;
     bool townsAndCitiesDwarvenCitys = false;
+    bool realAngloSaxons = false; // New flag for Anglo-Saxon names
 };
 
 /* Helper: get environment variable or fallback */
@@ -555,9 +557,9 @@ int main(int argc, char* argv[]) {
         } else if (arg == "--doctor_who-ice_warriors") {
             opts.doctor_who_ice_warriors = true;
         } else if (arg == "--inheritance_cycle-dragons") {
-            opts.inheritanceCycleDragons = true;   
+            opts.inheritanceCycleDragons = true;
         } else if (arg == "--pop_culture-homestucks") {
-            opts.popCultureHomestucks = true;      
+            opts.popCultureHomestucks = true;
         } else if (arg == "--warhammer_40k-sisters_of_battles") {
             opts.warhammer40kSistersOfBattles = true;
         } else if (arg == "--towns_and_cities-east_european_towns") {
@@ -582,6 +584,8 @@ int main(int argc, char* argv[]) {
             opts.wildstarMordeshs = true;
         } else if (arg == "--towns_and_cities-dwarven_citys") {
             opts.townsAndCitiesDwarvenCitys = true;
+        } else if (arg == "--real-anglo_saxons") { // New flag for Anglo-Saxon names
+            opts.realAngloSaxons = true;
         } else if (arg == "--help" || arg == "-h") {
             std::cout << "Usage: ./namgen [options]\\n\\n";
             std::cout << "Options:\\n";
@@ -645,6 +649,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --warhammer-daemons_of_chaos  Generate Warhammer “Daemons of Chaos” style names (uses built‑in generator)\\n";
             std::cout << "  --warhammer_40k-sisters_of_battles Generate Warhammer 40k Sisters of Battles names\\n";
             std::cout << "  --wildstar-mordeshs Generate Wildstar Mordeshs names\\n";
+            std::cout << "  --real-anglo_saxons      Generate real Anglo-Saxon names (male and female)\\n"; // New help entry
             std::cout << "  --help, -h               Show this help message and exit\\n";
             return 0;
         } else if (arg.rfind("-", 0) == 0) {
@@ -779,6 +784,19 @@ int main(int argc, char* argv[]) {
 
     // ------ Main generation loop ------
     for (std::size_t countzero = 0; countzero < counto; ++countzero) {
+        if (opts.realAngloSaxons) { // New Anglo-Saxon names handling
+            std::string angloSaxonName = generate_real_anglo_saxons_name(rng);
+            if (optDebug) {
+                printGeneratedName(angloSaxonName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << angloSaxonName << "\n";
+            }
+            continue;
+        }
+
         if (opts.destinyAwokens) {
             std::string awokenName = generate_destiny_awoken_name(rng, 0);
             if (optDebug) {
@@ -985,7 +1003,7 @@ int main(int argc, char* argv[]) {
             }
             continue;
         }
-	
+
         if (opts.starWarsTheOldRepublicCathars) {
             std::string goblinName = generate_star_wars_the_old_republic_cathars_name(rng);
             if (optDebug) {

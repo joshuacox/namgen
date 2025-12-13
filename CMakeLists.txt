@@ -68,6 +68,7 @@ add_executable(namgen
     src/pets-reptiles_lib.cpp
     src/wildstar-mordeshs_lib.cpp
     src/towns_and_cities-dwarven_citys_lib.cpp
+    src/real-anglo_saxons_lib.cpp
 )
 
 install(TARGETS namgen DESTINATION bin)

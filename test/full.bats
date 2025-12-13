@@ -319,3 +319,7 @@ setup() {
   result="$(counto=10 ./namgen --towns_and_cities-dwarven_citys|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+@test "test namgen --real-anglo_saxons at 10" {
+  result="$(counto=10 ./namgen --real-anglo_saxons|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
