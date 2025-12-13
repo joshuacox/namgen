@@ -64,21 +64,14 @@ do_aider () {
       >> test/full.bats
     ./ignorer.sh
     time1=$(date +%s.%N)
+    export FILES="--file man/namgen.1 --file src/namgen.cpp --file src/${this_lib_file} --file src/${this_lib_h_file} --file CMakeLists.txt --file README.md"
+    export READS="--read test/full.bats --read ${genscript} ${reads}"
+    export MODELS="--model ollama_chat/${model_name} --editor-model ollama_chat/${model_name} --weak-model ollama_chat/${weak_model_name}"
+    export MESSAGE="I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
+    export AIDER_OPTS="${FILES} ${READS} ${MODELS}"
+    export AIDER_CMD="aider-ce ${AIDER_OPTS}"
 
-    time aider-ce \
-    --model "ollama_chat/${model_name}"           \
-    --editor-model "ollama_chat/${model_name}"    \
-    --weak-model "ollama_chat/${weak_model_name}" \
-    --read test/full.bats \
-    --read "${genscript}"  \
-    $reads \
-    --file man/namgen.1 \
-    --file src/namgen.cpp \
-    --file "src/${this_lib_file}" \
-    --file "src/${this_lib_h_file}" \
-    --file CMakeLists.txt \
-    --file README.md \
-    -m "I'd like to add a new flag ${this_new_flag} that replicates the functionality in ${this_genscript} in cpp, add this as a lib in ${this_lib_file}_lib.cpp and include this functionality in namgen.cpp, update CMakeLists.txt to build ${this_lib_file}_lib.cpp and include it in the installation, update the man page."
+    time ${AIDER_CMD} -m "${MESSAGE}"
 
     time2=$(date +%s.%N)
     diff=$(echo "scale=40;${time2} - ${time1}" | bc)
