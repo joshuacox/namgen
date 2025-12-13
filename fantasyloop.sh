@@ -92,6 +92,7 @@ do_aider () {
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
       add_score "eagle"
+      scripts/reset2main.sh
       #echo "${this_new_name},${model_name},${time_delta},${loopster_count},eagle" >> score.csv
     fi
     #set -e
