@@ -2,7 +2,7 @@
 SOURCE_DIR=".javascript-fantasy-names-deprecated/generators"
 source .venv/bin/activate
 : ${counto:=0}
-: ${diff:=0}
+: ${time_delta:=0}
 : ${VERBOSITY:=0}
 reads=''
 mass_reader () {
@@ -16,16 +16,16 @@ done
 
 add_score() {
     SCORE_MESSAGE=$1
-    echo "${this_new_name},${model_name},${diff},${loopster_count},${SCORE_MESSAGE}" >> score.csv
+    echo "${this_new_name},${model_name},${time_delta},${loopster_count},${SCORE_MESSAGE}" >> score.csv
 }
 
 # Function to be called when Ctrl+C is pressed
 ctrl_c() {
     echo -e "\n** Ouch! SIGINT received (Ctrl+C). Performing cleanup..." >&2
     time2=$(date +%s.%N)
-    export diff=$(echo "scale=40;${time2} - ${time1}" | bc)
+    export time_delta=$(echo "scale=40;${time2} - ${time1}" | bc)
     add_score "interrupt-fail"
-    #echo "${this_new_name},${model_name},${diff},${loopster_count},interrupt-fail" >> score.csv
+    #echo "${this_new_name},${model_name},${time_delta},${loopster_count},interrupt-fail" >> score.csv
     echo "** Cleanup complete. Exiting script." >&2
     exit 1  # Exit the script after handling the signal
 }
@@ -65,7 +65,7 @@ do_aider () {
       < test/test.tpl \
       >> test/full.bats
     ./ignorer.sh
-    time1=$(date +%s.%N)
+    export time1=$(date +%s.%N)
     export FILES="--file man/namgen.1 --file src/namgen.cpp --file src/${this_lib_file} --file src/${this_lib_h_file} --file CMakeLists.txt --file README.md"
     export READS="--read test/full.bats --read ${genscript} ${reads}"
     export MODELS="--model ollama_chat/${model_name} --editor-model ollama_chat/${model_name} --weak-model ollama_chat/${weak_model_name}"
@@ -76,13 +76,13 @@ do_aider () {
     time ${AIDER_CMD} -m "${MESSAGE}"
 
     time2=$(date +%s.%N)
-    export diff=$(echo "scale=40;${time2} - ${time1}" | bc)
+    export time_delta=$(echo "scale=40;${time2} - ${time1}" | bc)
     clean_dirty_git
     set +e
     bats test/full.bats
     if [[ ! $? -eq 0 ]]; then
       add_score "initial-fail"
-      #echo "${this_new_name},${model_name},${diff},${loopster_count},initial-fail" >> score.csv
+      #echo "${this_new_name},${model_name},${time_delta},${loopster_count},initial-fail" >> score.csv
       loopster -c 5 \
         --success-cleanup ./successLoopster.sh \
         --fail-cleanup ./failLoopster.sh \
@@ -92,7 +92,7 @@ do_aider () {
       clean_dirty_git
       git checkout -b "${this_new_name}_success"
       add_score "eagle"
-      #echo "${this_new_name},${model_name},${diff},${loopster_count},eagle" >> score.csv
+      #echo "${this_new_name},${model_name},${time_delta},${loopster_count},eagle" >> score.csv
     fi
     #set -e
     echo $reads|grep "src/$this_lib_file" > /dev/null
