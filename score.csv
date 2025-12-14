@@ -15,3 +15,5 @@ legend_of_zelda-fairys,aider-ce,llama3.1:70b,whole,2025-12-13-16:17:11,176566423
 places-harbors,aider-ce,nous-hermes2:latest,whole,2025-12-13-16:23:36,1765664616,45.418183221,0,interrupt-fail
 descriptions-prophecys,cecli,gpt-oss:120b,whole,2025-12-13-17:17:41,1765667861,216.692417614,0,interrupt-fail
 dungeon_and_dragons-humans,aider,mistral-nemo:latest,diff,2025-12-13-19:25:00,1765675500,6747.449277941,0,interrupt-fail
+guild_wars-sylvaris,aider-ce,nous-hermes2:latest,udiff,2025-12-13-20:07:27,1765678047,2057.648339083,0,initial-fail
+guild_wars-sylvaris,aider-ce,nous-hermes2:latest,udiff,2025-12-13-20:09:49,1765678189,2208.005556029,0,interrupt-fail
