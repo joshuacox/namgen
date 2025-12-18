@@ -23,3 +23,5 @@ star_wars_the_old_republic-mirialans,aider,llama3.2:latest,diff-fenced,2025-12-1
 star_wars_the_old_republic-chiss,cecli,DeepSeek-R1:70b,diff-fenced,2025-12-14-04:47:19,1765709239,437.336228477,0,initial-fail
 wildstar-drakens,aider-ce,llama3.2:latest,udiff,2025-12-17-18:35:05,1766018105,17.123130291,0,initial-fail
 wildstar-drakens,aider-ce,llama3.2:latest,udiff,2025-12-17-18:38:28,1766018308,229.102249035,0,interrupt-fail
+warhammer-goblins,aider,nous-hermes2:latest,editor-diff,2025-12-17-18:47:18,1766018838,20.681203647,0,initial-fail
+warhammer-goblins,aider,nous-hermes2:latest,editor-diff,2025-12-17-18:47:55,1766018875,64.906287054,0,interrupt-fail
