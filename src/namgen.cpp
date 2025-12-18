@@ -70,6 +70,7 @@
 #include "game_of_thrones-dothrakis_lib.h"
 #include "eve_online-gallentes_lib.h"
 #include "star_wars_the_old_republic-cathars_lib.h"
+#include "star_wars_the_old_republic-chiss_lib.h"
 #include "places-plazas_lib.h"
 #include "dragon_age-dwarfs_lib.h"
 #include "pets-reptiles_lib.h"
@@ -276,6 +277,7 @@ struct CommandLineOptions {
     bool harryPotterGoblins = false;
     bool eveOnlineGallentes = false;
     bool starWarsTheOldRepublicCathars = false;
+    bool starWarsTheOldRepublicChiss = false;
     bool militaryRoyalNavy = false;
     bool placesPlazas = false;
     bool dragonAgeDwarfs = false;
@@ -582,6 +584,8 @@ int main(int argc, char* argv[]) {
             opts.eveOnlineGallentes = true;
         } else if (arg == "--star_wars_the_old_republic-cathars") {
             opts.starWarsTheOldRepublicCathars = true;
+        } else if (arg == "--star_wars_the_old_republic-chiss") {
+            opts.starWarsTheOldRepublicChiss = true;
         } else if (arg == "--military-royal_navy") {
             opts.militaryRoyalNavy = true;
         } else if (arg == "--dragon_age-dwarfs") {
@@ -658,6 +662,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --pets-reptiles          Generate reptile pet names (legacy JS generator)\\n";
             std::cout << "  --rift-bahmis            Generate a Rift‑Bahmis name (uses built‑in generator)\\n";
             std::cout << "  --star_wars_the_old_republic-cathars   Generate Cathars style names (uses built‑in generator)\\n";
+            std::cout << "  --star_wars_the_old_republic-chiss   Generate Chiss style names (uses built‑in generator)\\n";
             std::cout << "  --towns_and_cities-dwarven_citys  Generate dwarven city names (towns_and_cities‑dwarven_citys)\\n";
             std::cout << "  --towns_and_cities-east_european_towns Generate East European Towns and Cities\\n";
             std::cout << "  --warhammer-daemons_of_chaos  Generate Warhammer “Daemons of Chaos” style names (uses built‑in generator)\\n";
@@ -1040,6 +1045,19 @@ int main(int argc, char* argv[]) {
                                   ""); // no separator
             } else {
                 std::cout << goblinName << "\n";
+            }
+            continue;
+        }
+
+        if (opts.starWarsTheOldRepublicChiss) {
+            std::string chissName = generate_star_wars_the_old_republic_chiss_name(rng);
+            if (optDebug) {
+                printGeneratedName(chissName, countzero, counto,
+                                  fs::path(), fs::path(),
+                                  fs::path(), fs::path(),
+                                  ""); // no separator
+            } else {
+                std::cout << chissName << "\n";
             }
             continue;
         }

@@ -61,6 +61,7 @@ add_executable(namgen
     src/harry_potter-goblins_lib.cpp
     src/eve_online-gallentes_lib.cpp
     src/star_wars_the_old_republic-cathars_lib.cpp
+    src/star_wars_the_old_republic-chiss_lib.cpp
     src/military-royal_navy_lib.cpp
     src/towns_and_cities-west_european_towns_lib.cpp
     src/places-plazas_lib.cpp

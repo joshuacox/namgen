@@ -20,3 +20,4 @@ guild_wars-sylvaris,aider-ce,nous-hermes2:latest,udiff,2025-12-13-20:09:49,17656
 pets-elephants,aider,llama3.2:latest,diff-fenced,2025-12-14-04:35:17,1765708517,855.197293479,0,interrupt-fail
 star_wars_the_old_republic-mirialans,aider,llama3.2:latest,diff-fenced,2025-12-14-05:51:10,1765713070,150.490844468,0,initial-fail
 star_wars_the_old_republic-mirialans,aider,llama3.2:latest,diff-fenced,2025-12-14-06:07:25,1765714045,1133.468466859,0,interrupt-fail
+star_wars_the_old_republic-chiss,cecli,DeepSeek-R1:70b,diff-fenced,2025-12-14-04:47:19,1765709239,437.336228477,0,initial-fail

@@ -335,3 +335,7 @@ setup() {
   result="$(counto=10 ./namgen --descriptions-prophecys|wc -l)"
   [[ "$result" -eq 80 ]]
 }
+@test "test namgen --star_wars_the_old_republic-chiss at 10" {
+  result="$(counto=10 ./namgen --star_wars_the_old_republic-chiss|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
