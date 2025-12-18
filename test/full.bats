@@ -171,10 +171,6 @@ setup() {
   result="$(counto=10 ./namgen --destiny-humans|wc -l)"
   [[ "$result" -eq 10 ]]
 }
-@test "test namgen --destiny-vexs at 10" {
-  result="$(counto=10 ./namgen --destiny-vexs|wc -l)"
-  [[ "$result" -eq 10 ]]
-}
 @test "test namgen --dragon_ball-skians at 10" {
   result="$(counto=10 ./namgen --dragon_ball-skians|wc -l)"
   [[ "$result" -eq 10 ]]
@@ -337,5 +333,9 @@ setup() {
 }
 @test "test namgen --star_wars_the_old_republic-chiss at 10" {
   result="$(counto=10 ./namgen --star_wars_the_old_republic-chiss|wc -l)"
+  [[ "$result" -eq 10 ]]
+}
+@test "test namgen --destiny-vexs at 10" {
+  result="$(counto=10 ./namgen  --destiny-vexs|wc -l)"
   [[ "$result" -eq 10 ]]
 }
