@@ -28,3 +28,5 @@ warhammer-goblins,aider,nous-hermes2:latest,editor-diff,2025-12-17-18:47:55,1766
 military-itu,cecli,nous-hermes2:latest,udiff,2025-12-17-19:40:06,1766022006,20.391104410,0,initial-fail
 military-itu,cecli,nous-hermes2:latest,udiff,2025-12-17-19:45:00,1766022300,321.638498951,0,interrupt-fail
 guild_wars-human,aider-ce,mistral-nemo:latest,udiff,2025-12-21-09:15:48,1766330148,126.169042740,0,initial-fail
+mass_effect-batarians,cecli,qwen2.5-coder:32b-base-fp16,editor-whole,2025-12-21-12:18:00,1766341080,608.665269180,0,initial-fail
+mass_effect-batarians,cecli,qwen2.5-coder:32b-base-fp16,editor-whole,2025-12-21-12:18:13,1766341093,1228.332188416,0,interrupt-fail
