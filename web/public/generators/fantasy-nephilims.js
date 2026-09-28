@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$fantasy$nephilims(){var n=["","","","b","d","g","h","j","k","n","p","q","r","s","sh","t","th","z"],r=["a","e","a","e","a","e","a","e","a","e","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","ya","yu","ee","ie","ue","ia"],a=["dr","dj","gr","gn","kb","kn","mj","mr","mz","nz","nq","rq","rm","rj","rz","sb","sz","st","tr","tn","tz","b","d","g","j","k","m","n","q","r","s","t","z","b","d","g","j","k","m","n","q","r","s","t","z","b","d","g","j","k","m","n","q","r","s","t","z"],t=["l","n","s","th","z","l","l","","","","",""];if(i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*r.length),rnd3=Math.floor(Math.random()*a.length),n[rnd]===a[rnd3]&&(rnd3=Math.floor(Math.random()*a.length)),rnd4=Math.floor(Math.random()*r.length),rnd5=Math.floor(Math.random()*t.length),i<4)names=n[rnd]+r[rnd2]+a[rnd3]+r[rnd4]+t[rnd5];else{if(rnd6=Math.floor(Math.random()*a.length),rnd3<21)for(;rnd6<21;)rnd6=Math.floor(Math.random()*a.length);rnd7=Math.floor(Math.random()*r.length),names=n[rnd]+r[rnd2]+a[rnd3]+r[rnd4]+a[rnd6]+r[rnd7]+t[rnd5]}return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["fantasy-nephilims"] = function(type) {
+    return generator$fantasy$nephilims(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

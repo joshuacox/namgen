@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$star_wars$iktotchis(n){var r=["","","","c","d","f","h","k","m","n","r","s","t","v","w","z"],a=["a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","ee","ae","ie","ye","yi","ei"],t=["d","dh","f","fl","fn","l","ll","ld","ln","lm","lr","lv","m","mm","md","mr","mn","mk","n","nn","nh","nk","ng","nv","nl","r","rr","rn","rl","rk","rd","s","sl","sh","shk"],o=["","","","","j","l","m","n","r","s","th"],d=["ch","d","h","j","k","m","n","t","v","z"],h=["a","e","i","a","e","i","a","e","i","o","u","aa","ii"],l=["d","f","h","j","l","m","n","r","s","v","w","z"],e=["","","l","mm","n","r","s"];return i=Math.floor(10*Math.random()),rnd6=Math.floor(Math.random()*d.length),rnd7=Math.floor(Math.random()*h.length),rnd8=Math.floor(Math.random()*e.length),i%2===0?(rnd9=Math.floor(Math.random()*l.length),rnd10=Math.floor(Math.random()*h.length),namelast=d[rnd6]+h[rnd7]+l[rnd9]+h[rnd10]+e[rnd8]):namelast=d[rnd6]+h[rnd7]+e[rnd8],rnd=Math.floor(Math.random()*r.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*t.length),rnd4=Math.floor(Math.random()*a.length),rnd5=Math.floor(Math.random()*o.length),names=r[rnd]+a[rnd2]+t[rnd3]+a[rnd4]+o[rnd5]+"  "+namelast,names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["star_wars-iktotchis"] = function(type) {
+    return generator$star_wars$iktotchis(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

@@ -7,6 +7,8 @@ on:
     paths:
       - 'web/**'
       - '.github/workflows/deploy-web.yml'
+      - 'scripts/export_web_generators.py'
+      - '.javascript-fantasy-names-deprecated/**'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -42,6 +44,10 @@ jobs:
         run: |
           cd web
           npm ci
+
+      - name: Export live JavaScript generator scripts
+        run: |
+          python3 scripts/export_web_generators.py
 
       - name: Build static site with Next.js export
         env:

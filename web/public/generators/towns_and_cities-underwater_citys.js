@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$towns_and_cities$underwater_citys(){var a=["Aby","Abys","Ache","Acio","Aeg","Amphi","Anu","Aqu","Aqua","Aqui","Asha","Ashe","Atla","Azha","Azu","Beli","Bery","Boy","Bri","Cae","Caenu","Cala","Cata","Cla","Coa","Coara","Cora","Delph","Do","Ebi","Expa","Flu","Gey","Gla","Glaci","Hippo","Hy","Hyd","Jutu","Levi","Levia","Limu","Liqi","Liqu","Liqua","Liqui","Litto","Mari","Mer","Mimi","Nata","Nau","Nauti","Nava","Nep","Neph","Nept","Neptu","Nerei","Neri","Njo","Njor","Oce","Ocea","Osi","Paci","Palae","Pela","Pose","Posei","Pura","Puri","Rive","Sala","Sali","Saph","Saphi","Scy","Sequa","Si","Sire","Squa","Te","Tempe","Teth","Tha","Thala","Thau","The","Tri","Trite","Trito","Tsu","Tsuna","Ty","Typh","Va","Vapo","Voltu","Wata"],e=["cada","cadis","cia","cique","cis","dor","dore","gia","lean","lin","lina","lis","loch","lona","lor","lora","lore","lune","mari","mon","mond","na","nas","ne","nea","nia","nis","noch","pis","ra","rai","ran","rei","rem","ren","reth","rey","ri","ria","ril","rin","ris","rius","rus","sa","tas","tesh","thas","theas","this","thys","tia","tin","tis","ton","tria","via"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*a.length),rnd2=Math.floor(Math.random()*e.length),names=a[rnd]+e[rnd2],a.splice(rnd,1),e.splice(rnd2,1),names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["towns_and_cities-underwater_citys"] = function(type) {
+    return generator$towns_and_cities$underwater_citys(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

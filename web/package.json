@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "python3 ../scripts/export_web_generators.py 2>/dev/null || true",
     "build": "next build",
     "start": "next start"
   },

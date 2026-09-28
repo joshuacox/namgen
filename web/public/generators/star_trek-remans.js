@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$star_trek$remans(r){var a=["Aku","Anra","Ari","Axio","Bera","Bi","Bia","Bru","Dena","Dira","Do","Dri","Ja","Jeru","Jia","Jo","Ka","Kara","Kia","Kru","Lira","Lita","Lo","Lori","Me","Mekri","Mi","Mia","Na","Ni","Nira","Nori","Obi","Onu","Ora","Ovi","R'Da","R'Ki","R'Ve","R'Xi","Ra","Rena","Ria","Risu","S'Ha","S'Ki","S'Ma","S'Ri","Sa","Si","Sio","Sira","Tare","Te","Tena","Ti","Tira","Via","Vkru","Vri","Vro","Xa","Xena","Xio","Xiro"],k=["clado","clek","crek","crix","kad","karix","kir","kirud","kix","krax","krikuk","kruvek","kuk","marik","mek","mix","mosik","muk","narix","natek","nuk","nuvik","nux","rad","rarix","rix","ruk","ruvix","sarix","sek","sik","srix","stuk","tek","tix","trik","tuk","turik","vek","vik","vrex","vurik","vux"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*a.length),rnd2=Math.floor(Math.random()*k.length),names=a[rnd]+k[rnd2],names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["star_trek-remans"] = function(type) {
+    return generator$star_trek$remans(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

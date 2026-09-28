@@ -3,12 +3,31 @@
 import React, { useState, useMemo } from 'react';
 import generatorsData from '../data/generators.json';
 import categoriesData from '../data/categories.json';
+import { loadGenerator, executeGenerator } from '../lib/generatorLoader';
 
 export default function GeneratorExplorer() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState(null);
   const [displayLimit, setDisplayLimit] = useState(48);
+  const [liveOutputs, setLiveOutputs] = useState({});
+  const [rollingId, setRollingId] = useState(null);
+
+  const rollCardLive = async (genId) => {
+    setRollingId(genId);
+    try {
+      const fn = await loadGenerator(genId);
+      const names = executeGenerator(fn, 2, { unique: true });
+      setLiveOutputs((prev) => ({
+        ...prev,
+        [genId]: names,
+      }));
+    } catch (e) {
+      console.error('Failed to roll live in card:', genId, e);
+    } finally {
+      setRollingId(null);
+    }
+  };
 
   const filtered = useMemo(() => {
     return generatorsData.filter((gen) => {
@@ -184,29 +203,37 @@ export default function GeneratorExplorer() {
                 </p>
               </div>
 
-              {/* Sample Output preview */}
-              {gen.samples && gen.samples.length > 0 && (
-                <div className="pt-3 border-t border-slate-800/60">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1.5">
-                    Sample Output
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/40 text-xs text-slate-300 font-sans space-y-1">
-                    {gen.samples.slice(0, 2).map((s, i) => (
-                      <div key={i} className="truncate text-slate-200">
-                        • {s}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-2 flex justify-end">
-                    <a
-                      href={`?gen=${gen.id}#simulator`}
-                      className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
-                    >
-                      Try in Simulator →
-                    </a>
-                  </div>
+              {/* Sample / Live Output preview */}
+              <div className="pt-3 border-t border-slate-800/60">
+                <div className="flex items-center justify-between text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1.5">
+                  <span className={liveOutputs[gen.id] ? "text-emerald-400" : ""}>
+                    {liveOutputs[gen.id] ? "⚡ Live Output" : "Sample Output"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => rollCardLive(gen.id)}
+                    disabled={rollingId === gen.id}
+                    className="text-[11px] font-sans font-medium text-emerald-400 hover:text-emerald-300 disabled:opacity-50 transition-colors"
+                  >
+                    {rollingId === gen.id ? "Rolling..." : "⚡ Roll Live"}
+                  </button>
                 </div>
-              )}
+                <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/40 text-xs text-slate-300 font-sans space-y-1">
+                  {(liveOutputs[gen.id] || (gen.samples && gen.samples.length > 0 ? gen.samples.slice(0, 2) : ['Generated instance'])).map((s, i) => (
+                    <div key={i} className="truncate text-slate-200">
+                      • {s}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-2 flex justify-end">
+                  <a
+                    href={`?gen=${gen.id}#simulator`}
+                    className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    Full Simulator →
+                  </a>
+                </div>
+              </div>
             </div>
           ))}
         </div>

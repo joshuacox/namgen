@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$game_of_thrones$unsullieds(){var e=["Ash","Awful","Bad","Black","Blue","Bottom","Broken","Brown","Cheap","Dirt","Dirty","Down","Drab","Dreck","Dust","Feeble","Filthy","Foul","Fragile","Frail","Garbage","Grease","Grey","Grim","Grime","Grisly","Gross","Grotesque","Hideous","Horrid","Ill","Inferior","Infirm","Junk","Lesser","Little","Lousy","Low","Meager","Measly","Mediocre","Menial","Messy","Minor","Monstrous","Muck","Mud","Murky","Nasty","Paltry","Peon","Pesky","Poor","Puny","Raunchy","Red","Repulsive","Revolting","Sad","Scant","Scrap","Shame","Shoddy","Sick","Slag","Slimey","Slop","Smut","Soil","Soot","Stink","Tiny","Trash","Trashy","Trivial","Ugly","Vile","Waste","Worthless","Wracked","Wretched"],r=["Ant","Beetle","Bug","Crawler","Creep","Creeper","Cricket","Curse","Dog","Flea","Fly","Frog","Grub","Insect","Larva","Leech","Maggot","Mite","Mole","Mongrel","Moth","Mouse","Mule","Mutt","Nit","Parasite","Pest","Pig","Rabbit","Rat","Roach","Rodent","Scrub","Shrimp","Snail","Spider","Squirmer","Termite","Tick","Toad","Vermin","Weasel","Weevil","Whelp","Worm","Wriggler","Runt","Slug","Oaf","Prawn","Louse","Skunk"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*e.length),rnd2=Math.floor(Math.random()*r.length),names=e[rnd]+" "+r[rnd2],names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["game_of_thrones-unsullieds"] = function(type) {
+    return generator$game_of_thrones$unsullieds(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

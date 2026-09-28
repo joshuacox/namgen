@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$mass_effect$geths(){var a=["Unit","Platform","Mod","System","SysMod","GU","G-Unit","Geth-Unit","Module"],n=["a","b","c","e","s","x"],e=["Armada","Batallion","Alpha","Omega","Myriad","Sundry","Horde","Brigade","Phalanx","Host","Enigma","Terminus","Prophet","Genesis","Dawn","Oracle","Anomaly","Centurion","Obelisk","Pinnacle","Goliath","Apex","Vortex","Vertex","Armageddon","Oblivion","Eternity","Daemon","Demise","Destiny"];if(i=Math.floor(10*Math.random()),i<6){rnd=Math.floor(Math.random()*a.length);var r=Math.floor(250*Math.random()+1);rnd1=Math.floor(Math.random()*n.length),names=a[rnd]+"-"+r+n[rnd1]}else rnd0=Math.floor(Math.random()*e.length),names=e[rnd0];return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["mass_effect-geths"] = function(type) {
+    return generator$mass_effect$geths(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

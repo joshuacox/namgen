@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$star_trek$pakleds(r){var n=["B","D","G","H","K","L","N","M","P","R"],a=["a","e","o","i","u"],o=["b","d","g","h","k","l","n","m","p","r"],d=["b","d","g","h","k","l","n","m","p","r","",""],t=["b","d","g","k","l","m","p","r","gg","kk","ll","rr"];if(i=Math.floor(10*Math.random()),1===r){for(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*o.length),rnd4=Math.floor(Math.random()*d.length);rnd4===rnd3;)rnd4=Math.floor(Math.random()*d.length);for(rnd5=Math.floor(Math.random()*a.length),rnd6=Math.floor(Math.random()*o.length),rnd7=Math.floor(Math.random()*d.length);rnd6===rnd7;)rnd7=Math.floor(Math.random()*d.length);rnd8=Math.floor(Math.random()*a.length),names=n[rnd]+a[rnd2]+o[rnd3]+d[rnd4]+a[rnd5]+o[rnd6]+d[rnd7]+a[rnd8]}else{for(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*o.length),rnd4=Math.floor(Math.random()*d.length);rnd4===rnd3;)rnd4=Math.floor(Math.random()*d.length);for(rnd5=Math.floor(Math.random()*a.length),rnd6=Math.floor(Math.random()*o.length),rnd7=Math.floor(Math.random()*d.length);rnd6===rnd7;)rnd7=Math.floor(Math.random()*d.length);rnd8=Math.floor(Math.random()*a.length),rnd9=Math.floor(Math.random()*t.length),names=n[rnd]+a[rnd2]+o[rnd3]+d[rnd4]+a[rnd5]+o[rnd6]+d[rnd7]+a[rnd8]+t[rnd5]}return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["star_trek-pakleds"] = function(type) {
+    return generator$star_trek$pakleds(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

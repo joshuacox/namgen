@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$star_trek$letheans(r){var n=["b","c","d","g","j","k","l","m","n","q","r","s","t","tr","v","z","",""],t=["oi","ao","ui","ei","a","e","i","o","u","a","e","i","o","u"],a=["b","c","d","g","j","k","l","m","n","p","q","r","t","v","z","b","bb","bt","cz","c","d","dl","dz","g","gr","j","k","kz","kl","kr","l","lt","lv","m","nj","nb","n","nth","p","q","qr","r","rr","rrn","rn","t","tt","v","vv","z","zz","ztr","zm"],o=["b","c","d","f","g","k","m","nt","n","p","q","r","sz","t","v","z","",""];if(i=Math.floor(10*Math.random()),i<5){if(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*t.length),rnd3=Math.floor(Math.random()*a.length),rnd4=Math.floor(Math.random()*t.length),rnd5=Math.floor(Math.random()*a.length),rnd6=Math.floor(Math.random()*t.length),rnd7=Math.floor(Math.random()*o.length),rnd2<4){for(;rnd4<4;)rnd4=Math.floor(Math.random()*t.length);for(;rnd6<4;)rnd6=Math.floor(Math.random()*t.length)}if(rnd4<4)for(;rnd6<4;)rnd6=Math.floor(Math.random()*t.length);names=n[rnd]+t[rnd2]+a[rnd3]+t[rnd4]+a[rnd5]+t[rnd6]+o[rnd7]}else{if(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*t.length),rnd3=Math.floor(Math.random()*a.length),rnd4=Math.floor(Math.random()*t.length),rnd5=Math.floor(Math.random()*o.length),rnd2<4)for(;rnd4<4;)rnd4=Math.floor(Math.random()*t.length);names=n[rnd]+t[rnd2]+a[rnd3]+t[rnd4]+o[rnd5]}return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["star_trek-letheans"] = function(type) {
+    return generator$star_trek$letheans(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

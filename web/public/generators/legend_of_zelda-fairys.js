@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$legend_of_zelda$fairys(a){var n=["B","C","D","F","G","H","K","L","M","N","P","R","S","T","V","W","Z"],o=["ea","ae","ai","ao","aa","au","ei","ee","ia","ie","io","oo","oa"],r=["f","k","l","m","n","r","s"],e=["a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","a","e","i","o","u","ie","ia","ea","ae","io","eo","ai"],t=["w","r","t","l","k","h","g","f","d","s","m","n","v","c"],d=["a","e","i","o","u"],h=["","","","","","","t","h","s","l","n","m"];return i=Math.floor(10*Math.random()),1===a?(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*e.length),rnd3=Math.floor(Math.random()*t.length),rnd4=Math.floor(Math.random()*d.length),rnd5=Math.floor(Math.random()*h.length),names=n[rnd]+e[rnd2]+t[rnd3]+d[rnd4]+h[rnd5]):(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*o.length),rnd3=Math.floor(Math.random()*r.length),names=n[rnd]+o[rnd2]+r[rnd3]),names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["legend_of_zelda-fairys"] = function(type) {
+    return generator$legend_of_zelda$fairys(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$halo$unggoys(){var n=["a","i","u"],r=["d","f","k","l","m","s","w","p","y","z"],a=["fl","kl","sl","sm","pl","zl","d","f","k","l","m","s","w","p","y","z"],o=["fl","kl","sl","sm","pl","zl"];if(i=Math.floor(10*Math.random()),i<5)rnd=Math.floor(Math.random()*r.length),rnd2=Math.floor(Math.random()*n.length),rnd3=Math.floor(Math.random()*r.length),rnd4=Math.floor(Math.random()*r.length),names=r[rnd]+n[rnd2]+r[rnd3]+n[rnd2]+r[rnd4];else if(i<7){if(rnd=Math.floor(Math.random()*a.length),rnd2=Math.floor(Math.random()*n.length),rnd1=Math.floor(Math.random()*r.length),rnd3=Math.floor(Math.random()*a.length),rnd<6)for(;rnd3<6;)rnd3=Math.floor(Math.random()*a.length);rnd4=Math.floor(Math.random()*n.length),rnd5=Math.floor(Math.random()*r.length),names=a[rnd]+n[rnd2]+r[rnd1]+a[rnd3]+n[rnd4]+r[rnd5]}else rnd=Math.floor(Math.random()*o.length),rnd2=Math.floor(Math.random()*n.length),rnd3=Math.floor(Math.random()*r.length),names=o[rnd]+n[rnd2]+r[rnd3];return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["halo-unggoys"] = function(type) {
+    return generator$halo$unggoys(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

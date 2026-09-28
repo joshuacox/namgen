@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$pathfinder$sylphs(n){var a=["","","","","","c","d","f","g","h","j","l","m","n","s","v","w","z"],r=["a","e","i","u","a","e","i","u","a","e","i","u","a","e","i","u","a","e","i","u","aa","uu","ii"],d=["d","f","g","j","k","l","m","n","s","v","w","z"],h=["d","l","m","n","sh"],t=["","","","","","d","f","h","k","l","m","n","r","s","t","v","w","z"],o=["a","e","i","a","e","i","a","e","i","a","e","i","a","e","i","a","a","a","ee","aa"],l=["d","f","ff","h","l","ll","m","mm","n","nn","s","ss","v","y","w"],e=["","","","","","","","","","","","","","","","","","","","","h","m","n","sh"];return i=Math.floor(10*Math.random()),1===n?(rnd=Math.floor(Math.random()*t.length),rnd2=Math.floor(Math.random()*o.length),rnd3=Math.floor(Math.random()*l.length),rnd4=Math.floor(Math.random()*o.length),i<5?(rnd5=Math.floor(Math.random()*e.length),names=t[rnd]+o[rnd2]+l[rnd3]+o[rnd4]+e[rnd5]):(rnd6=Math.floor(Math.random()*l.length),rnd7=Math.floor(Math.random()*o.length),names=t[rnd]+o[rnd2]+l[rnd3]+o[rnd4]+l[rnd6]+o[rnd7])):(rnd=Math.floor(Math.random()*a.length),rnd2=Math.floor(Math.random()*r.length),rnd5=Math.floor(Math.random()*h.length),rnd3=Math.floor(Math.random()*d.length),rnd4=Math.floor(Math.random()*r.length),names=a[rnd]+r[rnd2]+d[rnd3]+r[rnd4]+h[rnd5]),names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["pathfinder-sylphs"] = function(type) {
+    return generator$pathfinder$sylphs(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

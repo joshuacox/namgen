@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$harry_potter$dragon_species(a){var n=["Algerian","American","Angolan","Antarctic","Argentinian","Armenian","Australian","Austrian","Bolivian","Brazilian","British","Bulgarian","Cambodian","Canadian","Chilean","Chinese","Croatian","Cuban","Danish","Egyptian","Finnish","French","German","Hungarian","Indian","Irish","Italian","Jamaican","Japanese","Mexican","Mongolian","Moroccan","Nepalese","Norwegian","Peruvian","Romanian","Russian","Slovenian","South-African","Spanish","Swedish","Thai","Turkish","Ukrainian","Vietnamese"],r=["Barb","Blaze","Bristle","Dart","Demon","Ember","Fire","Flame","Foul","Fury","Giant","Glow","Horn","Iron","Jade","Long","Mammoth","Monster","Opal","Plate","Rage","Ridge","Ruby","Short","Smooth","Snake","Soft","Spark","Spike","Steel","Storm","Swift","Thin","Thorn","Thunder","Venom","Vile","Viper","Warp","Wide"],e=["back","belly","bottom","claw","crown","dart","eye","fang","frame","gut","head","horn","muzzle","paw","rump","scale","skull","snout","spike","stub","tail","tooth","trunk","tusk","wing"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*r.length),rnd3=Math.floor(Math.random()*e.length),names=n[rnd]+" "+r[rnd2]+e[rnd3],names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["harry_potter-dragon_species"] = function(type) {
+    return generator$harry_potter$dragon_species(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

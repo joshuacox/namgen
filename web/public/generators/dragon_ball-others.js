@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$dragon_ball$others(){var a=["Lala","Abra","Ala","Alaka","Bim","Braca","Bracada","Cada","Cadabra","Dabra","Eppe","Flam","Flim","Gobble","Gobbledee","Gook","Hello","Hillo","Hocu","Hocus","Hollo","Hum","Jumbo","Kakke","Kazam","Laka","Mani","Mumbo","Ocus","Om","Padme","Peppe","Pocu","Pocus","Pow","Presto","Sala","Same","Sesa","Sesame","Shazam","Sim","Wow","Zam","Zik","Zizzi","Zuzzy"],e=["Aioli","Anise","Basil","Bay","Celery","Chili","Chutney","Cilantro","Cinnamon","Clove","Coriander","Cream","Cumin","Dashi","Dressing","Fennel","Guacamole","Jasmine","Juniper","Ketchup","Lemon","Lime","Mace","Marmite","Mash","Mayo","Mint","Miso","Naise","Nutmeg","Oil","Onion","Oregano","Paprika","Parsley","Pepper","Peppermint","Pesto","Piccalilli","Pickle","Ponzu","Radish","Relish","Rice","Riyaki","Rosemary","Safe","Saffron","Salsa","Sambal","Sauce","Sesame","Shichimi","Sichuan","Soy","Syrup","Tarragon","Tartar","Teriya","Teriyaki","Thyme","Turmeric","Tzatziki","Vanilla","Wasabi"];return i=Math.floor(10*Math.random()),i<5?(rnd=Math.floor(Math.random()*a.length),names=a[rnd]):(rnd=Math.floor(Math.random()*e.length),names=e[rnd]),names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["dragon_ball-others"] = function(type) {
+    return generator$dragon_ball$others(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

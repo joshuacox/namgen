@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$lord_of_the_rings$maiars(n){var r=["f","l","m","n","ph","s","sh","w","y","z","",""],a=["a","e","o","i","u","ó","é","ie","ui","ia","ea","ae","ua"],o=["l","lm","ln","ls","n","nn","ph","r","s","sh","ss","th"],t=["r","n","s","th","l","m"],h=["a","e","ë","é","ó","","","","",""],d=["c","k","l","m","n","p","r","s","t","th","",""],l=["a","e","o","i","u","ó","é","ai","eo","io","eö","uo","ua"],e=["l","ll","lm","ln","ls","m","md","n","nd","nm","nw","r","s","ss","t","w"],M=["l","m","n","nd","r","s","t","th"],m=["o","e","ë","ó","","","",""];if(i=Math.floor(10*Math.random()),1===n){if(rnd=Math.floor(Math.random()*r.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*o.length),rnd4=Math.floor(Math.random()*a.length),rnd2>6)for(;rnd4>6;)rnd4=Math.floor(Math.random()*a.length);rnd5=Math.floor(Math.random()*t.length),rnd6=Math.floor(Math.random()*h.length),names=r[rnd]+a[rnd2]+o[rnd3]+a[rnd4]+t[rnd5]+h[rnd6]}else{if(rnd=Math.floor(Math.random()*d.length),rnd2=Math.floor(Math.random()*l.length),rnd3=Math.floor(Math.random()*e.length),rnd4=Math.floor(Math.random()*l.length),rnd2>6)for(;rnd4>6;)rnd4=Math.floor(Math.random()*l.length);rnd5=Math.floor(Math.random()*M.length),rnd6=Math.floor(Math.random()*m.length),names=d[rnd]+l[rnd2]+e[rnd3]+l[rnd4]+M[rnd5]+m[rnd6]}return names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["lord_of_the_rings-maiars"] = function(type) {
+    return generator$lord_of_the_rings$maiars(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

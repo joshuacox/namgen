@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$halo$mgalekgolos(){var n=["b","d","f","g","h","k","l","m","n","p","r","s","t","w","x","y","","","","","","","","",""],r=["a","e","u","i","o"],d=["b","d","f","g","h","k","l","m","n","p","r","s","t","w","x","y"],t=["b","d","f","g","h","k","l","m","n","p","r","s","t","w","x","y","b","d","f","g","h","k","l","m","n","p","r","s","t","w","x","y","bn","dn","fn","gn","kn","pn","sn","tn","bm","dm","fm","gm","km","pm","sm","tm","bk","dk","lk","mk","nk","pk","sk","tk","bl","fl","gl","pl","tl","xl","sl","bd","gd","fd","ld","pd","sd","xd","bb","dd","ff","gg","kk","ll","mm","nn","pp","rr","ss","tt","ww","br","dr","gr","fr","kr","pr","tr","xr"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*r.length),rnd3=Math.floor(Math.random()*d.length),rnd4=Math.floor(Math.random()*r.length),rnd5=Math.floor(Math.random()*d.length),rnd6=Math.floor(Math.random()*r.length),rnd7=Math.floor(Math.random()*d.length),rnd8=Math.floor(Math.random()*r.length),rnd9=Math.floor(Math.random()*d.length),rnd10=Math.floor(Math.random()*r.length),rnd11=Math.floor(Math.random()*d.length),rnd12=Math.floor(Math.random()*r.length),rnd13=Math.floor(Math.random()*t.length),rnd14=Math.floor(Math.random()*r.length),names=n[rnd]+r[rnd2]+d[rnd3]+r[rnd4]+d[rnd5]+r[rnd6]+" "+d[rnd7]+r[rnd8]+d[rnd9]+r[rnd10]+" "+d[rnd11]+r[rnd12]+t[rnd13]+r[rnd14],names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["halo-mgalekgolos"] = function(type) {
+    return generator$halo$mgalekgolos(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

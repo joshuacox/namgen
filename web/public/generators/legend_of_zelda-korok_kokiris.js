@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$legend_of_zelda$korok_kokiris(r){var n=["","","","","b","d","br","dr","gr","g","h","k","l","m","r","tr","t"],a=["a","e","i","o","u"],o=["c","g","gn","gm","k","kl","l","v","ld","lm","ll","m","md","n","nd","r","rn","s","sn","sm","sr"],d=["","","","","","","","","h","l","m","s","r","n","wn","w"],t=["b","d","f","g","h","k","l","m","n","p","r","s","t","z"],h=["b","d","f","g","h","l","k","m","n","p","r","s","t","v","w","z"],l=["c","d","f","g","h","k","l","m","n","ph","r","s","t","th","w","z"],e=["a","e","i","o","u","ai","ae","ea","ei","eo","ia","io","iu","ie","oa","oe","oi","ou","ua","ue","uo","ui"];return i=Math.floor(10*Math.random()),1===r?(rnd=Math.floor(Math.random()*h.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*l.length),rnd4=Math.floor(Math.random()*e.length),names=h[rnd]+a[rnd2]+l[rnd3]+e[rnd4]):i<5?(rnd=Math.floor(Math.random()*n.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*o.length),rnd4=Math.floor(Math.random()*d.length),rnd5=Math.floor(Math.random()*a.length),names=n[rnd]+a[rnd2]+o[rnd3]+a[rnd5]+d[rnd4]):(rnd=Math.floor(Math.random()*t.length),rnd2=Math.floor(Math.random()*a.length),rnd3=Math.floor(Math.random()*l.length),rnd4=Math.floor(Math.random()*a.length),names=t[rnd]+a[rnd2]+l[rnd3]+a[rnd4]),names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["legend_of_zelda-korok_kokiris"] = function(type) {
+    return generator$legend_of_zelda$korok_kokiris(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);

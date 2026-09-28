@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import wordsData from '../data/words.json';
 import generatorsData from '../data/generators.json';
+import { loadGenerator, executeGenerator } from '../lib/generatorLoader';
 
 export default function Playground() {
   const [activeTab, setActiveTab] = useState('combinator'); // 'combinator' | 'procedural'
@@ -26,6 +27,7 @@ export default function Playground() {
   const [selectedGenId, setSelectedGenId] = useState('descriptions-pokemons');
   const [proceduralResults, setProceduralResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loadingGen, setLoadingGen] = useState(false);
 
   // Handle URL deep-linking on mount
   useEffect(() => {
@@ -88,7 +90,7 @@ export default function Playground() {
       .replace(/^-+|-+$/g, '');
   };
 
-  // Generate Combinator names
+  // Generate Combinator names live
   const generateCombinations = () => {
     const { adjectives, nouns } = wordsData;
     const results = [];
@@ -137,17 +139,21 @@ export default function Playground() {
   // Find currently selected generator
   const currentGen = generatorsData.find((g) => g.id === selectedGenId) || generatorsData[0];
 
-  // Roll Procedural names
-  const rollProcedural = () => {
+  // Execute the REAL JavaScript Generator live in the browser
+  const rollProcedural = async () => {
     if (!currentGen) return;
-    if (currentGen.samples && currentGen.samples.length > 0) {
-      let samples = [...currentGen.samples];
-      if (unique) {
-        samples = Array.from(new Set(samples));
-      }
+    setLoadingGen(true);
+    try {
+      const genFn = await loadGenerator(currentGen.id);
+      const liveNames = executeGenerator(genFn, count, { seed, unique });
+      setProceduralResults(liveNames.length > 0 ? liveNames : ['(No names generated)']);
+    } catch (err) {
+      console.warn('Falling back to static samples for:', currentGen.id, err);
+      let samples = currentGen.samples || ['Sample name'];
+      if (unique) samples = Array.from(new Set(samples));
       setProceduralResults(samples.slice(0, count));
-    } else {
-      setProceduralResults(['Generated sample instance']);
+    } finally {
+      setLoadingGen(false);
     }
   };
 
@@ -271,9 +277,9 @@ export default function Playground() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-10">
           <h2 className="text-xs uppercase font-bold tracking-wider text-emerald-400">Interactive Playground</h2>
-          <p className="mt-2 text-3xl font-extrabold text-white">Experience namgen in Your Browser</p>
+          <p className="mt-2 text-3xl font-extrabold text-white">Live In-Browser Name Engine</p>
           <p className="mt-3 text-slate-300">
-            Test adjective-noun combinatorics with real-time casing controls, or sample output from 907 specialized procedural generators.
+            Running real procedural generators directly in your browser. Zero simulation—every click executes the actual JavaScript engine.
           </p>
         </div>
 
@@ -300,7 +306,7 @@ export default function Playground() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              2. 907 Universe Generators Explorer
+              2. 907 Live JavaScript Generators
             </button>
           </div>
         </div>
@@ -479,7 +485,7 @@ export default function Playground() {
                 <input
                   type="range"
                   min="1"
-                  max="15"
+                  max="20"
                   value={count}
                   onChange={(e) => setCount(parseInt(e.target.value, 10))}
                   className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
@@ -528,8 +534,8 @@ export default function Playground() {
                   </div>
 
                   <div className="text-xs text-slate-400 font-sans flex items-center justify-between pt-2 border-t border-slate-900">
-                    <span>Deterministic combinations: 42,000+ words</span>
-                    <span className="text-emerald-400 font-mono">0.003ms exec</span>
+                    <span>Live in-browser combinatorics: 42,000+ words</span>
+                    <span className="text-emerald-400 font-mono">Instant Client Execution</span>
                   </div>
                 </div>
               </div>
@@ -544,7 +550,17 @@ export default function Playground() {
             <div className="lg:col-span-5 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
               <h3 className="text-lg font-bold text-white flex items-center justify-between">
                 <span>Select Generator</span>
-                <span className="text-xs text-emerald-400 font-mono">907 Available</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={rollProcedural}
+                    disabled={loadingGen}
+                    className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
+                  >
+                    {loadingGen ? '⏳ Generating...' : '⚡ Re-roll'}
+                  </button>
+                  <span className="text-xs text-emerald-400 font-mono">907 Available</span>
+                </div>
               </h3>
 
               <div className="relative">
@@ -552,7 +568,7 @@ export default function Playground() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Filter (e.g. pokemon, dragon, sith)..."
+                  placeholder="Filter (e.g. pokemon, dragon, sith, elf)..."
                   className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
@@ -583,6 +599,22 @@ export default function Playground() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Count Slider for Procedural */}
+              <div>
+                <div className="flex justify-between text-xs font-semibold uppercase text-slate-400 mb-1">
+                  <span>Batch Count (<code className="text-emerald-400">-c</code>)</span>
+                  <span className="text-emerald-400 font-mono">{count} names</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  value={count}
+                  onChange={(e) => setCount(parseInt(e.target.value, 10))}
+                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                />
               </div>
 
               {/* Advanced Flags (Seed & Unique) */}
@@ -657,6 +689,9 @@ export default function Playground() {
                     <span className="ml-2 text-xs font-mono text-slate-400">
                       namgen {currentGen.flag}
                     </span>
+                    <span className="hidden sm:inline-flex px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      Live Engine
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -683,15 +718,27 @@ export default function Playground() {
                     <span className="text-slate-100">{getProceduralCommand()}</span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800/80 text-slate-200 leading-relaxed font-sans text-sm whitespace-pre-wrap">
-                    {renderFormattedOutput(proceduralResults)}
+                  <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800/80 text-slate-200 leading-relaxed font-sans text-sm whitespace-pre-wrap min-h-[140px]">
+                    {loadingGen ? (
+                      <div className="flex items-center justify-center py-8 text-slate-400 text-xs gap-2">
+                        <svg className="animate-spin h-4 w-4 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Executing JavaScript generator...</span>
+                      </div>
+                    ) : (
+                      renderFormattedOutput(proceduralResults)
+                    )}
                   </div>
 
                   <div className="pt-2 text-xs text-slate-400 font-sans flex items-center justify-between">
                     <div>
-                      <strong className="text-slate-200">Category:</strong> {currentGen.categoryName} ({currentGen.category})
+                      <strong className="text-slate-200">Generator:</strong> {currentGen.name} • {currentGen.categoryName}
                     </div>
-                    <div className="text-emerald-400 font-mono">Zero Heap Allocations</div>
+                    <div className="text-emerald-400 font-mono text-[11px]">
+                      ⚡ Live In-Browser Generator
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,0 +1,8 @@
+(function(root) {
+  var i, rnd, rnd2, rnd3, rnd4, rnd5, rnd6, rnd7, rnd8, rnd9, rnd10, rnd11, names, name, lname, name2, name3;
+  function generator$destiny$vexs(){var r=["","","","","c","g","h","k","n","s","t","th","z"],n=["a","e","a","e","a","e","i","o","a","e","i","o","eo","io","y","y","ia","ea"],a=["d","dh","dr","g","gg","gh","gr","k","kh","kk","kr","lg","lk","nk","nr","rg","rk","sk","th","tr"],t=["m","n","s","t","x"];return i=Math.floor(10*Math.random()),rnd=Math.floor(Math.random()*r.length),rnd2=Math.floor(Math.random()*n.length),rnd3=Math.floor(Math.random()*a.length),rnd4=Math.floor(Math.random()*n.length),rnd5=Math.floor(Math.random()*t.length),names=r[rnd]+n[rnd2]+a[rnd3]+n[rnd4]+t[rnd5],names}
+  root.__NAMGEN_GENS = root.__NAMGEN_GENS || {};
+  root.__NAMGEN_GENS["destiny-vexs"] = function(type) {
+    return generator$destiny$vexs(type !== undefined ? type : 0);
+  };
+})(typeof window !== "undefined" ? window : globalThis);
