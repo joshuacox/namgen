@@ -2,6 +2,8 @@
 
 A fast, flexible, and extensible command-line name generator written in C++17.
 
+**Documentation & Interactive Simulator**: [https://joshuacox.github.io/namgen/](https://joshuacox.github.io/namgen/)
+
 `namgen` combines adjectives and nouns to produce memorable names with custom casing and separators, while also providing built-in procedural name generators for fantasy, sci-fi, historical, and pop-culture universes.
 
 ---
@@ -69,6 +71,7 @@ namgen/
 │   ├── generator_registry.h / .cpp # Centralized dynamic generator registry
 │   └── *_lib.cpp / *_lib.h # 907 modular procedural name generators (zero-allocation .rodata)
 ├── test/                 # Test suites (Bats integration tests & tester.sh)
+├── web/                  # Next.js static documentation website & interactive simulator
 ├── CMakeLists.txt        # CMake configuration with dynamic source discovery
 ├── Makefile              # Parallel build & installation targets
 └── Dockerfile            # Container build specification

@@ -1,0 +1,242 @@
+[
+  {
+    "id": "real",
+    "name": "Real-World Cultures",
+    "description": "Historical and modern real-world cultures, nations, and languages.",
+    "count": 130
+  },
+  {
+    "id": "miscellaneous",
+    "name": "Miscellaneous & Lore",
+    "description": "Quirky names, bands, guilds, potions, spells, taverns, vehicles, and concepts.",
+    "count": 124
+  },
+  {
+    "id": "fantasy",
+    "name": "Fantasy Races & Beings",
+    "description": "Classic and exotic fantasy races, mythical creatures, and magical beings.",
+    "count": 96
+  },
+  {
+    "id": "places",
+    "name": "Places & Geography",
+    "description": "Castles, dungeons, forests, islands, mountains, temples, plazas, and realms.",
+    "count": 80
+  },
+  {
+    "id": "descriptions",
+    "name": "Narrative Descriptions",
+    "description": "Rich procedural narrative blocks for characters, planets, battles, Pokémon, and backstories.",
+    "count": 54
+  },
+  {
+    "id": "star_wars",
+    "name": "Star Wars Universe",
+    "description": "Alien species, factions, and character names from the Star Wars universe.",
+    "count": 37
+  },
+  {
+    "id": "towns_and_cities",
+    "name": "Towns & Cities",
+    "description": "Steampunk, fantasy, historical, and regional urban settlements.",
+    "count": 36
+  },
+  {
+    "id": "pets",
+    "name": "Pets & Animals",
+    "description": "Beloved domestic pets, companions, marine mammals, reptiles, and birds.",
+    "count": 28
+  },
+  {
+    "id": "pop_culture",
+    "name": "Pop Culture & Comics",
+    "description": "Anime, comics, superhero teams, Homestuck, kaiju, and fiction generators.",
+    "count": 25
+  },
+  {
+    "id": "pathfinder",
+    "name": "Pathfinder RPG",
+    "description": "Ancestries, heritages, and species from the Pathfinder tabletop RPG.",
+    "count": 23
+  },
+  {
+    "id": "star_trek",
+    "name": "Star Trek",
+    "description": "Vulcans, Klingons, Romulans, Cardassians, Ferengi, and galactic species.",
+    "count": 21
+  },
+  {
+    "id": "weapons",
+    "name": "Weapons",
+    "description": "Swords, bows, staffs, shotguns, daggers, firearms, and fantasy armaments.",
+    "count": 21
+  },
+  {
+    "id": "dungeon_and_dragons",
+    "name": "Dungeons & Dragons",
+    "description": "Core and expanded player character races for D&D adventures.",
+    "count": 18
+  },
+  {
+    "id": "elder_scrolls",
+    "name": "The Elder Scrolls",
+    "description": "Races and peoples of Tamriel (Altmer, Bosmer, Dunmer, Khajiit, Nord, etc.).",
+    "count": 16
+  },
+  {
+    "id": "warhammer",
+    "name": "Warhammer Fantasy",
+    "description": "Factions of the Old World: Empire, Dwarfs, High Elfs, Daemons of Chaos, Skaven.",
+    "count": 16
+  },
+  {
+    "id": "world_of_warcraft",
+    "name": "World of Warcraft",
+    "description": "Playable races of Azeroth: Blood Elf, Draenei, Tauren, Worgen, Troll, etc.",
+    "count": 13
+  },
+  {
+    "id": "world_of_warcraft_pets",
+    "name": "World of Warcraft Pets",
+    "description": "Hunter pets and companion beasts from World of Warcraft.",
+    "count": 12
+  },
+  {
+    "id": "star_wars_the_old_republic",
+    "name": "Star Wars: The Old Republic",
+    "description": "Species and organizations from SWTOR (Chiss, Cathar, Sith, etc.).",
+    "count": 11
+  },
+  {
+    "id": "armour",
+    "name": "Armour",
+    "description": "Helmets, shields, gauntlets, pauldrons, cloaks, and defensive gear.",
+    "count": 10
+  },
+  {
+    "id": "game_of_thrones",
+    "name": "Game of Thrones",
+    "description": "Houses, free cities, Dothraki, Valyrian, and Westerosi character names.",
+    "count": 10
+  },
+  {
+    "id": "legend_of_zelda",
+    "name": "The Legend of Zelda",
+    "description": "Gorons, Zoras, Gerudos, Dekus, Koroks, and Hyrulean deities.",
+    "count": 10
+  },
+  {
+    "id": "mass_effect",
+    "name": "Mass Effect",
+    "description": "Asari, Turian, Krogan, Salarian, and galactic citadel species.",
+    "count": 9
+  },
+  {
+    "id": "halo",
+    "name": "Halo Universe",
+    "description": "Forerunners, Sangheili (Elites), Kig-Yar (Jackals), Mgalekgolo (Hunters).",
+    "count": 8
+  },
+  {
+    "id": "military",
+    "name": "Military & Phonetic",
+    "description": "NATO phonetic, Royal Navy, US Armed Forces call-signs, and communications.",
+    "count": 8
+  },
+  {
+    "id": "warhammer_40k",
+    "name": "Warhammer 40,000",
+    "description": "Grimdark far future: Space Marines, Necrons, Eldar, Orks, Chaos, Tau.",
+    "count": 8
+  },
+  {
+    "id": "wildstar",
+    "name": "WildStar",
+    "description": "Nexus inhabitants: Aurin, Chua, Draken, Granok, Mechari, Mordesh.",
+    "count": 8
+  },
+  {
+    "id": "destiny",
+    "name": "Destiny Universe",
+    "description": "Guardians and enemies: Awoken, Exo, Cabal, Fallen, Hive, Vex.",
+    "count": 7
+  },
+  {
+    "id": "doctor_who",
+    "name": "Doctor Who",
+    "description": "Daleks, Time Lords, Ice Warriors, Silurians, Sontarans, and Gallifreyans.",
+    "count": 7
+  },
+  {
+    "id": "dragon_ball",
+    "name": "Dragon Ball Universe",
+    "description": "Saiyans, Frieza Clan, Hakaishins, Namekians, and martial artists.",
+    "count": 7
+  },
+  {
+    "id": "final_fantasy",
+    "name": "Final Fantasy",
+    "description": "Elezen, Lalafell, Miqo'te, Roegadyn, and Hyur from Eorzea.",
+    "count": 6
+  },
+  {
+    "id": "lord_of_the_rings",
+    "name": "Lord of the Rings",
+    "description": "Elves, Dwarves, Hobbits, Maiar, and peoples of Middle-earth.",
+    "count": 6
+  },
+  {
+    "id": "rift",
+    "name": "Rift Universe",
+    "description": "Bahmi, Eth, Kelari, Mathosian, and Telaran races.",
+    "count": 6
+  },
+  {
+    "id": "guild_wars",
+    "name": "Guild Wars",
+    "description": "Asura, Charr, Norn, and Sylvari from the world of Tyria.",
+    "count": 5
+  },
+  {
+    "id": "harry_potter",
+    "name": "Harry Potter Universe",
+    "description": "Goblins, Dragon species, Hippogriffs, House-elves, and magical beasts.",
+    "count": 5
+  },
+  {
+    "id": "inheritance_cycle",
+    "name": "Inheritance Cycle",
+    "description": "Dragons, Elves, Dwarves, and Urgals from the world of Alagaësia.",
+    "count": 5
+  },
+  {
+    "id": "lord_of_the_rings_online",
+    "name": "Lord of the Rings Online",
+    "description": "Beornings, Dale-folk, and LOTRO specific cultural lineages.",
+    "count": 5
+  },
+  {
+    "id": "diablo",
+    "name": "Diablo Universe",
+    "description": "Angels of High Heavens, Demons of the Burning Hells, Nephalem, Khazra.",
+    "count": 4
+  },
+  {
+    "id": "dragon_age",
+    "name": "Dragon Age",
+    "description": "Dwarfs, Elfs, and Qunari from the world of Thedas.",
+    "count": 4
+  },
+  {
+    "id": "eve_online",
+    "name": "EVE Online",
+    "description": "Caldari, Gallente, Amarr, and Minmatar pilot genealogies in New Eden.",
+    "count": 4
+  },
+  {
+    "id": "the_witcher",
+    "name": "The Witcher Universe",
+    "description": "Witchers, Nilfgaardians, Dryads, Dwarfs, Elfs, and Northern Realms peoples.",
+    "count": 4
+  }
+]
