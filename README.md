@@ -86,6 +86,11 @@ namgen/
 | Option | Description |
 |---|---|
 | `-c, --count COUNT` | Number of names to generate (default: terminal height, or 24) |
+| `-S, --seed NUM` | Deterministic random seed for reproducible outputs |
+| `-u, --unique` | Ensure no duplicate names are emitted in batch |
+| `--json` | Output names as structured JSON array |
+| `--csv` | Output names in CSV format with column header |
+| `--slug, --kebab` | Output names as URL-friendly lowercase kebab-case slugs |
 | `-s, --separator SEP` | Custom separator string (default: `-`) |
 | `-x, --null-separator` | Do not print separator (concatenates words) |
 | `--cap, --capcasing` | Capitalize first letter of both words (`CapWords` style) |
@@ -95,6 +100,13 @@ namgen/
 | `-e, --exclude STRING` | Characters to strip from generated names (default: `-`, `'`) |
 | `--debug` | Enable debug printing of word source and counter info |
 | `-h, --help` | Display help message and exit |
+
+### Shell Completions
+
+`namgen` includes full auto-completions for all CLI flags and 907 procedural generators:
+- **Bash**: `completions/namgen.bash` (installed to `/usr/local/share/bash-completion/completions/namgen`)
+- **Zsh**: `completions/_namgen` (installed to `/usr/local/share/zsh/site-functions/_namgen`)
+- **Fish**: `completions/namgen.fish` (installed to `/usr/local/share/fish/vendor_completions.d/namgen.fish`)
 
 ---
 

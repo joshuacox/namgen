@@ -1,0 +1,926 @@
+#compdef namgen
+# Zsh completion for namgen
+# Generated automatically by scripts/generate_completions.py
+
+_arguments -s -S \
+  '(-h --help)'{-h,--help}'[Show help message]' \
+  '(-c --count)'{-c,--count}'[Number of names to generate]:count:' \
+  '(-S --seed)'{-S,--seed}'[Seed random number generator deterministically]:seed:' \
+  '(-u --unique)'{-u,--unique}'[Ensure no duplicate names are emitted]' \
+  '--json[Output results as a JSON array]' \
+  '--csv[Output results in CSV format]' \
+  '(--slug --kebab)'{--slug,--kebab}'[Convert output to lowercase kebab-case slugs]' \
+  '(-s --separator)'{-s,--separator}'[Custom separator string]:separator:' \
+  '(-x --null-separator)'{-x,--null-separator}'[Do not print separator]' \
+  '(--cap --capcasing)'{--cap,--capcasing}'[Capitalize first letter of both words]' \
+  '(--camel --camelcasing)'{--camel,--camelcasing}'[CamelCase style]' \
+  '--debug[Enable debug output]' \
+  '(-a --adj --adj-file)'{-a,--adj,--adj-file}'[Path to custom adjective file]:file:_files' \
+  '(-n --noun --noun-file)'{-n,--noun,--noun-file}'[Path to custom noun file]:file:_files' \
+  '--armour-belts[Generate Armour Belts style names]' \
+  '--armour-boots[Generate Armour Boots style names]' \
+  '--armour-chests[Generate Armour Chests style names]' \
+  '--armour-cloaks[Generate Armour Cloaks style names]' \
+  '--armour-gauntlets[Generate Armour Gauntlets style names]' \
+  '--armour-helmets[Generate Armour Helmets style names]' \
+  '--armour-legs[Generate Armour Legs style names]' \
+  '--armour-pauldrons[Generate Armour Pauldrons style names]' \
+  '--armour-shields[Generate Armour Shields style names]' \
+  '--armour-vambraces[Generate Armour Vambraces style names]' \
+  '--descriptions-aliens[Generate Descriptions Aliens style names]' \
+  '--descriptions-animals[Generate Descriptions Animals style names]' \
+  '--descriptions-armys[Generate Descriptions Armys style names]' \
+  '--descriptions-backstorys[Generate Descriptions Backstorys style names]' \
+  '--descriptions-battlefields[Generate Descriptions Battlefields style names]' \
+  '--descriptions-bows[Generate Descriptions Bows style names]' \
+  '--descriptions-castles[Generate Descriptions Castles style names]' \
+  '--descriptions-characters[Generate Descriptions Characters style names]' \
+  '--descriptions-citys[Generate Descriptions Citys style names]' \
+  '--descriptions-coat_of_arms[Generate Descriptions Coat Of Arms style names]' \
+  '--descriptions-constellations[Generate Descriptions Constellations style names]' \
+  '--descriptions-countrys[Generate Descriptions Countrys style names]' \
+  '--descriptions-diseases[Generate Descriptions Diseases style names]' \
+  '--descriptions-dragons[Generate Descriptions Dragons style names]' \
+  '--descriptions-dungeons[Generate Descriptions Dungeons style names]' \
+  '--descriptions-dyings[Generate Descriptions Dyings style names]' \
+  '--descriptions-fancy_clothings[Generate Descriptions Fancy Clothings style names]' \
+  '--descriptions-flags[Generate Descriptions Flags style names]' \
+  '--descriptions-gems[Generate Descriptions Gems style names]' \
+  '--descriptions-ghost_towns[Generate Descriptions Ghost Towns style names]' \
+  '--descriptions-gods[Generate Descriptions Gods style names]' \
+  '--descriptions-hand_gestures[Generate Descriptions Hand Gestures style names]' \
+  '--descriptions-holidays[Generate Descriptions Holidays style names]' \
+  '--descriptions-houses[Generate Descriptions Houses style names]' \
+  '--descriptions-humanoids[Generate Descriptions Humanoids style names]' \
+  '--descriptions-laws[Generate Descriptions Laws style names]' \
+  '--descriptions-leather_armors[Generate Descriptions Leather Armors style names]' \
+  '--descriptions-martial_arts[Generate Descriptions Martial Arts style names]' \
+  '--descriptions-medieval_clothings[Generate Descriptions Medieval Clothings style names]' \
+  '--descriptions-monuments[Generate Descriptions Monuments style names]' \
+  '--descriptions-pains[Generate Descriptions Pains style names]' \
+  '--descriptions-personalitys[Generate Descriptions Personalitys style names]' \
+  '--descriptions-pistols[Generate Descriptions Pistols style names]' \
+  '--descriptions-planets[Generate Descriptions Planets style names]' \
+  '--descriptions-plants[Generate Descriptions Plants style names]' \
+  '--descriptions-plate_armors[Generate Descriptions Plate Armors style names]' \
+  '--descriptions-plots[Generate Descriptions Plots style names]' \
+  '--descriptions-pokemons[Generate Descriptions Pokemons style names]' \
+  '--descriptions-potions[Generate Descriptions Potions style names]' \
+  '--descriptions-prophecys[Generate fantasy prophecy style descriptions]' \
+  '--descriptions-quests[Generate Descriptions Quests style names]' \
+  '--descriptions-rag_clothings[Generate Descriptions Rag Clothings style names]' \
+  '--descriptions-rifles[Generate Descriptions Rifles style names]' \
+  '--descriptions-school_uniforms[Generate Descriptions School Uniforms style names]' \
+  '--descriptions-shields[Generate Descriptions Shields style names]' \
+  '--descriptions-shotguns[Generate Descriptions Shotguns style names]' \
+  '--descriptions-societys[Generate Descriptions Societys style names]' \
+  '--descriptions-spells[Generate Descriptions Spells style names]' \
+  '--descriptions-staffs[Generate Descriptions Staffs style names]' \
+  '--descriptions-taverns[Generate Descriptions Taverns style names]' \
+  '--descriptions-towns[Generate Descriptions Towns style names]' \
+  '--descriptions-traditions[Generate Descriptions Traditions style names]' \
+  '--descriptions-wands[Generate Descriptions Wands style names]' \
+  '--descriptions-weapons[Generate Descriptions Weapons style names]' \
+  '--destiny-awokens[Generate Destiny Awokens style names]' \
+  '--destiny-cabals[Generate Destiny Cabals style names]' \
+  '--destiny-exos[Generate Destiny Exos style names]' \
+  '--destiny-fallens[Generate Destiny Fallens style names]' \
+  '--destiny-hives[Generate Destiny Hives style names]' \
+  '--destiny-humans[Generate Destiny Humans style names]' \
+  '--destiny-vexs[Generate Destiny Vexs style names]' \
+  '--diablo-angels[Generate Diablo Angels style names]' \
+  '--diablo-demons[Generate Diablo Demons style names]' \
+  '--diablo-khazras[Generate Diablo Khazras style names]' \
+  '--diablo-nephalems[Generate Diablo Nephalems style names]' \
+  '--doctor_who-daleks[Generate Doctor Who Daleks style names]' \
+  '--doctor_who-gallifreyans[Generate Doctor Who Gallifreyans style names]' \
+  '--doctor_who-ice_warriors[Generate Doctor Who Ice Warriors style names]' \
+  '--doctor_who-raxacoricofallapatorians[Generate Doctor Who Raxacoricofallapatorians style names]' \
+  '--doctor_who-silurians[Generate Doctor Who Silurians style names]' \
+  '--doctor_who-sontarans[Generate Doctor Who Sontarans style names]' \
+  '--doctor_who-zygons[Generate Doctor Who Zygons style names]' \
+  '--dragon_age-dwarfs[Generate Dragon Age Dwarfs style names]' \
+  '--dragon_age-elfs[Generate Dragon Age Elfs style names]' \
+  '--dragon_age-humans[Generate Dragon Age Humans style names]' \
+  '--dragon_age-qunaris[Generate Dragon Age Qunaris style names]' \
+  '--dragon_ball-frieza_clans[Generate Dragon Ball Frieza Clans style names]' \
+  '--dragon_ball-hakaishins[Generate Dragon Ball Hakaishins style names]' \
+  '--dragon_ball-humans[Generate Dragon Ball Humans style names]' \
+  '--dragon_ball-others[Generate Dragon Ball Others style names]' \
+  '--dragon_ball-saiyans[Generate Dragon Ball Saiyans style names]' \
+  '--dragon_ball-skians[Generate Dragon Ball Skians style names]' \
+  '--dragon_ball-tuffles[Generate Dragon Ball Tuffles style names]' \
+  '--dungeon_and_dragons-devas[Generate Dungeon And Dragons Devas style names]' \
+  '--dungeon_and_dragons-dragonborns[Generate Dungeon And Dragons Dragonborns style names]' \
+  '--dungeon_and_dragons-drows[Generate Dungeon And Dragons Drows style names]' \
+  '--dungeon_and_dragons-dwarfs[Generate Dungeon And Dragons Dwarfs style names]' \
+  '--dungeon_and_dragons-eladrins[Generate Dungeon And Dragons Eladrins style names]' \
+  '--dungeon_and_dragons-elfs[Generate Dungeon And Dragons Elfs style names]' \
+  '--dungeon_and_dragons-githzerais[Generate Dungeon And Dragons Githzerais style names]' \
+  '--dungeon_and_dragons-gnomes[Generate Dungeon And Dragons Gnomes style names]' \
+  '--dungeon_and_dragons-goliaths[Generate Dungeon And Dragons Goliaths style names]' \
+  '--dungeon_and_dragons-half_elfs[Generate Dungeon And Dragons Half Elfs style names]' \
+  '--dungeon_and_dragons-half_orcs[Generate Dungeon And Dragons Half Orcs style names]' \
+  '--dungeon_and_dragons-halflings[Generate Dungeon And Dragons Halflings style names]' \
+  '--dungeon_and_dragons-humans[Generate Dungeon And Dragons Humans style names]' \
+  '--dungeon_and_dragons-minotaurs[Generate Dungeon And Dragons Minotaurs style names]' \
+  '--dungeon_and_dragons-shardminds[Generate Dungeon And Dragons Shardminds style names]' \
+  '--dungeon_and_dragons-shifters[Generate Dungeon And Dragons Shifters style names]' \
+  '--dungeon_and_dragons-tieflings[Generate Dungeon And Dragons Tieflings style names]' \
+  '--dungeon_and_dragons-wildens[Generate Dungeon And Dragons Wildens style names]' \
+  '--elder_scrolls-altmers[Generate Elder Scrolls Altmers style names]' \
+  '--elder_scrolls-argonians[Generate Elder Scrolls Argonians style names]' \
+  '--elder_scrolls-bosmers[Generate Elder Scrolls Bosmers style names]' \
+  '--elder_scrolls-bretons[Generate Elder Scrolls Bretons style names]' \
+  '--elder_scrolls-daedrics[Generate Elder Scrolls Daedrics style names]' \
+  '--elder_scrolls-dragons[Generate Elder Scrolls Dragons style names]' \
+  '--elder_scrolls-dunmers[Generate Elder Scrolls Dunmers style names]' \
+  '--elder_scrolls-dwemers[Generate Elder Scrolls Dwemers style names]' \
+  '--elder_scrolls-falmers[Generate Elder Scrolls Falmers style names]' \
+  '--elder_scrolls-forsworns[Generate Elder Scrolls Forsworns style names]' \
+  '--elder_scrolls-imperials[Generate Elder Scrolls Imperials style names]' \
+  '--elder_scrolls-khajiits[Generate Elder Scrolls Khajiits style names]' \
+  '--elder_scrolls-nords[Generate Elder Scrolls Nords style names]' \
+  '--elder_scrolls-orc[Generate Elder Scrolls Orc style names]' \
+  '--elder_scrolls-redguards[Generate Elder Scrolls Redguards style names]' \
+  '--elder_scrolls-spriggans[Generate Elder Scrolls Spriggans style names]' \
+  '--eve_online-amarrs[Generate Eve Online Amarrs style names]' \
+  '--eve_online-caldaris[Generate Eve Online Caldaris style names]' \
+  '--eve_online-gallentes[Generate Eve Online Gallentes style names]' \
+  '--eve_online-minmatars[Generate Eve Online Minmatars style names]' \
+  '--fantasy-aliens[Generate Fantasy Aliens style names]' \
+  '--fantasy-amazons[Generate Fantasy Amazons style names]' \
+  '--fantasy-angels[Generate Fantasy Angels style names]' \
+  '--fantasy-animal_species[Generate Fantasy Animal Species style names]' \
+  '--fantasy-animatronics[Generate Fantasy Animatronics style names]' \
+  '--fantasy-apocalypse_mutants[Generate Fantasy Apocalypse Mutants style names]' \
+  '--fantasy-bandits[Generate Fantasy Bandits style names]' \
+  '--fantasy-barbarians[Generate Fantasy Barbarians style names]' \
+  '--fantasy-bounty_hunters[Generate Fantasy Bounty Hunters style names]' \
+  '--fantasy-cat_people_nekojins[Generate Fantasy Cat People Nekojins style names]' \
+  '--fantasy-cavemens[Generate Fantasy Cavemens style names]' \
+  '--fantasy-centaurs[Generate Fantasy Centaurs style names]' \
+  '--fantasy-christmas_elfs[Generate Fantasy Christmas Elfs style names]' \
+  '--fantasy-codes[Generate Fantasy Codes style names]' \
+  '--fantasy-cowboys[Generate Fantasy Cowboys style names]' \
+  '--fantasy-creatures[Generate Fantasy Creatures style names]' \
+  '--fantasy-deaths[Generate Fantasy Deaths style names]' \
+  '--fantasy-demons[Generate Fantasy Demons style names]' \
+  '--fantasy-detectives[Generate Fantasy Detectives style names]' \
+  '--fantasy-dragons[Generate Fantasy Dragons style names]' \
+  '--fantasy-dryads[Generate Fantasy Dryads style names]' \
+  '--fantasy-dwarfs[Generate Fantasy Dwarfs style names]' \
+  '--fantasy-elementals[Generate Fantasy Elementals style names]' \
+  '--fantasy-elfs[Generate Fantasy Elfs style names]' \
+  '--fantasy-ents[Generate Fantasy Ents style names]' \
+  '--fantasy-evils[Generate Fantasy Evils style names]' \
+  '--fantasy-fairys[Generate Fantasy Fairys style names]' \
+  '--fantasy-fantasy_animals[Generate Fantasy Animals style names]' \
+  '--fantasy-fantasy_races[Generate Fantasy Races style names]' \
+  '--fantasy-fantasy_surnames[Generate Fantasy Surnames style names]' \
+  '--fantasy-fursonas[Generate Fantasy Fursonas style names]' \
+  '--fantasy-futuristics[Generate Fantasy Futuristics style names]' \
+  '--fantasy-ghost_classifications[Generate Fantasy Ghost Classifications style names]' \
+  '--fantasy-ghosts[Generate Fantasy Ghosts style names]' \
+  '--fantasy-giants[Generate Fantasy Giants style names]' \
+  '--fantasy-gnolls[Generate Fantasy Gnolls style names]' \
+  '--fantasy-gnomes[Generate Fantasy Gnomes style names]' \
+  '--fantasy-goblins[Generate Fantasy Goblins style names]' \
+  '--fantasy-gods[Generate Fantasy Gods style names]' \
+  '--fantasy-gorgons[Generate Fantasy Gorgons style names]' \
+  '--fantasy-griffins[Generate Fantasy Griffins style names]' \
+  '--fantasy-half_elfs[Generate Fantasy Half Elfs style names]' \
+  '--fantasy-harpys[Generate Fantasy Harpys style names]' \
+  '--fantasy-heros[Generate Fantasy Heros style names]' \
+  '--fantasy-hobbits[Generate Fantasy Hobbits style names]' \
+  '--fantasy-horses[Generate Fantasy Horses style names]' \
+  '--fantasy-imps[Generate Fantasy Imps style names]' \
+  '--fantasy-kaijus[Generate Fantasy Kaijus style names]' \
+  '--fantasy-killers[Generate Fantasy Killers style names]' \
+  '--fantasy-knights[Generate Fantasy Knights style names]' \
+  '--fantasy-kobolds[Generate Fantasy Kobolds style names]' \
+  '--fantasy-lamias[Generate Fantasy Lamias style names]' \
+  '--fantasy-lichs[Generate Fantasy Lichs style names]' \
+  '--fantasy-mechas[Generate Fantasy Mechas style names]' \
+  '--fantasy-medievals[Generate Fantasy Medievals style names]' \
+  '--fantasy-mermaids[Generate Fantasy Mermaids style names]' \
+  '--fantasy-minotaurs[Generate Fantasy Minotaurs style names]' \
+  '--fantasy-mobsters[Generate Fantasy Mobsters style names]' \
+  '--fantasy-monsters[Generate Fantasy Monsters style names]' \
+  '--fantasy-mutant_species[Generate Fantasy Mutant Species style names]' \
+  '--fantasy-nagas[Generate Fantasy Nagas style names]' \
+  '--fantasy-necromancers[Generate Fantasy Necromancers style names]' \
+  '--fantasy-nephilims[Generate Fantasy Nephilims style names]' \
+  '--fantasy-ninjas[Generate Fantasy Ninjas style names]' \
+  '--fantasy-nymphs[Generate Fantasy Nymphs style names]' \
+  '--fantasy-ogres[Generate Fantasy Ogres style names]' \
+  '--fantasy-orcs[Generate Fantasy Orcs style names]' \
+  '--fantasy-pegasus[Generate Fantasy Pegasus style names]' \
+  '--fantasy-phoenixs[Generate Fantasy Phoenixs style names]' \
+  '--fantasy-pirates[Generate Fantasy Pirates style names]' \
+  '--fantasy-robots[Generate Fantasy Robots style names]' \
+  '--fantasy-satyr_fauns[Generate Fantasy Satyr Fauns style names]' \
+  '--fantasy-sea_creatures[Generate Fantasy Sea Creatures style names]' \
+  '--fantasy-servants[Generate Fantasy Servants style names]' \
+  '--fantasy-shapeshifters[Generate Fantasy Shapeshifters style names]' \
+  '--fantasy-sirens[Generate Fantasy Sirens style names]' \
+  '--fantasy-slaves[Generate Fantasy Slaves style names]' \
+  '--fantasy-species[Generate Fantasy Species style names]' \
+  '--fantasy-steampunks[Generate Fantasy Steampunks style names]' \
+  '--fantasy-succubus[Generate Fantasy Succubus style names]' \
+  '--fantasy-superhero_teams[Generate Fantasy Superhero Teams style names]' \
+  '--fantasy-sylphs[Generate Fantasy Sylphs style names]' \
+  '--fantasy-taurens[Generate Fantasy Taurens style names]' \
+  '--fantasy-trolls[Generate Fantasy Trolls style names]' \
+  '--fantasy-twins[Generate Fantasy Twins style names]' \
+  '--fantasy-unicorns[Generate Fantasy Unicorns style names]' \
+  '--fantasy-valkyries[Generate Fantasy Valkyries style names]' \
+  '--fantasy-vampire_clans[Generate Fantasy Vampire Clans style names]' \
+  '--fantasy-vampires[Generate Fantasy Vampires style names]' \
+  '--fantasy-villains[Generate Fantasy Villains style names]' \
+  '--fantasy-warrior_nicknames[Generate Fantasy Warrior Nicknames style names]' \
+  '--fantasy-werewolf_packs[Generate Fantasy Werewolf Packs style names]' \
+  '--fantasy-werewolfs[Generate Fantasy Werewolfs style names]' \
+  '--fantasy-witchs[Generate Fantasy Witchs style names]' \
+  '--fantasy-wizards[Generate Fantasy Wizards style names]' \
+  '--fantasy-zombie_types[Generate Fantasy Zombie Types style names]' \
+  '--final_fantasy-au_ras[Generate Final Fantasy Au Ras style names]' \
+  '--final_fantasy-elezens[Generate Final Fantasy Elezens style names]' \
+  '--final_fantasy-hyurs[Generate Final Fantasy Hyurs style names]' \
+  '--final_fantasy-lalafells[Generate Final Fantasy Lalafells style names]' \
+  '--final_fantasy-miqotes[Generate Final Fantasy Miqotes style names]' \
+  '--final_fantasy-roegadyns[Generate Final Fantasy Roegadyns style names]' \
+  '--game_of_thrones-dothrakis[Generate Game Of Thrones Dothrakis style names]' \
+  '--game_of_thrones-free_citys[Generate Game Of Thrones Free Citys style names]' \
+  '--game_of_thrones-free_folks[Generate Game Of Thrones Free Folks style names]' \
+  '--game_of_thrones-ghiscaris[Generate Game Of Thrones Ghiscaris style names]' \
+  '--game_of_thrones-mountain_clans[Generate Game Of Thrones Mountain Clans style names]' \
+  '--game_of_thrones-nicknames[Generate Game Of Thrones Nicknames style names]' \
+  '--game_of_thrones-summer_islanders[Generate Game Of Thrones Summer Islanders style names]' \
+  '--game_of_thrones-unsullieds[Generate Game Of Thrones Unsullieds style names]' \
+  '--game_of_thrones-valyrians[Generate Game Of Thrones Valyrians style names]' \
+  '--game_of_thrones-westeros[Generate Game Of Thrones Westeros style names]' \
+  '--guild_wars-asuras[Generate Guild Wars Asuras style names]' \
+  '--guild_wars-charrs[Generate Guild Wars Charrs style names]' \
+  '--guild_wars-human[Generate Guild Wars Human style names]' \
+  '--guild_wars-norns[Generate Guild Wars Norns style names]' \
+  '--guild_wars-sylvaris[Generate Guild Wars Sylvaris style names]' \
+  '--halo-forerunners[Generate Halo Forerunners style names]' \
+  '--halo-huragoks[Generate Halo Huragoks style names]' \
+  '--halo-jiralhanaes[Generate Halo Jiralhanaes style names]' \
+  '--halo-kig_yars[Generate Halo Kig Yars style names]' \
+  '--halo-mgalekgolos[Generate Halo Mgalekgolos style names]' \
+  '--halo-san_shyuums[Generate Halo San Shyuums style names]' \
+  '--halo-sangheilis[Generate Halo Sangheilis style names]' \
+  '--halo-unggoys[Generate Halo Unggoys style names]' \
+  '--harry_potter-dragon_species[Generate Harry Potter Dragon Species style names]' \
+  '--harry_potter-goblins[Generate Harry Potter Goblins style names]' \
+  '--harry_potter-hippogriffs[Generate Harry Potter Hippogriffs style names]' \
+  '--harry_potter-house_elfs[Generate Harry Potter House Elfs style names]' \
+  '--harry_potter-winged_horses[Generate Harry Potter Winged Horses style names]' \
+  '--inheritance_cycle-dragons[Generate Inheritance Cycle Dragons style names]' \
+  '--inheritance_cycle-dwarfs[Generate Inheritance Cycle Dwarfs style names]' \
+  '--inheritance_cycle-elfs[Generate Inheritance Cycle Elfs style names]' \
+  '--inheritance_cycle-humans[Generate Inheritance Cycle Humans style names]' \
+  '--inheritance_cycle-urgals[Generate Inheritance Cycle Urgals style names]' \
+  '--legend_of_zelda-anoukis[Generate Legend Of Zelda Anoukis style names]' \
+  '--legend_of_zelda-deitys[Generate Legend Of Zelda Deitys style names]' \
+  '--legend_of_zelda-dekus[Generate Legend Of Zelda Dekus style names]' \
+  '--legend_of_zelda-fairys[Generate Legend Of Zelda Fairys style names]' \
+  '--legend_of_zelda-gerudos[Generate Legend Of Zelda Gerudos style names]' \
+  '--legend_of_zelda-gorons[Generate Legend Of Zelda Gorons style names]' \
+  '--legend_of_zelda-humans[Generate Legend Of Zelda Humans style names]' \
+  '--legend_of_zelda-korok_kokiris[Generate Legend Of Zelda Korok Kokiris style names]' \
+  '--legend_of_zelda-minishs[Generate Legend Of Zelda Minishs style names]' \
+  '--legend_of_zelda-zoras[Generate Legend Of Zelda Zoras style names]' \
+  '--lord_of_the_rings-dwarfs[Generate Lord Of The Rings Dwarfs style names]' \
+  '--lord_of_the_rings-elfs[Generate Lord of the Rings elf style names]' \
+  '--lord_of_the_rings-hobbits[Generate Lord Of The Rings Hobbits style names]' \
+  '--lord_of_the_rings-humans[Generate Lord Of The Rings Humans style names]' \
+  '--lord_of_the_rings-maiars[Generate Lord Of The Rings Maiars style names]' \
+  '--lord_of_the_rings-orcs[Generate Lord Of The Rings Orcs style names]' \
+  '--lord_of_the_rings_online-beorning[Generate Lord Of The Rings Online Beorning style names]' \
+  '--lord_of_the_rings_online-dwarf[Generate Lord Of The Rings Online Dwarf style names]' \
+  '--lord_of_the_rings_online-elf[Generate Lord Of The Rings Online Elf style names]' \
+  '--lord_of_the_rings_online-hobbit[Generate Lord Of The Rings Online Hobbit style names]' \
+  '--lord_of_the_rings_online-human[Generate Lord Of The Rings Online Human style names]' \
+  '--mass_effect-asaris[Generate Mass Effect Asaris style names]' \
+  '--mass_effect-batarians[Generate Mass Effect Batarians style names]' \
+  '--mass_effect-drells[Generate Mass Effect Drells style names]' \
+  '--mass_effect-geths[Generate Mass Effect Geths style names]' \
+  '--mass_effect-humans[Generate Mass Effect Humans style names]' \
+  '--mass_effect-krogans[Generate Mass Effect Krogans style names]' \
+  '--mass_effect-quarians[Generate Mass Effect Quarians style names]' \
+  '--mass_effect-salarians[Generate Mass Effect Salarians style names]' \
+  '--mass_effect-turians[Generate Mass Effect Turians style names]' \
+  '--military-itu[Generate Military Itu style names]' \
+  '--military-nato[Generate Military Nato style names]' \
+  '--military-numeric[Generate Military Numeric style names]' \
+  '--military-royal_air_force[Generate Military Royal Air Force style names]' \
+  '--military-royal_navy[Generate Royal Navy military call-sign style names]' \
+  '--military-signalese[Generate Military Signalese style names]' \
+  '--military-telegram[Generate Military Telegram style names]' \
+  '--military-united_states[Generate United States military NATO phonetic call-signs]' \
+  '--miscellaneous-afterlifes[Generate Miscellaneous Afterlifes style names]' \
+  '--miscellaneous-airplanes[Generate Miscellaneous Airplanes style names]' \
+  '--miscellaneous-airships[Generate Miscellaneous Airships style names]' \
+  '--miscellaneous-alliances[Generate Miscellaneous Alliances style names]' \
+  '--miscellaneous-animal_groups[Generate Miscellaneous Animal Groups style names]' \
+  '--miscellaneous-anime_attacks[Generate Miscellaneous Anime Attacks style names]' \
+  '--miscellaneous-apocalypses[Generate Miscellaneous Apocalypses style names]' \
+  '--miscellaneous-armys[Generate Miscellaneous Armys style names]' \
+  '--miscellaneous-artifacts[Generate Miscellaneous Artifacts style names]' \
+  '--miscellaneous-attack_moves[Generate Miscellaneous Attack Moves style names]' \
+  '--miscellaneous-awards[Generate Miscellaneous Awards style names]' \
+  '--miscellaneous-bands[Generate Miscellaneous Bands style names]' \
+  '--miscellaneous-battles[Generate Miscellaneous Battles style names]' \
+  '--miscellaneous-birds[Generate Miscellaneous Birds style names]' \
+  '--miscellaneous-board_games[Generate Miscellaneous Board Games style names]' \
+  '--miscellaneous-book_titles[Generate Miscellaneous Book Titles style names]' \
+  '--miscellaneous-bouquets[Generate Miscellaneous Bouquets style names]' \
+  '--miscellaneous-brands[Generate Miscellaneous Brands style names]' \
+  '--miscellaneous-candys[Generate Miscellaneous Candys style names]' \
+  '--miscellaneous-cars[Generate Miscellaneous Cars style names]' \
+  '--miscellaneous-chivalric_orders[Generate Miscellaneous Chivalric Orders style names]' \
+  '--miscellaneous-class[Generate Miscellaneous Class style names]' \
+  '--miscellaneous-clothing_brands[Generate Miscellaneous Clothing Brands style names]' \
+  '--miscellaneous-colors[Generate Miscellaneous Colors style names]' \
+  '--miscellaneous-constellations[Generate Miscellaneous Constellations style names]' \
+  '--miscellaneous-creepypastas[Generate Miscellaneous Creepypastas style names]' \
+  '--miscellaneous-crops[Generate Miscellaneous Crops style names]' \
+  '--miscellaneous-currencys[Generate Miscellaneous Currencys style names]' \
+  '--miscellaneous-dances[Generate Miscellaneous Dances style names]' \
+  '--miscellaneous-dates[Generate Miscellaneous Dates style names]' \
+  '--miscellaneous-dinosaurs[Generate Miscellaneous Dinosaurs style names]' \
+  '--miscellaneous-diseases[Generate Miscellaneous Diseases style names]' \
+  '--miscellaneous-drinks[Generate Miscellaneous Drinks style names]' \
+  '--miscellaneous-drugs[Generate Miscellaneous Drugs style names]' \
+  '--miscellaneous-enchantments[Generate Miscellaneous Enchantments style names]' \
+  '--miscellaneous-energy_types[Generate Miscellaneous Energy Types style names]' \
+  '--miscellaneous-epithets[Generate Miscellaneous Epithets style names]' \
+  '--miscellaneous-evil_groups[Generate Miscellaneous Evil Groups style names]' \
+  '--miscellaneous-foods[Generate Miscellaneous Foods style names]' \
+  '--miscellaneous-fruit_vegetables[Generate Miscellaneous Fruit Vegetables style names]' \
+  '--miscellaneous-fungis[Generate Miscellaneous Fungis style names]' \
+  '--miscellaneous-galaxys[Generate Miscellaneous Galaxys style names]' \
+  '--miscellaneous-game_engines[Generate Miscellaneous Game Engines style names]' \
+  '--miscellaneous-game_soundtracks[Generate Miscellaneous Game Soundtracks style names]' \
+  '--miscellaneous-gangs[Generate Miscellaneous Gangs style names]' \
+  '--miscellaneous-gear_enchantments[Generate Miscellaneous Gear Enchantments style names]' \
+  '--miscellaneous-gem_minerals[Generate Miscellaneous Gem Minerals style names]' \
+  '--miscellaneous-graffiti_tags[Generate Miscellaneous Graffiti Tags style names]' \
+  '--miscellaneous-guilds[Generate Miscellaneous Guilds style names]' \
+  '--miscellaneous-hackers[Generate Miscellaneous Hackers style names]' \
+  '--miscellaneous-heists[Generate Miscellaneous Heists style names]' \
+  '--miscellaneous-helicopters[Generate Miscellaneous Helicopters style names]' \
+  '--miscellaneous-herbs[Generate Miscellaneous Herbs style names]' \
+  '--miscellaneous-holidays[Generate Miscellaneous Holidays style names]' \
+  '--miscellaneous-holy_books[Generate Miscellaneous Holy Books style names]' \
+  '--miscellaneous-human_species[Generate Miscellaneous Human Species style names]' \
+  '--miscellaneous-instruments[Generate Miscellaneous Instruments style names]' \
+  '--miscellaneous-inventions[Generate Miscellaneous Inventions style names]' \
+  '--miscellaneous-jewelrys[Generate Miscellaneous Jewelrys style names]' \
+  '--miscellaneous-languages[Generate Miscellaneous Languages style names]' \
+  '--miscellaneous-love_nicknames[Generate Miscellaneous Love Nicknames style names]' \
+  '--miscellaneous-magazines[Generate Miscellaneous Magazines style names]' \
+  '--miscellaneous-magic_types[Generate Miscellaneous Magic Types style names]' \
+  '--miscellaneous-magical_diseases[Generate Miscellaneous Magical Diseases style names]' \
+  '--miscellaneous-magical_plants[Generate Miscellaneous Magical Plants style names]' \
+  '--miscellaneous-magical_trees[Generate Miscellaneous Magical Trees style names]' \
+  '--miscellaneous-martial_arts[Generate Miscellaneous Martial Arts style names]' \
+  '--miscellaneous-mascots[Generate Miscellaneous Mascots style names]' \
+  '--miscellaneous-medicines[Generate Miscellaneous Medicines style names]' \
+  '--miscellaneous-metals[Generate Miscellaneous Metals style names]' \
+  '--miscellaneous-military_divisions[Generate Miscellaneous Military Divisions style names]' \
+  '--miscellaneous-military_operations[Generate Miscellaneous Military Operations style names]' \
+  '--miscellaneous-military_ranks[Generate Miscellaneous Military Ranks style names]' \
+  '--miscellaneous-military_vehicles[Generate Miscellaneous Military Vehicles style names]' \
+  '--miscellaneous-molecules[Generate Miscellaneous Molecules style names]' \
+  '--miscellaneous-motorcycle_clubs[Generate Miscellaneous Motorcycle Clubs style names]' \
+  '--miscellaneous-mutant_plants[Generate Miscellaneous Mutant Plants style names]' \
+  '--miscellaneous-natural_disasters[Generate Miscellaneous Natural Disasters style names]' \
+  '--miscellaneous-newspapers[Generate Miscellaneous Newspapers style names]' \
+  '--miscellaneous-nicknames[Generate Miscellaneous Nicknames style names]' \
+  '--miscellaneous-noble_houses[Generate Miscellaneous Noble Houses style names]' \
+  '--miscellaneous-pirate_crews[Generate Miscellaneous Pirate Crews style names]' \
+  '--miscellaneous-pirate_ships[Generate Miscellaneous Pirate Ships style names]' \
+  '--miscellaneous-plagues[Generate Miscellaneous Plagues style names]' \
+  '--miscellaneous-plants[Generate Miscellaneous Plants style names]' \
+  '--miscellaneous-poisons[Generate Miscellaneous Poisons style names]' \
+  '--miscellaneous-political_partys[Generate Miscellaneous Political Partys style names]' \
+  '--miscellaneous-post_apocalyptic_societys[Generate Miscellaneous Post Apocalyptic Societys style names]' \
+  '--miscellaneous-potions[Generate Miscellaneous Potions style names]' \
+  '--miscellaneous-professions[Generate Miscellaneous Professions style names]' \
+  '--miscellaneous-racers[Generate Miscellaneous Racers style names]' \
+  '--miscellaneous-railways[Generate Miscellaneous Railways style names]' \
+  '--miscellaneous-ranks[Generate Miscellaneous Ranks style names]' \
+  '--miscellaneous-religions[Generate Miscellaneous Religions style names]' \
+  '--miscellaneous-scientific_creatures[Generate Miscellaneous Scientific Creatures style names]' \
+  '--miscellaneous-ships[Generate Miscellaneous Ships style names]' \
+  '--miscellaneous-siege_engines[Generate Miscellaneous Siege Engines style names]' \
+  '--miscellaneous-softwares[Generate Miscellaneous Softwares style names]' \
+  '--miscellaneous-song_titles[Generate Miscellaneous Song Titles style names]' \
+  '--miscellaneous-space_fleets[Generate Miscellaneous Space Fleets style names]' \
+  '--miscellaneous-spaceships[Generate Miscellaneous Spaceships style names]' \
+  '--miscellaneous-spells[Generate Miscellaneous Spells style names]' \
+  '--miscellaneous-sports[Generate Miscellaneous Sports style names]' \
+  '--miscellaneous-sports_teams[Generate Miscellaneous Sports Teams style names]' \
+  '--miscellaneous-squads[Generate Miscellaneous Squads style names]' \
+  '--miscellaneous-superpowers[Generate Miscellaneous Superpowers style names]' \
+  '--miscellaneous-teleportations[Generate Miscellaneous Teleportations style names]' \
+  '--miscellaneous-thrones[Generate Miscellaneous Thrones style names]' \
+  '--miscellaneous-time_periods[Generate Miscellaneous Time Periods style names]' \
+  '--miscellaneous-titles[Generate Miscellaneous Titles style names]' \
+  '--miscellaneous-tool_nicknames[Generate Miscellaneous Tool Nicknames style names]' \
+  '--miscellaneous-treatys[Generate Miscellaneous Treatys style names]' \
+  '--miscellaneous-trees[Generate Miscellaneous Trees style names]' \
+  '--miscellaneous-tribals[Generate Miscellaneous Tribals style names]' \
+  '--miscellaneous-tribes[Generate Miscellaneous Tribes style names]' \
+  '--miscellaneous-usernames[Generate Miscellaneous Usernames style names]' \
+  '--miscellaneous-vehicles[Generate Miscellaneous Vehicles style names]' \
+  '--miscellaneous-video_games[Generate Miscellaneous Video Games style names]' \
+  '--miscellaneous-vocal_groups[Generate Miscellaneous Vocal Groups style names]' \
+  '--miscellaneous-weapon_abilities[Generate Miscellaneous Weapon Abilities style names]' \
+  '--miscellaneous-web_series[Generate Miscellaneous Web Series style names]' \
+  '--miscellaneous-wines[Generate Miscellaneous Wines style names]' \
+  '--miscellaneous-wrestlers[Generate Miscellaneous Wrestlers style names]' \
+  '--miscellaneous-wrestling_moves[Generate Miscellaneous Wrestling Moves style names]' \
+  '--pathfinder-aasimars[Generate Pathfinder Aasimars style names]' \
+  '--pathfinder-catfolks[Generate Pathfinder Catfolks style names]' \
+  '--pathfinder-drows[Generate Pathfinder Drows style names]' \
+  '--pathfinder-dwarfs[Generate Pathfinder Dwarfs style names]' \
+  '--pathfinder-elfs[Generate Pathfinder Elfs style names]' \
+  '--pathfinder-fetchlings[Generate Pathfinder Fetchlings style names]' \
+  '--pathfinder-gnomes[Generate Pathfinder Gnomes style names]' \
+  '--pathfinder-goblins[Generate Pathfinder Goblins style names]' \
+  '--pathfinder-half_elfs[Generate Pathfinder Half Elfs style names]' \
+  '--pathfinder-half_orcs[Generate Pathfinder Half Orcs style names]' \
+  '--pathfinder-halflings[Generate Pathfinder Halflings style names]' \
+  '--pathfinder-hobgoblins[Generate Pathfinder Hobgoblins style names]' \
+  '--pathfinder-humans[Generate Pathfinder Humans style names]' \
+  '--pathfinder-ifrits[Generate Pathfinder Ifrits style names]' \
+  '--pathfinder-kobolds[Generate Pathfinder Kobolds style names]' \
+  '--pathfinder-orcs[Generate Pathfinder Orcs style names]' \
+  '--pathfinder-oreads[Generate Pathfinder Oreads style names]' \
+  '--pathfinder-ratfolks[Generate Pathfinder Ratfolks style names]' \
+  '--pathfinder-sylphs[Generate Pathfinder Sylphs style names]' \
+  '--pathfinder-tengus[Generate Pathfinder Tengus style names]' \
+  '--pathfinder-tians[Generate Pathfinder Tians style names]' \
+  '--pathfinder-tieflings[Generate Pathfinder Tieflings style names]' \
+  '--pathfinder-undines[Generate Pathfinder Undines style names]' \
+  '--pets-aliens[Generate Pets Aliens style names]' \
+  '--pets-amphibians[Generate Pets Amphibians style names]' \
+  '--pets-bats[Generate Pets Bats style names]' \
+  '--pets-bears[Generate Pets Bears style names]' \
+  '--pets-bird_of_preys[Generate Pets Bird Of Preys style names]' \
+  '--pets-birds[Generate Pets Birds style names]' \
+  '--pets-cats[Generate Pets Cats style names]' \
+  '--pets-cows[Generate Pets Cows style names]' \
+  '--pets-crabs[Generate Pets Crabs style names]' \
+  '--pets-deers[Generate Pets Deers style names]' \
+  '--pets-dogs[Generate Pets Dogs style names]' \
+  '--pets-elephants[Generate Pets Elephants style names]' \
+  '--pets-fishs[Generate Pets Fishs style names]' \
+  '--pets-horses[Generate Pets Horses style names]' \
+  '--pets-insects[Generate Pets Insects style names]' \
+  '--pets-lions[Generate Pets Lions style names]' \
+  '--pets-marine_mammals[Generate Pets Marine Mammals style names]' \
+  '--pets-monkeys[Generate Pets Monkeys style names]' \
+  '--pets-mouses[Generate Pets Mouses style names]' \
+  '--pets-owls[Generate Pets Owls style names]' \
+  '--pets-parrots[Generate Pets Parrots style names]' \
+  '--pets-pigs[Generate Pets Pigs style names]' \
+  '--pets-rabbits[Generate Pets Rabbits style names]' \
+  '--pets-reptiles[Generate Pets Reptiles style names]' \
+  '--pets-rodents[Generate Pets Rodents style names]' \
+  '--pets-sheeps[Generate Pets Sheeps style names]' \
+  '--pets-turtles[Generate Pets Turtles style names]' \
+  '--pets-wolfs[Generate Pets Wolfs style names]' \
+  '--places-amusement_parks[Generate Places Amusement Parks style names]' \
+  '--places-antique_stores[Generate Places Antique Stores style names]' \
+  '--places-asylums[Generate Places Asylums style names]' \
+  '--places-bakerys[Generate Places Bakerys style names]' \
+  '--places-banks[Generate Places Banks style names]' \
+  '--places-battle_arenas[Generate Places Battle Arenas style names]' \
+  '--places-beachs[Generate Places Beachs style names]' \
+  '--places-brewerys[Generate Places Brewerys style names]' \
+  '--places-bridges[Generate Places Bridges style names]' \
+  '--places-business[Generate Places Business style names]' \
+  '--places-cafes[Generate Places Cafes style names]' \
+  '--places-camps[Generate Places Camps style names]' \
+  '--places-casinos[Generate Places Casinos style names]' \
+  '--places-castles[Generate Places Castles style names]' \
+  '--places-caves[Generate Places Caves style names]' \
+  '--places-circus[Generate Places Circus style names]' \
+  '--places-city_districts[Generate Places City Districts style names]' \
+  '--places-civilizations[Generate Places Civilizations style names]' \
+  '--places-cliffs[Generate Places Cliffs style names]' \
+  '--places-companys[Generate Places Companys style names]' \
+  '--places-continents[Generate Places Continents style names]' \
+  '--places-countrys[Generate Places Countrys style names]' \
+  '--places-day_cares[Generate Places Day Cares style names]' \
+  '--places-dimensions[Generate Places Dimensions style names]' \
+  '--places-dungeons[Generate Places Dungeons style names]' \
+  '--places-farms[Generate Places Farms style names]' \
+  '--places-film_studios[Generate Places Film Studios style names]' \
+  '--places-fire_lands[Generate Places Fire Lands style names]' \
+  '--places-forests[Generate Places Forests style names]' \
+  '--places-game_studios[Generate Places Game Studios style names]' \
+  '--places-grasslands[Generate Places Grasslands style names]' \
+  '--places-graveyards[Generate Places Graveyards style names]' \
+  '--places-harbors[Generate Places Harbors style names]' \
+  '--places-headquarters[Generate Places Headquarters style names]' \
+  '--places-hospitals[Generate Places Hospitals style names]' \
+  '--places-hotels[Generate Places Hotels style names]' \
+  '--places-inns[Generate Places Inns style names]' \
+  '--places-islands[Generate Places Islands style names]' \
+  '--places-jungles[Generate Places Jungles style names]' \
+  '--places-kingdoms[Generate Places Kingdoms style names]' \
+  '--places-laboratorys[Generate Places Laboratorys style names]' \
+  '--places-lakes[Generate Places Lakes style names]' \
+  '--places-lands[Generate Places Lands style names]' \
+  '--places-librarys[Generate Places Librarys style names]' \
+  '--places-magic_schools[Generate Places Magic Schools style names]' \
+  '--places-magic_shops[Generate Places Magic Shops style names]' \
+  '--places-mansions[Generate Places Mansions style names]' \
+  '--places-mining_companys[Generate Places Mining Companys style names]' \
+  '--places-mountains[Generate Places Mountains style names]' \
+  '--places-museums[Generate Places Museums style names]' \
+  '--places-nightclubs[Generate Places Nightclubs style names]' \
+  '--places-oasis[Generate Places Oasis style names]' \
+  '--places-orphanages[Generate Places Orphanages style names]' \
+  '--places-outposts[Generate Places Outposts style names]' \
+  '--places-parks[Generate Places Parks style names]' \
+  '--places-pirate_coves[Generate Places Pirate Coves style names]' \
+  '--places-planets[Generate Places Planets style names]' \
+  '--places-plantations[Generate Places Plantations style names]' \
+  '--places-plazas[Generate Places Plazas style names]' \
+  '--places-prisons[Generate Places Prisons style names]' \
+  '--places-realms[Generate Places Realms style names]' \
+  '--places-restaurants[Generate Places Restaurants style names]' \
+  '--places-rivers[Generate Places Rivers style names]' \
+  '--places-roads[Generate Places Roads style names]' \
+  '--places-ruins[Generate Places Ruins style names]' \
+  '--places-schools[Generate Places Schools style names]' \
+  '--places-shops[Generate Places Shops style names]' \
+  '--places-sky_islands[Generate Places Sky Islands style names]' \
+  '--places-snowlands[Generate Places Snowlands style names]' \
+  '--places-space_colonys[Generate Places Space Colonys style names]' \
+  '--places-stadiums[Generate Places Stadiums style names]' \
+  '--places-stars[Generate Places Stars style names]' \
+  '--places-streets[Generate Places Streets style names]' \
+  '--places-swamps[Generate Places Swamps style names]' \
+  '--places-temples[Generate Places Temples style names]' \
+  '--places-theaters[Generate Places Theaters style names]' \
+  '--places-towers[Generate Places Towers style names]' \
+  '--places-volcanos[Generate Places Volcanos style names]' \
+  '--places-waterfalls[Generate Places Waterfalls style names]' \
+  '--places-waters[Generate Places Waters style names]' \
+  '--pop_culture-arthurians[Generate Pop Culture Arthurians style names]' \
+  '--pop_culture-avatar_last_airbenders[Generate Pop Culture Avatar Last Airbenders style names]' \
+  '--pop_culture-digimons[Generate Pop Culture Digimons style names]' \
+  '--pop_culture-dragonriders_of_perns[Generate Pop Culture Dragonriders Of Perns style names]' \
+  '--pop_culture-homestucks[Generate Pop Culture Homestucks style names]' \
+  '--pop_culture-how_to_train_your_dragons[Generate Pop Culture How To Train Your Dragons style names]' \
+  '--pop_culture-hunger_games[Generate Pop Culture Hunger Games style names]' \
+  '--pop_culture-hyborians[Generate Pop Culture Hyborians style names]' \
+  '--pop_culture-lovecraftians[Generate Pop Culture Lovecraftians style names]' \
+  '--pop_culture-maze_runners[Generate Pop Culture Maze Runners style names]' \
+  '--pop_culture-mortal_kombats[Generate Pop Culture Mortal Kombats style names]' \
+  '--pop_culture-my_little_ponys[Generate Pop Culture My Little Ponys style names]' \
+  '--pop_culture-one_piece_devil_fruits[Generate Pop Culture One Piece Devil Fruits style names]' \
+  '--pop_culture-pacific_rims[Generate Pop Culture Pacific Rims style names]' \
+  '--pop_culture-pokemons[Generate Pop Culture Pokemons style names]' \
+  '--pop_culture-rwbys[Generate Pop Culture Rwbys style names]' \
+  '--pop_culture-shadowhunter_chronicles[Generate Pop Culture Shadowhunter Chronicles style names]' \
+  '--pop_culture-skulduggery_pleasants[Generate Pop Culture Skulduggery Pleasants style names]' \
+  '--pop_culture-starcrafts[Generate Pop Culture Starcrafts style names]' \
+  '--pop_culture-stormlight_archives[Generate Pop Culture Stormlight Archives style names]' \
+  '--pop_culture-transformers[Generate Pop Culture Transformers style names]' \
+  '--pop_culture-warrior_cats[Generate Pop Culture Warrior Cats style names]' \
+  '--pop_culture-wheel_of_times[Generate Pop Culture Wheel Of Times style names]' \
+  '--pop_culture-wings_of_fires[Generate Pop Culture Wings Of Fires style names]' \
+  '--pop_culture-x_mens[Generate Pop Culture X Mens style names]' \
+  '--real-20th_century_englishs[Generate Real 20Th Century Englishs style names]' \
+  '--real-aboriginals[Generate Real Aboriginals style names]' \
+  '--real-african_americans[Generate Real African Americans style names]' \
+  '--real-akans[Generate Real Akans style names]' \
+  '--real-albanians[Generate Real Albanians style names]' \
+  '--real-algerians[Generate Real Algerians style names]' \
+  '--real-amazighs[Generate Real Amazighs style names]' \
+  '--real-ancient_greeks[Generate Real Ancient Greeks style names]' \
+  '--real-anglo_saxons[Generate Real Anglo Saxons style names]' \
+  '--real-argentinians[Generate Real Argentinians style names]' \
+  '--real-armenians[Generate Real Armenians style names]' \
+  '--real-assyrians[Generate Real Assyrians style names]' \
+  '--real-azerbaijanis[Generate Real Azerbaijanis style names]' \
+  '--real-aztecs[Generate Real Aztecs style names]' \
+  '--real-babylonians[Generate Real Babylonians style names]' \
+  '--real-basothos[Generate Real Basothos style names]' \
+  '--real-basques[Generate Real Basques style names]' \
+  '--real-belgians[Generate Real Belgians style names]' \
+  '--real-bengalis[Generate Real Bengalis style names]' \
+  '--real-biblicals[Generate Real Biblicals style names]' \
+  '--real-bosnians[Generate Real Bosnians style names]' \
+  '--real-brazilians[Generate Real Brazilians style names]' \
+  '--real-bulgarians[Generate Real Bulgarians style names]' \
+  '--real-burmese_myanmars[Generate Real Burmese Myanmars style names]' \
+  '--real-cajuns[Generate Real Cajuns style names]' \
+  '--real-catalans[Generate Real Catalans style names]' \
+  '--real-celtic_bretons[Generate Real Celtic Bretons style names]' \
+  '--real-celtic_welshs[Generate Real Celtic Welshs style names]' \
+  '--real-celtics[Generate Real Celtics style names]' \
+  '--real-chineses[Generate Real Chineses style names]' \
+  '--real-circassians[Generate Real Circassians style names]' \
+  '--real-colonial_americans[Generate Real Colonial Americans style names]' \
+  '--real-croatians[Generate Real Croatians style names]' \
+  '--real-czechs[Generate Real Czechs style names]' \
+  '--real-danishs[Generate Real Danishs style names]' \
+  '--real-dutchs[Generate Real Dutchs style names]' \
+  '--real-edo_japaneses[Generate Real Edo Japaneses style names]' \
+  '--real-edwardians[Generate Real Edwardians style names]' \
+  '--real-egyptians[Generate Real Egyptians style names]' \
+  '--real-englishs[Generate Real Englishs style names]' \
+  '--real-enochians[Generate Real Enochians style names]' \
+  '--real-estonians[Generate Real Estonians style names]' \
+  '--real-ethiopians[Generate Real Ethiopians style names]' \
+  '--real-faroeses[Generate Real Faroeses style names]' \
+  '--real-filipinos[Generate Real Filipinos style names]' \
+  '--real-finnishs[Generate Real Finnishs style names]' \
+  '--real-frankishs[Generate Real Frankishs style names]' \
+  '--real-frenchs[Generate Real Frenchs style names]' \
+  '--real-frisians[Generate Real Frisians style names]' \
+  '--real-georgians[Generate Real Georgians style names]' \
+  '--real-germans[Generate Real Germans style names]' \
+  '--real-gothics[Generate Real Gothics style names]' \
+  '--real-greeks[Generate Real Greeks style names]' \
+  '--real-hausas[Generate Real Hausas style names]' \
+  '--real-hawaiians[Generate Real Hawaiians style names]' \
+  '--real-hebrews[Generate Real Hebrews style names]' \
+  '--real-hillbillys[Generate Real Hillbillys style names]' \
+  '--real-hindus[Generate Real Hindus style names]' \
+  '--real-hippies[Generate Real Hippies style names]' \
+  '--real-hispanics[Generate Real Hispanics style names]' \
+  '--real-hungarians[Generate Real Hungarians style names]' \
+  '--real-icelandics[Generate Real Icelandics style names]' \
+  '--real-indonesians[Generate Real Indonesians style names]' \
+  '--real-inuits[Generate Real Inuits style names]' \
+  '--real-irishs[Generate Real Irishs style names]' \
+  '--real-italians[Generate Real Italians style names]' \
+  '--real-jamaicans[Generate Real Jamaicans style names]' \
+  '--real-japaneses[Generate Real Japaneses style names]' \
+  '--real-jewishs[Generate Real Jewishs style names]' \
+  '--real-kazakhs[Generate Real Kazakhs style names]' \
+  '--real-khmers[Generate Real Khmers style names]' \
+  '--real-koreans[Generate Real Koreans style names]' \
+  '--real-kurdishs[Generate Real Kurdishs style names]' \
+  '--real-laotians[Generate Real Laotians style names]' \
+  '--real-latins[Generate Real Latins style names]' \
+  '--real-latvians[Generate Real Latvians style names]' \
+  '--real-lithuanians[Generate Real Lithuanians style names]' \
+  '--real-malaysians[Generate Real Malaysians style names]' \
+  '--real-malteses[Generate Real Malteses style names]' \
+  '--real-maoris[Generate Real Maoris style names]' \
+  '--real-mayans[Generate Real Mayans style names]' \
+  '--real-modern_egyptians[Generate Real Modern Egyptians style names]' \
+  '--real-mongolians[Generate Real Mongolians style names]' \
+  '--real-moroccans[Generate Real Moroccans style names]' \
+  '--real-muslims[Generate Real Muslims style names]' \
+  '--real-native_americans[Generate Real Native Americans style names]' \
+  '--real-natures[Generate Real Natures style names]' \
+  '--real-nepaleses[Generate Real Nepaleses style names]' \
+  '--real-normans[Generate Real Normans style names]' \
+  '--real-norwegians[Generate Real Norwegians style names]' \
+  '--real-old_high_germans[Generate Real Old High Germans style names]' \
+  '--real-pashtuns[Generate Real Pashtuns style names]' \
+  '--real-persians[Generate Real Persians style names]' \
+  '--real-polishs[Generate Real Polishs style names]' \
+  '--real-portugueses[Generate Real Portugueses style names]' \
+  '--real-poshs[Generate Real Poshs style names]' \
+  '--real-punjabis[Generate Real Punjabis style names]' \
+  '--real-puritans[Generate Real Puritans style names]' \
+  '--real-quebecois[Generate Real Quebecois style names]' \
+  '--real-roma_gypsys[Generate Real Roma Gypsys style names]' \
+  '--real-romanians[Generate Real Romanians style names]' \
+  '--real-romans[Generate Real Romans style names]' \
+  '--real-russians[Generate Real Russians style names]' \
+  '--real-serbians[Generate Real Serbians style names]' \
+  '--real-shakespeareans[Generate Real Shakespeareans style names]' \
+  '--real-shonas[Generate Real Shonas style names]' \
+  '--real-sikhs[Generate Real Sikhs style names]' \
+  '--real-sinhaleses[Generate Real Sinhaleses style names]' \
+  '--real-slavics[Generate Real Slavics style names]' \
+  '--real-slovenians[Generate Real Slovenians style names]' \
+  '--real-somalis[Generate Real Somalis style names]' \
+  '--real-stages[Generate Real Stages style names]' \
+  '--real-suebis[Generate Real Suebis style names]' \
+  '--real-sumerians[Generate Real Sumerians style names]' \
+  '--real-swahilis[Generate Real Swahilis style names]' \
+  '--real-swedishs[Generate Real Swedishs style names]' \
+  '--real-swiss[Generate Real Swiss style names]' \
+  '--real-tajiks[Generate Real Tajiks style names]' \
+  '--real-tamils[Generate Real Tamils style names]' \
+  '--real-telugus[Generate Real Telugus style names]' \
+  '--real-thais[Generate Real Thais style names]' \
+  '--real-tibetans[Generate Real Tibetans style names]' \
+  '--real-turkishs[Generate Real Turkishs style names]' \
+  '--real-twins[Generate Real Twins style names]' \
+  '--real-ukrainians[Generate Real Ukrainians style names]' \
+  '--real-victorians[Generate Real Victorians style names]' \
+  '--real-vietnameses[Generate Real Vietnameses style names]' \
+  '--real-vikings[Generate Real Vikings style names]' \
+  '--real-yorubas[Generate Real Yorubas style names]' \
+  '--real-zulus[Generate Real Zulus style names]' \
+  '--rift-bahmis[Generate Rift Bahmis style names]' \
+  '--rift-dwarfs[Generate Rift Dwarfs style names]' \
+  '--rift-eths[Generate Rift Eths style names]' \
+  '--rift-high_elfs[Generate Rift High Elfs style names]' \
+  '--rift-kelaris[Generate Rift Kelaris style names]' \
+  '--rift-mathosians[Generate Rift Mathosians style names]' \
+  '--star_trek-andorians[Generate Star Trek Andorians style names]' \
+  '--star_trek-bajorans[Generate Star Trek Bajorans style names]' \
+  '--star_trek-benzites[Generate Star Trek Benzites style names]' \
+  '--star_trek-betazoids[Generate Star Trek Betazoids style names]' \
+  '--star_trek-bolians[Generate Star Trek Bolians style names]' \
+  '--star_trek-caitians[Generate Star Trek Caitians style names]' \
+  '--star_trek-ferengis[Generate Star Trek Ferengis style names]' \
+  '--star_trek-gorns[Generate Star Trek Gorns style names]' \
+  '--star_trek-jemhadars[Generate Star Trek Jemhadars style names]' \
+  '--star_trek-klingons[Generate Star Trek Klingons style names]' \
+  '--star_trek-letheans[Generate Star Trek Letheans style names]' \
+  '--star_trek-nausicaans[Generate Star Trek Nausicaans style names]' \
+  '--star_trek-orions[Generate Star Trek Orions style names]' \
+  '--star_trek-pakleds[Generate Star Trek Pakleds style names]' \
+  '--star_trek-remans[Generate Star Trek Remans style names]' \
+  '--star_trek-rigelians[Generate Star Trek Rigelians style names]' \
+  '--star_trek-romulans[Generate Star Trek Romulans style names]' \
+  '--star_trek-saurians[Generate Star Trek Saurians style names]' \
+  '--star_trek-tellarites[Generate Star Trek Tellarites style names]' \
+  '--star_trek-trills[Generate Star Trek Trills style names]' \
+  '--star_trek-vulcans[Generate Star Trek Vulcans style names]' \
+  '--star_wars-anzatis[Generate Star Wars Anzatis style names]' \
+  '--star_wars-biths[Generate Star Wars Biths style names]' \
+  '--star_wars-bothans[Generate Star Wars Bothans style names]' \
+  '--star_wars-darths[Generate Star Wars Darths style names]' \
+  '--star_wars-devaronians[Generate Star Wars Devaronians style names]' \
+  '--star_wars-dugs[Generate Star Wars Dugs style names]' \
+  '--star_wars-duross[Generate Star Wars Duross style names]' \
+  '--star_wars-ewoks[Generate Star Wars Ewoks style names]' \
+  '--star_wars-falleens[Generate Star Wars Falleens style names]' \
+  '--star_wars-gamorreans[Generate Star Wars Gamorreans style names]' \
+  '--star_wars-gands[Generate Star Wars Gands style names]' \
+  '--star_wars-gotals[Generate Star Wars Gotals style names]' \
+  '--star_wars-grans[Generate Star Wars Grans style names]' \
+  '--star_wars-gungans[Generate Star Wars Gungans style names]' \
+  '--star_wars-hutts[Generate Star Wars Hutts style names]' \
+  '--star_wars-iktotchis[Generate Star Wars Iktotchis style names]' \
+  '--star_wars-ishi_tibs[Generate Star Wars Ishi Tibs style names]' \
+  '--star_wars-ithorians[Generate Star Wars Ithorians style names]' \
+  '--star_wars-jawas[Generate Star Wars Jawas style names]' \
+  '--star_wars-kel_dors[Generate Star Wars Kel Dors style names]' \
+  '--star_wars-korunnais[Generate Star Wars Korunnais style names]' \
+  '--star_wars-mandalorians[Generate Star Wars Mandalorians style names]' \
+  '--star_wars-mon_calamaris[Generate Star Wars Mon Calamaris style names]' \
+  '--star_wars-nautolans[Generate Star Wars Nautolans style names]' \
+  '--star_wars-neimoidians[Generate Star Wars Neimoidians style names]' \
+  '--star_wars-niktos[Generate Star Wars Niktos style names]' \
+  '--star_wars-ortolans[Generate Star Wars Ortolans style names]' \
+  '--star_wars-quarrens[Generate Star Wars Quarrens style names]' \
+  '--star_wars-rodians[Generate Star Wars Rodians style names]' \
+  '--star_wars-shistavanens[Generate Star Wars Shistavanens style names]' \
+  '--star_wars-sullustans[Generate Star Wars Sullustans style names]' \
+  '--star_wars-swiss[Generate Star Wars Swiss style names]' \
+  '--star_wars-toydarians[Generate Star Wars Toydarians style names]' \
+  '--star_wars-trandoshans[Generate Star Wars Trandoshans style names]' \
+  '--star_wars-tusken_raiders[Generate Star Wars Tusken Raiders style names]' \
+  '--star_wars-weequays[Generate Star Wars Weequays style names]' \
+  '--star_wars-wookiees[Generate Star Wars Wookiees style names]' \
+  '--star_wars_the_old_republic-cathars[Generate Star Wars The Old Republic Cathars style names]' \
+  '--star_wars_the_old_republic-chiss[Generate Star Wars The Old Republic Chiss style names]' \
+  '--star_wars_the_old_republic-cyborgs[Generate Star Wars The Old Republic Cyborgs style names]' \
+  '--star_wars_the_old_republic-human_sws[Generate Star Wars The Old Republic Human Sws style names]' \
+  '--star_wars_the_old_republic-miralukas[Generate Star Wars The Old Republic Miralukas style names]' \
+  '--star_wars_the_old_republic-mirialans[Generate Star Wars The Old Republic Mirialans style names]' \
+  '--star_wars_the_old_republic-rattatakis[Generate Star Wars The Old Republic Rattatakis style names]' \
+  '--star_wars_the_old_republic-siths[Generate Star Wars The Old Republic Siths style names]' \
+  '--star_wars_the_old_republic-togrutas[Generate Star Wars The Old Republic Togrutas style names]' \
+  '--star_wars_the_old_republic-twileks[Generate Star Wars The Old Republic Twileks style names]' \
+  '--star_wars_the_old_republic-zabraks[Generate Star Wars The Old Republic Zabraks style names]' \
+  '--the_witcher-dwarfs[Generate The Witcher Dwarfs style names]' \
+  '--the_witcher-elfs[Generate The Witcher Elfs style names]' \
+  '--the_witcher-halflings[Generate The Witcher Halflings style names]' \
+  '--the_witcher-humans[Generate The Witcher Humans style names]' \
+  '--towns_and_cities-ancient_greek_towns[Generate Towns And Cities Ancient Greek Towns style names]' \
+  '--towns_and_cities-apocalypse_towns[Generate Towns And Cities Apocalypse Towns style names]' \
+  '--towns_and_cities-central_african_towns[Generate Towns And Cities Central African Towns style names]' \
+  '--towns_and_cities-central_american_towns[Generate Towns And Cities Central American Towns style names]' \
+  '--towns_and_cities-central_east_african_towns[Generate Towns And Cities Central East African Towns style names]' \
+  '--towns_and_cities-city_nicknames[Generate Towns And Cities City Nicknames style names]' \
+  '--towns_and_cities-citys[Generate Towns And Cities Citys style names]' \
+  '--towns_and_cities-dwarven_citys[Generate Towns And Cities Dwarven Citys style names]' \
+  '--towns_and_cities-east_asian_towns[Generate Towns And Cities East Asian Towns style names]' \
+  '--towns_and_cities-east_european_towns[Generate Towns And Cities East European Towns style names]' \
+  '--towns_and_cities-egyptian_towns[Generate Towns And Cities Egyptian Towns style names]' \
+  '--towns_and_cities-elven_citys[Generate Towns And Cities Elven Citys style names]' \
+  '--towns_and_cities-fantasy_towns[Generate Towns And Cities Fantasy Towns style names]' \
+  '--towns_and_cities-middle_eastern_towns[Generate Towns And Cities Middle Eastern Towns style names]' \
+  '--towns_and_cities-north_african_towns[Generate Towns And Cities North African Towns style names]' \
+  '--towns_and_cities-north_american_towns[Generate Towns And Cities North American Towns style names]' \
+  '--towns_and_cities-north_european_towns[Generate Towns And Cities North European Towns style names]' \
+  '--towns_and_cities-northern_south_american_towns[Generate Towns And Cities Northern South American Towns style names]' \
+  '--towns_and_cities-oceania_towns[Generate Towns And Cities Oceania Towns style names]' \
+  '--towns_and_cities-orcish_citys[Generate Towns And Cities Orcish Citys style names]' \
+  '--towns_and_cities-roman_towns[Generate Towns And Cities Roman Towns style names]' \
+  '--towns_and_cities-russian_towns[Generate Towns And Cities Russian Towns style names]' \
+  '--towns_and_cities-south_african_towns[Generate Towns And Cities South African Towns style names]' \
+  '--towns_and_cities-south_american_towns[Generate Towns And Cities South American Towns style names]' \
+  '--towns_and_cities-south_asian_towns[Generate Towns And Cities South Asian Towns style names]' \
+  '--towns_and_cities-south_european_towns[Generate Towns And Cities South European Towns style names]' \
+  '--towns_and_cities-southeast_african_towns[Generate Towns And Cities Southeast African Towns style names]' \
+  '--towns_and_cities-southeast_asian_towns[Generate Towns And Cities Southeast Asian Towns style names]' \
+  '--towns_and_cities-southeast_european[Generate Towns And Cities Southeast European style names]' \
+  '--towns_and_cities-steampunk_citys[Generate Towns And Cities Steampunk Citys style names]' \
+  '--towns_and_cities-towns[Generate Towns And Cities Towns style names]' \
+  '--towns_and_cities-underwater_citys[Generate Towns And Cities Underwater Citys style names]' \
+  '--towns_and_cities-viking_towns[Generate Towns And Cities Viking Towns style names]' \
+  '--towns_and_cities-west_african_towns[Generate Towns And Cities West African Towns style names]' \
+  '--towns_and_cities-west_european_towns[Generate Towns And Cities West European Towns style names]' \
+  '--towns_and_cities-wild_west_towns[Generate Towns And Cities Wild West Towns style names]' \
+  '--warhammer-beastmens[Generate Warhammer Beastmens style names]' \
+  '--warhammer-bretonnias[Generate Warhammer Bretonnias style names]' \
+  '--warhammer-daemons_of_chaos[Generate Warhammer Daemons Of Chaos style names]' \
+  '--warhammer-dark_elfs[Generate Warhammer Dark Elfs style names]' \
+  '--warhammer-dwarfs[Generate Warhammer Dwarfs style names]' \
+  '--warhammer-empires[Generate Warhammer Empires style names]' \
+  '--warhammer-goblins[Generate Warhammer Goblins style names]' \
+  '--warhammer-high_elfs[Generate Warhammer High Elfs style names]' \
+  '--warhammer-lizardmens[Generate Warhammer Lizardmens style names]' \
+  '--warhammer-ogres[Generate Warhammer Ogres style names]' \
+  '--warhammer-orcs[Generate Warhammer Orcs style names]' \
+  '--warhammer-skavens[Generate Warhammer Skavens style names]' \
+  '--warhammer-tomb_kings[Generate Warhammer Tomb Kings style names]' \
+  '--warhammer-vampire_counts[Generate Warhammer Vampire Counts style names]' \
+  '--warhammer-warriors_of_chaos[Generate Warhammer Warriors Of Chaos style names]' \
+  '--warhammer-wood_elfs[Generate Warhammer Wood Elfs style names]' \
+  '--warhammer_40k-chaos[Generate Warhammer 40K Chaos style names]' \
+  '--warhammer_40k-dark_eldars[Generate Warhammer 40K Dark Eldars style names]' \
+  '--warhammer_40k-eldars[Generate Warhammer 40K Eldars style names]' \
+  '--warhammer_40k-necrons[Generate Warhammer 40K Necrons style names]' \
+  '--warhammer_40k-orks[Generate Warhammer 40K Orks style names]' \
+  '--warhammer_40k-sisters_of_battles[Generate Warhammer 40K Sisters Of Battles style names]' \
+  '--warhammer_40k-space_marines[Generate Warhammer 40K Space Marines style names]' \
+  '--warhammer_40k-taus[Generate Warhammer 40K Taus style names]' \
+  '--weapons-battle_axes[Generate Weapons Battle Axes style names]' \
+  '--weapons-bomb_missiles[Generate Weapons Bomb Missiles style names]' \
+  '--weapons-bows[Generate Weapons Bows style names]' \
+  '--weapons-claw_weapons[Generate Claw Weapons style names]' \
+  '--weapons-daggers[Generate Weapons Daggers style names]' \
+  '--weapons-dual_wields[Generate Weapons Dual Wields style names]' \
+  '--weapons-fist_weapons[Generate Fist Weapons style names]' \
+  '--weapons-flails[Generate Weapons Flails style names]' \
+  '--weapons-magic_books[Generate Weapons Magic Books style names]' \
+  '--weapons-magic_weapons[Generate Magic Weapons style names]' \
+  '--weapons-pistols[Generate Weapons Pistols style names]' \
+  '--weapons-rifles[Generate Weapons Rifles style names]' \
+  '--weapons-sci_fi_guns[Generate Weapons Sci Fi Guns style names]' \
+  '--weapons-scythes[Generate Weapons Scythes style names]' \
+  '--weapons-shotguns[Generate Weapons Shotguns style names]' \
+  '--weapons-spears[Generate Weapons Spears style names]' \
+  '--weapons-staffs[Generate Weapons Staffs style names]' \
+  '--weapons-swords[Generate Weapons Swords style names]' \
+  '--weapons-throwing_weapons[Generate Throwing Weapons style names]' \
+  '--weapons-war_hammers[Generate Weapons War Hammers style names]' \
+  '--weapons-whips[Generate Weapons Whips style names]' \
+  '--wildstar-aurins[Generate Wildstar Aurins style names]' \
+  '--wildstar-cassians[Generate Wildstar Cassians style names]' \
+  '--wildstar-chuas[Generate Wildstar Chuas style names]' \
+  '--wildstar-drakens[Generate Wildstar Drakens style names]' \
+  '--wildstar-granoks[Generate Wildstar Granoks style names]' \
+  '--wildstar-humans[Generate Wildstar Humans style names]' \
+  '--wildstar-mecharis[Generate Wildstar Mecharis style names]' \
+  '--wildstar-mordeshs[Generate Wildstar Mordeshs style names]' \
+  '--world_of_warcraft-blood_elf[Generate World Of Warcraft Blood Elf style names]' \
+  '--world_of_warcraft-draenei[Generate World Of Warcraft Draenei style names]' \
+  '--world_of_warcraft-dwarf[Generate World Of Warcraft Dwarf style names]' \
+  '--world_of_warcraft-forsaken[Generate World Of Warcraft Forsaken style names]' \
+  '--world_of_warcraft-gnome[Generate World Of Warcraft Gnome style names]' \
+  '--world_of_warcraft-goblin[Generate World Of Warcraft Goblin style names]' \
+  '--world_of_warcraft-human[Generate World Of Warcraft Human style names]' \
+  '--world_of_warcraft-night_elf[Generate World Of Warcraft Night Elf style names]' \
+  '--world_of_warcraft-orc[Generate World Of Warcraft Orc style names]' \
+  '--world_of_warcraft-pandaren[Generate World Of Warcraft Pandaren style names]' \
+  '--world_of_warcraft-tauren[Generate World Of Warcraft Tauren style names]' \
+  '--world_of_warcraft-troll[Generate World Of Warcraft Troll style names]' \
+  '--world_of_warcraft-worgen[Generate World Of Warcraft Worgen style names]' \
+  '--world_of_warcraft_pets-bat_dragonhawks[Generate World Of Warcraft Pets Bat Dragonhawks style names]' \
+  '--world_of_warcraft_pets-birds[Generate World Of Warcraft Pets Birds style names]' \
+  '--world_of_warcraft_pets-boars_bears[Generate World Of Warcraft Pets Boars Bears style names]' \
+  '--world_of_warcraft_pets-cats[Generate World Of Warcraft Pets Cats style names]' \
+  '--world_of_warcraft_pets-crabs[Generate World Of Warcraft Pets Crabs style names]' \
+  '--world_of_warcraft_pets-dino_rhinos[Generate World Of Warcraft Pets Dino Rhinos style names]' \
+  '--world_of_warcraft_pets-dog_wolfs[Generate World Of Warcraft Pets Dog Wolfs style names]' \
+  '--world_of_warcraft_pets-goat_porcupines[Generate World Of Warcraft Pets Goat Porcupines style names]' \
+  '--world_of_warcraft_pets-gorilla_monkeys[Generate World Of Warcraft Pets Gorilla Monkeys style names]' \
+  '--world_of_warcraft_pets-insects[Generate World Of Warcraft Pets Insects style names]' \
+  '--world_of_warcraft_pets-reptiles[Generate World Of Warcraft Pets Reptiles style names]' \
+  '--world_of_warcraft_pets-wow_pets[Generate World Of Warcraft Pets Wow Pets style names]'

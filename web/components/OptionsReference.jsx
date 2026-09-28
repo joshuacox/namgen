@@ -10,6 +10,31 @@ export default function OptionsReference() {
       defaultVal: 'Terminal height, or 24',
     },
     {
+      flags: '-S, --seed NUM',
+      description: 'Seed random number generator deterministically for reproducible runs.',
+      defaultVal: 'std::random_device{}()',
+    },
+    {
+      flags: '-u, --unique',
+      description: 'Ensure no duplicate names are emitted in the generated batch.',
+      defaultVal: 'false',
+    },
+    {
+      flags: '--json',
+      description: 'Output results as a structured JSON array of strings.',
+      defaultVal: 'false',
+    },
+    {
+      flags: '--csv',
+      description: 'Output results in CSV format with "name" column header.',
+      defaultVal: 'false',
+    },
+    {
+      flags: '--slug, --kebab',
+      description: 'Convert generated names into URL-friendly lowercase kebab-case slugs.',
+      defaultVal: 'false',
+    },
+    {
       flags: '-s, --separator SEP',
       description: 'Custom separator string inserted between adjective and noun.',
       defaultVal: '"-"',
@@ -57,6 +82,11 @@ export default function OptionsReference() {
   ];
 
   const envOptions = [
+    {
+      name: 'SEED',
+      description: 'Sets numeric seed for deterministic random number generation across runs.',
+      defaultVal: 'None',
+    },
     {
       name: 'SEPARATOR',
       description: 'Sets the default separator string (e.g. export SEPARATOR="_").',

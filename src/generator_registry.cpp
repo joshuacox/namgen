@@ -935,15 +935,55 @@ GeneratorRegistry::GeneratorRegistry() {
     initBuiltins();
 }
 
+static bool isConsonant(char c) {
+    c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    return (c >= 'a' && c <= 'z') && !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+}
+
+static std::vector<std::string> generateSpellingVariants(const std::string& key) {
+    std::vector<std::string> variants;
+    if (key.find("citys") != std::string::npos) {
+        std::string v = key;
+        std::size_t pos = 0;
+        while ((pos = v.find("citys", pos)) != std::string::npos) {
+            v.replace(pos, 5, "cities");
+            pos += 6;
+        }
+        variants.push_back(v);
+    }
+    if (key.find("cities") != std::string::npos) {
+        std::string v = key;
+        std::size_t pos = 0;
+        while ((pos = v.find("cities", pos)) != std::string::npos) {
+            v.replace(pos, 6, "citys");
+            pos += 5;
+        }
+        variants.push_back(v);
+    }
+    if (key.size() >= 3 && key.rfind("ys") == key.size() - 2 && isConsonant(key[key.size() - 3])) {
+        variants.push_back(key.substr(0, key.size() - 2) + "ies");
+    }
+    if (key.size() >= 4 && key.rfind("ies") == key.size() - 3 && isConsonant(key[key.size() - 4])) {
+        variants.push_back(key.substr(0, key.size() - 3) + "ys");
+    }
+    return variants;
+}
+
 void GeneratorRegistry::registerGenerator(GeneratorInfo info) {
     auto ptr = std::make_unique<GeneratorInfo>(std::move(info));
     const GeneratorInfo* raw = ptr.get();
     generators_.push_back(std::move(ptr));
     lookup_[normalizeKey(raw->flag)] = raw;
     lookup_[raw->flag] = raw;
+    for (const auto& variant : generateSpellingVariants(normalizeKey(raw->flag))) {
+        lookup_[variant] = raw;
+    }
     for (const auto& alias : raw->aliases) {
         lookup_[normalizeKey(alias)] = raw;
         lookup_[alias] = raw;
+        for (const auto& variant : generateSpellingVariants(normalizeKey(alias))) {
+            lookup_[variant] = raw;
+        }
     }
 }
 
@@ -955,6 +995,12 @@ const GeneratorInfo* GeneratorRegistry::find(const std::string& flagName) const 
     auto it2 = lookup_.find(flagName);
     if (it2 != lookup_.end()) {
         return it2->second;
+    }
+    for (const auto& variant : generateSpellingVariants(normalizeKey(flagName))) {
+        auto itv = lookup_.find(variant);
+        if (itv != lookup_.end()) {
+            return itv->second;
+        }
     }
     return nullptr;
 }

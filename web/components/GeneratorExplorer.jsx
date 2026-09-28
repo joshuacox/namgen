@@ -197,6 +197,14 @@ export default function GeneratorExplorer() {
                       </div>
                     ))}
                   </div>
+                  <div className="mt-2 flex justify-end">
+                    <a
+                      href={`?gen=${gen.id}#simulator`}
+                      className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
+                    >
+                      Try in Simulator →
+                    </a>
+                  </div>
                 </div>
               )}
             </div>

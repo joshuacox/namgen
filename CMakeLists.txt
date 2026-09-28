@@ -17,3 +17,7 @@ target_include_directories(namgen PRIVATE src)
 install(TARGETS namgen DESTINATION bin)
 install(DIRECTORY assets/ DESTINATION share/namgen/assets)
 install(FILES man/namgen.1 DESTINATION share/man/man1)
+install(FILES completions/namgen.bash DESTINATION share/bash-completion/completions RENAME namgen)
+install(FILES completions/_namgen DESTINATION share/zsh/site-functions)
+install(FILES completions/namgen.fish DESTINATION share/fish/vendor_completions.d)
+

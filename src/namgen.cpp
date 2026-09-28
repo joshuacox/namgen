@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <unordered_set>
 #include <filesystem>
@@ -15,6 +16,53 @@
 namespace fs = std::filesystem;
 
 static constexpr int DEFAULT_TERMINAL_LINES = 24;
+
+enum class OutputFormat { Plain, Json, Csv, Slug };
+
+std::string escapeJson(const std::string& s) {
+    std::string out;
+    out.reserve(s.size() + 8);
+    for (char c : s) {
+        if (c == '"') out += "\\\"";
+        else if (c == '\\') out += "\\\\";
+        else if (c == '\b') out += "\\b";
+        else if (c == '\f') out += "\\f";
+        else if (c == '\n') out += "\\n";
+        else if (c == '\r') out += "\\r";
+        else if (c == '\t') out += "\\t";
+        else out += c;
+    }
+    return out;
+}
+
+std::string escapeCsv(const std::string& s) {
+    std::string out;
+    out.reserve(s.size() + 8);
+    for (char c : s) {
+        if (c == '"') out += "\"\"";
+        else out += c;
+    }
+    return out;
+}
+
+std::string toSlug(const std::string& s) {
+    std::string out;
+    out.reserve(s.size());
+    bool lastHyphen = false;
+    for (char c : s) {
+        if (std::isalnum(static_cast<unsigned char>(c))) {
+            out += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+            lastHyphen = false;
+        } else if (!lastHyphen && !out.empty()) {
+            out += '-';
+            lastHyphen = true;
+        }
+    }
+    while (!out.empty() && out.back() == '-') {
+        out.pop_back();
+    }
+    return out;
+}
 
 /* Helper: convert string to lower case */
 std::string toLower(const std::string& str) {
@@ -144,8 +192,47 @@ struct CommandLineOptions {
     bool debug = false;
     bool capcasing = false;
     bool camelcasing = false;
+    bool unique = false;
+    bool seedSet = false;
+    uint64_t seed = 0;
+    OutputFormat format = OutputFormat::Plain;
     const GeneratorInfo* activeGenerator = nullptr;
 };
+
+void emitOutput(const std::vector<std::string>& results,
+                const CommandLineOptions& opts,
+                bool optDebug,
+                const fs::path& adjFile,
+                const fs::path& adjFolder,
+                const fs::path& nounFile,
+                const fs::path& nounFolder,
+                const std::string& separator) {
+    if (opts.format == OutputFormat::Json) {
+        std::cout << "[\n";
+        for (std::size_t i = 0; i < results.size(); ++i) {
+            std::cout << "  \"" << escapeJson(results[i]) << "\""
+                      << (i + 1 < results.size() ? "," : "") << "\n";
+        }
+        std::cout << "]\n";
+    } else if (opts.format == OutputFormat::Csv) {
+        std::cout << "\"name\"\n";
+        for (const auto& name : results) {
+            std::cout << "\"" << escapeCsv(name) << "\"\n";
+        }
+    } else if (opts.format == OutputFormat::Slug) {
+        for (const auto& name : results) {
+            std::cout << toSlug(name) << "\n";
+        }
+    } else {
+        for (std::size_t i = 0; i < results.size(); ++i) {
+            if (optDebug) {
+                printGeneratedName(results[i], i, results.size(), adjFile, adjFolder, nounFile, nounFolder, separator);
+            } else {
+                std::cout << results[i] << "\n";
+            }
+        }
+    }
+}
 
 std::string getEnv(const std::string& varName, const std::string& fallback) {
     const char* val = std::getenv(varName.c_str());
@@ -247,7 +334,6 @@ fs::path resolveFile(const std::string& envVar,
 
 int main(int argc, char* argv[]) {
     CommandLineOptions opts;
-    std::mt19937 rng(std::random_device{}());
     std::size_t counto = 0;
     bool optCountSet = false;
     bool optDebug = false;
@@ -283,6 +369,19 @@ int main(int argc, char* argv[]) {
             ++i;
             opts.separatorSet = true;
             opts.separator = argv[i];
+        } else if (arg == "--seed" || arg == "-S") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: " << arg << " requires a numeric seed argument.\n";
+                return 1;
+            }
+            ++i;
+            try {
+                opts.seed = static_cast<uint64_t>(std::stoull(argv[i]));
+                opts.seedSet = true;
+            } catch (const std::exception&) {
+                std::cerr << "Error: invalid seed value '" << argv[i] << "'. Must be an unsigned integer.\n";
+                return 1;
+            }
         } else if (arg == "--count" || arg == "-c") {
             if (i + 1 >= argc) {
                 std::cerr << "Error: " << arg << " requires a numeric argument.\n";
@@ -313,6 +412,14 @@ int main(int argc, char* argv[]) {
             opts.excludeChars = argv[i];
         } else if (arg == "--camel" || arg == "--camelcasing") {
             optCamelcasing = true;
+        } else if (arg == "--json") {
+            opts.format = OutputFormat::Json;
+        } else if (arg == "--csv") {
+            opts.format = OutputFormat::Csv;
+        } else if (arg == "--slug" || arg == "--kebab") {
+            opts.format = OutputFormat::Slug;
+        } else if (arg == "--unique" || arg == "-u") {
+            opts.unique = true;
         } else if (arg == "--debug") {
             optDebug = true;
         } else if (arg == "--help" || arg == "-h") {
@@ -324,6 +431,11 @@ int main(int argc, char* argv[]) {
             std::cout << "  -s SEP, --separator SEP  Custom separator string (default: -)\n";
             std::cout << "  -x, --null-separator     Do not print the separator\n";
             std::cout << "  -c COUNT, --count COUNT  Number of names to generate (default: terminal height)\n";
+            std::cout << "  -S NUM, --seed NUM       Seed random number generator deterministically\n";
+            std::cout << "  -u, --unique             Ensure no duplicate names are emitted\n";
+            std::cout << "  --json                   Output results as a JSON array of strings\n";
+            std::cout << "  --csv                    Output results in CSV format\n";
+            std::cout << "  --slug                   Convert output to lowercase kebab-case slugs\n";
             std::cout << "  --cap, --capcasing       Capitalize first letter of both adjective and noun\n";
             std::cout << "  --camel, --camelcasing   CamelCase style (adjective lower-cased, noun capitalized)\n";
             std::cout << "  --debug                  Enable debug output\n";
@@ -386,19 +498,41 @@ int main(int argc, char* argv[]) {
 #endif
     }
 
+    std::mt19937 rng;
+    if (opts.seedSet) {
+        rng.seed(static_cast<std::mt19937::result_type>(opts.seed));
+    } else {
+        std::string seedEnv = getEnv("SEED", "");
+        if (!seedEnv.empty()) {
+            try {
+                rng.seed(static_cast<std::mt19937::result_type>(std::stoull(seedEnv)));
+            } catch (...) {
+                rng.seed(std::random_device{}());
+            }
+        } else {
+            rng.seed(std::random_device{}());
+        }
+    }
+
     // If a specialized generator was selected, run it and exit
     if (opts.activeGenerator) {
-        for (std::size_t countzero = 0; countzero < counto; ++countzero) {
+        std::vector<std::string> results;
+        results.reserve(counto);
+        std::unordered_set<std::string> seen;
+        std::size_t attempts = 0;
+        const std::size_t maxAttempts = counto * 100 + 1000;
+        while (results.size() < counto && attempts < maxAttempts) {
+            ++attempts;
             std::string name = opts.activeGenerator->generate(rng);
-            if (optDebug) {
-                printGeneratedName(name, countzero, counto,
-                                  fs::path(), fs::path(),
-                                  fs::path(), fs::path(),
-                                  "");
+            if (opts.unique) {
+                if (seen.insert(name).second) {
+                    results.push_back(std::move(name));
+                }
             } else {
-                std::cout << name << "\n";
+                results.push_back(std::move(name));
             }
         }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "");
         return 0;
     }
 
@@ -475,7 +609,14 @@ int main(int argc, char* argv[]) {
     std::string noun;
     bool needCapcasing = capcasing || camelcasing;
 
-    for (std::size_t countzero = 0; countzero < counto; ++countzero) {
+    std::vector<std::string> results;
+    results.reserve(counto);
+    std::unordered_set<std::string> seen;
+    std::size_t attempts = 0;
+    const std::size_t maxAttempts = counto * 100 + 1000;
+
+    while (results.size() < counto && attempts < maxAttempts) {
+        ++attempts;
         const std::string& rawAdj  = randomChoice(filteredAdjectives, rng);
         const std::string& rawNoun = randomChoice(filteredNouns, rng);
 
@@ -489,8 +630,15 @@ int main(int argc, char* argv[]) {
         }
 
         std::string generatedName = generateName(adjective, noun, nullSeparator, separator, camelcasing);
-        printGeneratedName(generatedName, countzero, counto, adjFile, adjFolder, nounFile, nounFolder, separator);
+        if (opts.unique) {
+            if (seen.insert(generatedName).second) {
+                results.push_back(std::move(generatedName));
+            }
+        } else {
+            results.push_back(std::move(generatedName));
+        }
     }
 
+    emitOutput(results, opts, optDebug, adjFile, adjFolder, nounFile, nounFolder, separator);
     return 0;
 }

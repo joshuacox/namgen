@@ -342,3 +342,55 @@ setup() {
   result="$(counto=10 ./namgen  --destiny-vexs|wc -l)"
   [[ "$result" -eq 10 ]]
 }
+
+@test "test namgen --seed determinism" {
+  r1=$(./namgen -c 5 --seed 4242)
+  r2=$(./namgen -c 5 -S 4242)
+  [[ "$r1" == "$r2" ]]
+}
+
+@test "test namgen --seed with specialized generator" {
+  r1=$(./namgen --fantasy-dragons -c 3 --seed 777)
+  r2=$(./namgen --fantasy-dragons -c 3 -S 777)
+  [[ "$r1" == "$r2" ]]
+}
+
+@test "test namgen --unique deduplication" {
+  # With test/test containing only 1 word, asking for 10 unique names must yield exactly 1
+  count_single=$(./namgen -c 10 -u | wc -l)
+  [[ "$count_single" -eq 1 ]]
+
+  # With specialized generator, asking for 25 unique names yields 25 unique items
+  count_gen=$(./namgen --fantasy-dragons -c 25 -u | wc -l)
+  uniq_gen=$(./namgen --fantasy-dragons -c 25 -u | sort -u | wc -l)
+  [[ "$count_gen" -eq 25 ]]
+  [[ "$uniq_gen" -eq 25 ]]
+}
+
+@test "test namgen --json output format" {
+  out=$(./namgen -c 3 --json)
+  first_char=$(echo "$out" | head -n 1)
+  last_char=$(echo "$out" | tail -n 1)
+  [[ "$first_char" == "[" ]]
+  [[ "$last_char" == "]" ]]
+}
+
+@test "test namgen --csv output format" {
+  header=$(./namgen -c 3 --csv | head -n 1)
+  line_count=$(./namgen -c 3 --csv | wc -l)
+  [[ "$header" == '"name"' ]]
+  [[ "$line_count" -eq 4 ]]
+}
+
+@test "test namgen --slug format" {
+  out=$(./namgen -c 5 --slug)
+  # Ensure only lowercase, digits, and hyphens
+  invalid_chars=$(echo "$out" | grep -v '^[a-z0-9-]*$' || true)
+  [[ -z "$invalid_chars" ]]
+}
+
+@test "test natural English spelling aliases" {
+  ./namgen --descriptions-backstories -c 1
+  ./namgen --descriptions-cities -c 1
+  ./namgen --towns_and_cities-cities -c 1
+}

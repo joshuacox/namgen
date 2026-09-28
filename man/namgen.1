@@ -27,6 +27,21 @@ Do not print the separator (concatenates words)
 .B \-c COUNT, \-\-count COUNT
 Number of names to generate (default: terminal height)
 .TP
+.B \-S NUM, \-\-seed NUM
+Seed random number generator deterministically for reproducible runs
+.TP
+.B \-u, \-\-unique
+Ensure no duplicate names are emitted in the generated batch
+.TP
+.B \-\-json
+Output results as a JSON array of strings
+.TP
+.B \-\-csv
+Output results as CSV format with header
+.TP
+.B \-\-slug, \-\-kebab
+Convert output names to lowercase kebab-case URL slugs
+.TP
 .B \-\-cap, \-\-capcasing
 Capitalize first letter of both adjective and noun
 .TP
