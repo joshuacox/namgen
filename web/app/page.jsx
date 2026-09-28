@@ -7,6 +7,7 @@ import Playground from '../components/Playground';
 import Features from '../components/Features';
 import Installation from '../components/Installation';
 import OptionsReference from '../components/OptionsReference';
+import UniverseBanner from '../components/UniverseBanner';
 import GeneratorExplorer from '../components/GeneratorExplorer';
 import Architecture from '../components/Architecture';
 import Footer from '../components/Footer';
@@ -21,6 +22,7 @@ export default function HomePage() {
         <Features />
         <Installation />
         <OptionsReference />
+        <UniverseBanner />
         <GeneratorExplorer />
         <Architecture />
       </main>

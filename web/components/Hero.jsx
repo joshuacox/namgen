@@ -102,6 +102,25 @@ export default function Hero() {
             <span>Explore 907 Generators</span>
           </a>
         </div>
+
+        {/* Hero Graphic Frame */}
+        <div className="mt-12 max-w-4xl mx-auto rounded-2xl overflow-hidden border border-emerald-500/30 shadow-2xl shadow-emerald-500/10 bg-slate-900/80">
+          <div className="px-4 py-2.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs text-slate-400 font-mono">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
+              <span className="ml-2">namgen v2.0 // Procedural Universe Engine</span>
+            </div>
+            <span className="text-emerald-400 text-[11px]">C++17 • .rodata • Zero-Allocation</span>
+          </div>
+          <img
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/images/hero-banner.jpg`}
+            alt="namgen Procedural Fantasy and Sci-Fi Name Generator Interface"
+            className="w-full h-auto object-cover"
+            loading="eager"
+          />
+        </div>
       </div>
     </section>
   );
