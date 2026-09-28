@@ -16,6 +16,9 @@ setup() {
 }
 
 @test "cmake ." {
+  if ! command -v cmake >/dev/null 2>&1; then
+    skip "cmake not found"
+  fi
   cmake .
   result=$?
   [[ "$result" -eq 0 ]]

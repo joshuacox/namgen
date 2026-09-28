@@ -1,19 +1,19 @@
-.TH NAMGEN 1 "2023" "namgen" "User Commands"
+.TH NAMGEN 1 "2026" "namgen" "User Commands"
 .SH NAME
-namgen \- Generate fantasy names
+namgen \- Flexible name generator and procedural fantasy/sci-fi name generator
 .SH SYNOPSIS
 .B namgen
 [OPTIONS]
 .SH DESCRIPTION
 .B namgen
-generates fantasy names using various algorithms and word lists.
+generates names by combining adjectives and nouns with configurable casing and separators, or using built-in procedural name generators for fantasy and science fiction universes.
 .SH OPTIONS
 .TP
 .B \-a, \-\-adj\-file FILE
 Path to custom adjectives file
 .TP
 .B \-e, \-\-exclude STRING
-Characters to strip from generated words
+Characters to strip from generated words (default: hyphen, apostrophe)
 .TP
 .B \-n, \-\-noun\-file FILE
 Path to custom noun file
@@ -22,7 +22,7 @@ Path to custom noun file
 Custom separator string (default: \-)
 .TP
 .B \-x, \-\-null\-separator
-Do not print the separator
+Do not print the separator (concatenates words)
 .TP
 .B \-c COUNT, \-\-count COUNT
 Number of names to generate (default: terminal height)
@@ -31,225 +31,2735 @@ Number of names to generate (default: terminal height)
 Capitalize first letter of both adjective and noun
 .TP
 .B \-\-camel, \-\-camelcasing
-CamelCase style (adjective lower\-cased, noun capitalized)
+CamelCase style (adjective lower-cased, noun capitalized)
 .TP
 .B \-\-debug
 Enable debug output
 .TP
+.B \-\-elf, \-\-lotr\-elf, \-\-lord_of_the_rings\-elfs
+Generate Lord of the Rings elf style names
+.TP
+.B \-\-armour\-belts
+Generate armour belts style names
+.TP
+.B \-\-armour\-boots
+Generate armour boots style names
+.TP
+.B \-\-armour\-chests
+Generate armour chests style names
+.TP
+.B \-\-armour\-cloaks
+Generate armour cloaks style names
+.TP
+.B \-\-armour\-gauntlets
+Generate armour gauntlets style names
+.TP
+.B \-\-armour\-helmets
+Generate armour helmets style names
+.TP
+.B \-\-armour\-legs
+Generate armour legs style names
+.TP
+.B \-\-armour\-pauldrons
+Generate armour pauldrons style names
+.TP
+.B \-\-armour\-shields
+Generate armour shields style names
+.TP
+.B \-\-armour\-vambraces
+Generate armour vambraces style names
+.TP
+.B \-\-descriptions\-aliens
+Generate descriptions aliens style names
+.TP
+.B \-\-descriptions\-animals
+Generate descriptions animals style names
+.TP
+.B \-\-descriptions\-armys
+Generate descriptions armys style names
+.TP
+.B \-\-descriptions\-backstorys
+Generate descriptions backstorys style names
+.TP
+.B \-\-descriptions\-battlefields
+Generate descriptions battlefields style names
+.TP
+.B \-\-descriptions\-bows
+Generate descriptions bows style names
+.TP
+.B \-\-descriptions\-castles
+Generate descriptions castles style names
+.TP
+.B \-\-descriptions\-characters
+Generate descriptions characters style names
+.TP
+.B \-\-descriptions\-citys
+Generate descriptions citys style names
+.TP
+.B \-\-descriptions\-coat_of_arms
+Generate descriptions coat of arms style names
+.TP
+.B \-\-descriptions\-constellations
+Generate descriptions constellations style names
+.TP
+.B \-\-descriptions\-countrys
+Generate descriptions countrys style names
+.TP
+.B \-\-descriptions\-diseases
+Generate descriptions diseases style names
+.TP
+.B \-\-descriptions\-dragons
+Generate descriptions dragons style names
+.TP
+.B \-\-descriptions\-dungeons
+Generate descriptions dungeons style names
+.TP
+.B \-\-descriptions\-dyings
+Generate descriptions dyings style names
+.TP
+.B \-\-descriptions\-fancy_clothings
+Generate descriptions fancy clothings style names
+.TP
+.B \-\-descriptions\-flags
+Generate descriptions flags style names
+.TP
+.B \-\-descriptions\-gems
+Generate descriptions gems style names
+.TP
+.B \-\-descriptions\-ghost_towns
+Generate descriptions ghost towns style names
+.TP
+.B \-\-descriptions\-gods
+Generate descriptions gods style names
+.TP
+.B \-\-descriptions\-hand_gestures
+Generate descriptions hand gestures style names
+.TP
+.B \-\-descriptions\-holidays
+Generate descriptions holidays style names
+.TP
+.B \-\-descriptions\-houses
+Generate descriptions houses style names
+.TP
+.B \-\-descriptions\-humanoids
+Generate descriptions humanoids style names
+.TP
+.B \-\-descriptions\-laws
+Generate descriptions laws style names
+.TP
+.B \-\-descriptions\-leather_armors
+Generate descriptions leather armors style names
+.TP
+.B \-\-descriptions\-martial_arts
+Generate descriptions martial arts style names
+.TP
+.B \-\-descriptions\-medieval_clothings
+Generate descriptions medieval clothings style names
+.TP
+.B \-\-descriptions\-monuments
+Generate descriptions monuments style names
+.TP
+.B \-\-descriptions\-pains
+Generate descriptions pains style names
+.TP
+.B \-\-descriptions\-personalitys
+Generate descriptions personalitys style names
+.TP
+.B \-\-descriptions\-pistols
+Generate descriptions pistols style names
+.TP
+.B \-\-descriptions\-planets
+Generate descriptions planets style names
+.TP
+.B \-\-descriptions\-plants
+Generate descriptions plants style names
+.TP
+.B \-\-descriptions\-plate_armors
+Generate descriptions plate armors style names
+.TP
+.B \-\-descriptions\-plots
+Generate descriptions plots style names
+.TP
+.B \-\-descriptions\-pokemons
+Generate descriptions pokemons style names
+.TP
+.B \-\-descriptions\-potions
+Generate descriptions potions style names
+.TP
+.B \-\-descriptions\-prophecys
+Generate descriptions prophecys style names
+.TP
+.B \-\-descriptions\-quests
+Generate descriptions quests style names
+.TP
+.B \-\-descriptions\-rag_clothings
+Generate descriptions rag clothings style names
+.TP
+.B \-\-descriptions\-rifles
+Generate descriptions rifles style names
+.TP
+.B \-\-descriptions\-school_uniforms
+Generate descriptions school uniforms style names
+.TP
+.B \-\-descriptions\-shields
+Generate descriptions shields style names
+.TP
+.B \-\-descriptions\-shotguns
+Generate descriptions shotguns style names
+.TP
+.B \-\-descriptions\-societys
+Generate descriptions societys style names
+.TP
+.B \-\-descriptions\-spells
+Generate descriptions spells style names
+.TP
+.B \-\-descriptions\-staffs
+Generate descriptions staffs style names
+.TP
+.B \-\-descriptions\-taverns
+Generate descriptions taverns style names
+.TP
+.B \-\-descriptions\-towns
+Generate descriptions towns style names
+.TP
+.B \-\-descriptions\-traditions
+Generate descriptions traditions style names
+.TP
+.B \-\-descriptions\-wands
+Generate descriptions wands style names
+.TP
+.B \-\-descriptions\-weapons
+Generate descriptions weapons style names
+.TP
 .B \-\-destiny\-awokens
-Generate fantasy\-destiny awoken style names
+Generate destiny awokens style names
 .TP
 .B \-\-destiny\-cabals
-Generate fantasy\-destiny cabals style names
+Generate destiny cabals style names
 .TP
 .B \-\-destiny\-exos
-Generate fantasy\-destiny exos style names
+Generate destiny exos style names
 .TP
 .B \-\-destiny\-fallens
-Generate fantasy\-destiny fallens style names
+Generate destiny fallens style names
 .TP
 .B \-\-destiny\-hives
-Generate fantasy\-destiny hives style names
+Generate destiny hives style names
 .TP
 .B \-\-destiny\-humans
-Generate fantasy\-destiny humans style names
+Generate destiny humans style names
 .TP
 .B \-\-destiny\-vexs
-Generate fantasy\-destiny vexs style names
+Generate destiny vexs style names
 .TP
 .B \-\-diablo\-angels
-Generate Diablo angels style names
+Generate diablo angels style names
 .TP
 .B \-\-diablo\-demons
-Generate Diablo demons style names
+Generate diablo demons style names
 .TP
 .B \-\-diablo\-khazras
-Generate Diablo khazras style names
+Generate diablo khazras style names
 .TP
 .B \-\-diablo\-nephalems
-Generate Diablo nephalems style names
+Generate diablo nephalems style names
 .TP
-.B \-\-doctor_who\-silurians
-Generate Doctor Who Silurians style names
+.B \-\-doctor_who\-daleks
+Generate doctor who daleks style names
+.TP
+.B \-\-doctor_who\-gallifreyans
+Generate doctor who gallifreyans style names
+.TP
+.B \-\-doctor_who\-ice_warriors
+Generate doctor who ice warriors style names
 .TP
 .B \-\-doctor_who\-raxacoricofallapatorians
-Generate Doctor Who Raxacoricofallapatorians style names
+Generate doctor who raxacoricofallapatorians style names
+.TP
+.B \-\-doctor_who\-silurians
+Generate doctor who silurians style names
+.TP
+.B \-\-doctor_who\-sontarans
+Generate doctor who sontarans style names
+.TP
+.B \-\-doctor_who\-zygons
+Generate doctor who zygons style names
 .TP
 .B \-\-dragon_age\-dwarfs
-Generate Dragon Age dwarf names (legacy JS generator)
+Generate dragon age dwarfs style names
 .TP
-.B \-\-dragon_ball\-others
-Generate Dragon Ball "other ..." style names
+.B \-\-dragon_age\-elfs
+Generate dragon age elfs style names
+.TP
+.B \-\-dragon_age\-humans
+Generate dragon age humans style names
+.TP
+.B \-\-dragon_age\-qunaris
+Generate dragon age qunaris style names
 .TP
 .B \-\-dragon_ball\-frieza_clans
-Generate Dragon Ball Frieza Clans names
+Generate dragon ball frieza clans style names
 .TP
 .B \-\-dragon_ball\-hakaishins
-Generate Dragon Ball Hakaishins names
+Generate dragon ball hakaishins style names
 .TP
 .B \-\-dragon_ball\-humans
-Generate Dragon Ball human names (male/female)
+Generate dragon ball humans style names
+.TP
+.B \-\-dragon_ball\-others
+Generate dragon ball others style names
 .TP
 .B \-\-dragon_ball\-saiyans
-Generate Dragon Ball Saiyan names
+Generate dragon ball saiyans style names
 .TP
 .B \-\-dragon_ball\-skians
-Generate Dragon Ball Skians names
+Generate dragon ball skians style names
 .TP
 .B \-\-dragon_ball\-tuffles
-Generate Dragon Ball Tuffles names
+Generate dragon ball tuffles style names
 .TP
 .B \-\-dungeon_and_dragons\-devas
-Generate Dungeons & Dragons "devas" names
+Generate dungeon and dragons devas style names
 .TP
 .B \-\-dungeon_and_dragons\-dragonborns
-Generate Dungeons & Dragons "dragonborns" names
+Generate dungeon and dragons dragonborns style names
 .TP
 .B \-\-dungeon_and_dragons\-drows
-Generate Dungeons & Dragons "drows" names
+Generate dungeon and dragons drows style names
 .TP
 .B \-\-dungeon_and_dragons\-dwarfs
-Generate Dungeons & Dragons "dwarfs" names
+Generate dungeon and dragons dwarfs style names
 .TP
 .B \-\-dungeon_and_dragons\-eladrins
-Generate Dungeons & Dragons "eladrins" names
+Generate dungeon and dragons eladrins style names
 .TP
 .B \-\-dungeon_and_dragons\-elfs
-Generate Dungeons & Dragons "elfs" names
+Generate dungeon and dragons elfs style names
 .TP
 .B \-\-dungeon_and_dragons\-githzerais
-Generate Dungeons & Dragons "githzerais" names
+Generate dungeon and dragons githzerais style names
 .TP
-.B \-\-elf, \-\-lotr\-elf, \-\-lord_of_the_rings\-elfs
-Generate fantasy\-elf style names (uses built\-in generator)
+.B \-\-dungeon_and_dragons\-gnomes
+Generate dungeon and dragons gnomes style names
+.TP
+.B \-\-dungeon_and_dragons\-goliaths
+Generate dungeon and dragons goliaths style names
+.TP
+.B \-\-dungeon_and_dragons\-half_elfs
+Generate dungeon and dragons half elfs style names
+.TP
+.B \-\-dungeon_and_dragons\-half_orcs
+Generate dungeon and dragons half orcs style names
+.TP
+.B \-\-dungeon_and_dragons\-halflings
+Generate dungeon and dragons halflings style names
+.TP
+.B \-\-dungeon_and_dragons\-humans
+Generate dungeon and dragons humans style names
+.TP
+.B \-\-dungeon_and_dragons\-minotaurs
+Generate dungeon and dragons minotaurs style names
+.TP
+.B \-\-dungeon_and_dragons\-shardminds
+Generate dungeon and dragons shardminds style names
+.TP
+.B \-\-dungeon_and_dragons\-shifters
+Generate dungeon and dragons shifters style names
+.TP
+.B \-\-dungeon_and_dragons\-tieflings
+Generate dungeon and dragons tieflings style names
+.TP
+.B \-\-dungeon_and_dragons\-wildens
+Generate dungeon and dragons wildens style names
+.TP
+.B \-\-elder_scrolls\-altmers
+Generate elder scrolls altmers style names
+.TP
+.B \-\-elder_scrolls\-argonians
+Generate elder scrolls argonians style names
 .TP
 .B \-\-elder_scrolls\-bosmers
-Generate Elder Scrolls Bosmer style names (uses built\-in generator)
+Generate elder scrolls bosmers style names
+.TP
+.B \-\-elder_scrolls\-bretons
+Generate elder scrolls bretons style names
+.TP
+.B \-\-elder_scrolls\-daedrics
+Generate elder scrolls daedrics style names
+.TP
+.B \-\-elder_scrolls\-dragons
+Generate elder scrolls dragons style names
+.TP
+.B \-\-elder_scrolls\-dunmers
+Generate elder scrolls dunmers style names
+.TP
+.B \-\-elder_scrolls\-dwemers
+Generate elder scrolls dwemers style names
+.TP
+.B \-\-elder_scrolls\-falmers
+Generate elder scrolls falmers style names
+.TP
+.B \-\-elder_scrolls\-forsworns
+Generate elder scrolls forsworns style names
+.TP
+.B \-\-elder_scrolls\-imperials
+Generate elder scrolls imperials style names
+.TP
+.B \-\-elder_scrolls\-khajiits
+Generate elder scrolls khajiits style names
+.TP
+.B \-\-elder_scrolls\-nords
+Generate elder scrolls nords style names
+.TP
+.B \-\-elder_scrolls\-orc
+Generate elder scrolls orc style names
+.TP
+.B \-\-elder_scrolls\-redguards
+Generate elder scrolls redguards style names
+.TP
+.B \-\-elder_scrolls\-spriggans
+Generate elder scrolls spriggans style names
+.TP
+.B \-\-eve_online\-amarrs
+Generate eve online amarrs style names
+.TP
+.B \-\-eve_online\-caldaris
+Generate eve online caldaris style names
 .TP
 .B \-\-eve_online\-gallentes
-Generate Eve Online Gallentes style names (uses built\-in generator)
+Generate eve online gallentes style names
+.TP
+.B \-\-eve_online\-minmatars
+Generate eve online minmatars style names
 .TP
 .B \-\-fantasy\-aliens
-Generate fantasy "aliens" names
+Generate fantasy aliens style names
 .TP
 .B \-\-fantasy\-amazons
-Generate fantasy "amazons" names
+Generate fantasy amazons style names
 .TP
 .B \-\-fantasy\-angels
-Generate fantasy "angels" names
+Generate fantasy angels style names
 .TP
 .B \-\-fantasy\-animal_species
-Generate fantasy "animal species" names
+Generate fantasy animal species style names
 .TP
 .B \-\-fantasy\-animatronics
-Generate fantasy "animatronics" style names (ignores adjective/noun files)
+Generate fantasy animatronics style names
+.TP
+.B \-\-fantasy\-apocalypse_mutants
+Generate fantasy apocalypse mutants style names
+.TP
+.B \-\-fantasy\-bandits
+Generate fantasy bandits style names
+.TP
+.B \-\-fantasy\-barbarians
+Generate fantasy barbarians style names
+.TP
+.B \-\-fantasy\-bounty_hunters
+Generate fantasy bounty hunters style names
+.TP
+.B \-\-fantasy\-cat_people_nekojins
+Generate fantasy cat people nekojins style names
+.TP
+.B \-\-fantasy\-cavemens
+Generate fantasy cavemens style names
+.TP
+.B \-\-fantasy\-centaurs
+Generate fantasy centaurs style names
+.TP
+.B \-\-fantasy\-christmas_elfs
+Generate fantasy christmas elfs style names
+.TP
+.B \-\-fantasy\-codes
+Generate fantasy codes style names
+.TP
+.B \-\-fantasy\-cowboys
+Generate fantasy cowboys style names
+.TP
+.B \-\-fantasy\-creatures
+Generate fantasy creatures style names
+.TP
+.B \-\-fantasy\-deaths
+Generate fantasy deaths style names
+.TP
+.B \-\-fantasy\-demons
+Generate fantasy demons style names
+.TP
+.B \-\-fantasy\-detectives
+Generate fantasy detectives style names
+.TP
+.B \-\-fantasy\-dragons
+Generate fantasy dragons style names
+.TP
+.B \-\-fantasy\-dryads
+Generate fantasy dryads style names
+.TP
+.B \-\-fantasy\-dwarfs
+Generate fantasy dwarfs style names
+.TP
+.B \-\-fantasy\-elementals
+Generate fantasy elementals style names
+.TP
+.B \-\-fantasy\-elfs
+Generate fantasy elfs style names
+.TP
+.B \-\-fantasy\-ents
+Generate fantasy ents style names
+.TP
+.B \-\-fantasy\-evils
+Generate fantasy evils style names
+.TP
+.B \-\-fantasy\-fairys
+Generate fantasy fairys style names
+.TP
+.B \-\-fantasy\-fantasy_animals
+Generate fantasy fantasy animals style names
+.TP
+.B \-\-fantasy\-fantasy_races
+Generate fantasy fantasy races style names
+.TP
+.B \-\-fantasy\-fantasy_surnames
+Generate fantasy fantasy surnames style names
+.TP
+.B \-\-fantasy\-fursonas
+Generate fantasy fursonas style names
+.TP
+.B \-\-fantasy\-futuristics
+Generate fantasy futuristics style names
+.TP
+.B \-\-fantasy\-ghost_classifications
+Generate fantasy ghost classifications style names
+.TP
+.B \-\-fantasy\-ghosts
+Generate fantasy ghosts style names
+.TP
+.B \-\-fantasy\-giants
+Generate fantasy giants style names
+.TP
+.B \-\-fantasy\-gnolls
+Generate fantasy gnolls style names
+.TP
+.B \-\-fantasy\-gnomes
+Generate fantasy gnomes style names
+.TP
+.B \-\-fantasy\-goblins
+Generate fantasy goblins style names
+.TP
+.B \-\-fantasy\-gods
+Generate fantasy gods style names
+.TP
+.B \-\-fantasy\-gorgons
+Generate fantasy gorgons style names
+.TP
+.B \-\-fantasy\-griffins
+Generate fantasy griffins style names
+.TP
+.B \-\-fantasy\-half_elfs
+Generate fantasy half elfs style names
+.TP
+.B \-\-fantasy\-harpys
+Generate fantasy harpys style names
+.TP
+.B \-\-fantasy\-heros
+Generate fantasy heros style names
+.TP
+.B \-\-fantasy\-hobbits
+Generate fantasy hobbits style names
+.TP
+.B \-\-fantasy\-horses
+Generate fantasy horses style names
+.TP
+.B \-\-fantasy\-imps
+Generate fantasy imps style names
+.TP
+.B \-\-fantasy\-kaijus
+Generate fantasy kaijus style names
+.TP
+.B \-\-fantasy\-killers
+Generate fantasy killers style names
+.TP
+.B \-\-fantasy\-knights
+Generate fantasy knights style names
+.TP
+.B \-\-fantasy\-kobolds
+Generate fantasy kobolds style names
+.TP
+.B \-\-fantasy\-lamias
+Generate fantasy lamias style names
+.TP
+.B \-\-fantasy\-lichs
+Generate fantasy lichs style names
+.TP
+.B \-\-fantasy\-mechas
+Generate fantasy mechas style names
+.TP
+.B \-\-fantasy\-medievals
+Generate fantasy medievals style names
+.TP
+.B \-\-fantasy\-mermaids
+Generate fantasy mermaids style names
+.TP
+.B \-\-fantasy\-minotaurs
+Generate fantasy minotaurs style names
+.TP
+.B \-\-fantasy\-mobsters
+Generate fantasy mobsters style names
+.TP
+.B \-\-fantasy\-monsters
+Generate fantasy monsters style names
+.TP
+.B \-\-fantasy\-mutant_species
+Generate fantasy mutant species style names
+.TP
+.B \-\-fantasy\-nagas
+Generate fantasy nagas style names
+.TP
+.B \-\-fantasy\-necromancers
+Generate fantasy necromancers style names
+.TP
+.B \-\-fantasy\-nephilims
+Generate fantasy nephilims style names
+.TP
+.B \-\-fantasy\-ninjas
+Generate fantasy ninjas style names
+.TP
+.B \-\-fantasy\-nymphs
+Generate fantasy nymphs style names
+.TP
+.B \-\-fantasy\-ogres
+Generate fantasy ogres style names
+.TP
+.B \-\-fantasy\-orcs
+Generate fantasy orcs style names
+.TP
+.B \-\-fantasy\-pegasus
+Generate fantasy pegasus style names
+.TP
+.B \-\-fantasy\-phoenixs
+Generate fantasy phoenixs style names
+.TP
+.B \-\-fantasy\-pirates
+Generate fantasy pirates style names
+.TP
+.B \-\-fantasy\-robots
+Generate fantasy robots style names
+.TP
+.B \-\-fantasy\-satyr_fauns
+Generate fantasy satyr fauns style names
+.TP
+.B \-\-fantasy\-sea_creatures
+Generate fantasy sea creatures style names
+.TP
+.B \-\-fantasy\-servants
+Generate fantasy servants style names
+.TP
+.B \-\-fantasy\-shapeshifters
+Generate fantasy shapeshifters style names
+.TP
+.B \-\-fantasy\-sirens
+Generate fantasy sirens style names
+.TP
+.B \-\-fantasy\-slaves
+Generate fantasy slaves style names
+.TP
+.B \-\-fantasy\-species
+Generate fantasy species style names
+.TP
+.B \-\-fantasy\-steampunks
+Generate fantasy steampunks style names
+.TP
+.B \-\-fantasy\-succubus
+Generate fantasy succubus style names
+.TP
+.B \-\-fantasy\-superhero_teams
+Generate fantasy superhero teams style names
+.TP
+.B \-\-fantasy\-sylphs
+Generate fantasy sylphs style names
+.TP
+.B \-\-fantasy\-taurens
+Generate fantasy taurens style names
+.TP
+.B \-\-fantasy\-trolls
+Generate fantasy trolls style names
+.TP
+.B \-\-fantasy\-twins
+Generate fantasy twins style names
+.TP
+.B \-\-fantasy\-unicorns
+Generate fantasy unicorns style names
+.TP
+.B \-\-fantasy\-valkyries
+Generate fantasy valkyries style names
+.TP
+.B \-\-fantasy\-vampire_clans
+Generate fantasy vampire clans style names
+.TP
+.B \-\-fantasy\-vampires
+Generate fantasy vampires style names
+.TP
+.B \-\-fantasy\-villains
+Generate fantasy villains style names
+.TP
+.B \-\-fantasy\-warrior_nicknames
+Generate fantasy warrior nicknames style names
+.TP
+.B \-\-fantasy\-werewolf_packs
+Generate fantasy werewolf packs style names
+.TP
+.B \-\-fantasy\-werewolfs
+Generate fantasy werewolfs style names
+.TP
+.B \-\-fantasy\-witchs
+Generate fantasy witchs style names
+.TP
+.B \-\-fantasy\-wizards
+Generate fantasy wizards style names
+.TP
+.B \-\-fantasy\-zombie_types
+Generate fantasy zombie types style names
+.TP
+.B \-\-final_fantasy\-au_ras
+Generate final fantasy au ras style names
+.TP
+.B \-\-final_fantasy\-elezens
+Generate final fantasy elezens style names
+.TP
+.B \-\-final_fantasy\-hyurs
+Generate final fantasy hyurs style names
+.TP
+.B \-\-final_fantasy\-lalafells
+Generate final fantasy lalafells style names
+.TP
+.B \-\-final_fantasy\-miqotes
+Generate final fantasy miqotes style names
+.TP
+.B \-\-final_fantasy\-roegadyns
+Generate final fantasy roegadyns style names
+.TP
+.B \-\-game_of_thrones\-dothrakis
+Generate game of thrones dothrakis style names
+.TP
+.B \-\-game_of_thrones\-free_citys
+Generate game of thrones free citys style names
+.TP
+.B \-\-game_of_thrones\-free_folks
+Generate game of thrones free folks style names
+.TP
+.B \-\-game_of_thrones\-ghiscaris
+Generate game of thrones ghiscaris style names
+.TP
+.B \-\-game_of_thrones\-mountain_clans
+Generate game of thrones mountain clans style names
+.TP
+.B \-\-game_of_thrones\-nicknames
+Generate game of thrones nicknames style names
+.TP
+.B \-\-game_of_thrones\-summer_islanders
+Generate game of thrones summer islanders style names
+.TP
+.B \-\-game_of_thrones\-unsullieds
+Generate game of thrones unsullieds style names
+.TP
+.B \-\-game_of_thrones\-valyrians
+Generate game of thrones valyrians style names
+.TP
+.B \-\-game_of_thrones\-westeros
+Generate game of thrones westeros style names
+.TP
+.B \-\-guild_wars\-asuras
+Generate guild wars asuras style names
+.TP
+.B \-\-guild_wars\-charrs
+Generate guild wars charrs style names
+.TP
+.B \-\-guild_wars\-human
+Generate guild wars human style names
+.TP
+.B \-\-guild_wars\-norns
+Generate guild wars norns style names
+.TP
+.B \-\-guild_wars\-sylvaris
+Generate guild wars sylvaris style names
 .TP
 .B \-\-halo\-forerunners
-Generate Halo "forerunners" style names (ignores adjective/noun files)
+Generate halo forerunners style names
+.TP
+.B \-\-halo\-huragoks
+Generate halo huragoks style names
+.TP
+.B \-\-halo\-jiralhanaes
+Generate halo jiralhanaes style names
+.TP
+.B \-\-halo\-kig_yars
+Generate halo kig yars style names
 .TP
 .B \-\-halo\-mgalekgolos
-Generate Halo "Mgalekgolos" style names (uses built\-in generator)
+Generate halo mgalekgolos style names
 .TP
-.B \-\-harry_potter\-goblins
-Generate Harry Potter "Goblins" style names (uses built\-in generator)
+.B \-\-halo\-san_shyuums
+Generate halo san shyuums style names
 .TP
-.B \-\-inheritance_cycle\-dragons
-Generate Inheritance Cycle dragons names
+.B \-\-halo\-sangheilis
+Generate halo sangheilis style names
 .TP
-.B \-\-military\-united_states
-Generate United States military call\-sign style names (two random NATO phonetic alphabet words)
-.TP
-.B \-\-military\-royal_navy
-Generate Royal Navy military call\-sign style names
-.TP
-.B \-\-pets\-marine_mammals
-Generate marine mammal names (uses built\-in marine\-mammal generator)
-.TP
-.B \-\-pets\-reptiles
-Generate reptile pet names (legacy JS generator)
-.TP
-.B \-\-rift\-bahmis
-Generate Rift Bahmi names (uses built\-in generator)
-.TP
-.B \-\-star_wars_the_old_republic\-cathars
-Generate Star Wars: The Old Republic Cathar names (uses built\-in generator)
-.TP
-.B \-\-towns_and_cities\-dwarven_citys
-Generate dwarven city names (towns_and_cities\-dwarven_citys)
-.TP
-.B \-\-towns_and_cities\-east_european_towns
-Generate East European Towns and Cities
-.TP
-.B \-\-towns_and_cities\-west_european_towns
-Generate West European Towns and Cities
-.TP
-.B \-\-warhammer\-daemons_of_chaos
-Generate Warhammer "Daemons of Chaos" style names (uses built\-in generator)
-.TP
-.B \-\-warhammer_40k\-sisters_of_battles
-Generate Warhammer 40k Sisters of Battles names
-.TP
-.B \-\-wildstar\-mordeshs
-Generate Wildstar Mordesh names
+.B \-\-halo\-unggoys
+Generate halo unggoys style names
 .TP
 .B \-\-harry_potter\-dragon_species
-Generate Harry Potter dragon species names
+Generate harry potter dragon species style names
+.TP
+.B \-\-harry_potter\-goblins
+Generate harry potter goblins style names
+.TP
+.B \-\-harry_potter\-hippogriffs
+Generate harry potter hippogriffs style names
+.TP
+.B \-\-harry_potter\-house_elfs
+Generate harry potter house elfs style names
+.TP
+.B \-\-harry_potter\-winged_horses
+Generate harry potter winged horses style names
+.TP
+.B \-\-inheritance_cycle\-dragons
+Generate inheritance cycle dragons style names
+.TP
+.B \-\-inheritance_cycle\-dwarfs
+Generate inheritance cycle dwarfs style names
+.TP
+.B \-\-inheritance_cycle\-elfs
+Generate inheritance cycle elfs style names
+.TP
+.B \-\-inheritance_cycle\-humans
+Generate inheritance cycle humans style names
+.TP
+.B \-\-inheritance_cycle\-urgals
+Generate inheritance cycle urgals style names
+.TP
+.B \-\-legend_of_zelda\-anoukis
+Generate legend of zelda anoukis style names
+.TP
+.B \-\-legend_of_zelda\-deitys
+Generate legend of zelda deitys style names
+.TP
+.B \-\-legend_of_zelda\-dekus
+Generate legend of zelda dekus style names
+.TP
+.B \-\-legend_of_zelda\-fairys
+Generate legend of zelda fairys style names
+.TP
+.B \-\-legend_of_zelda\-gerudos
+Generate legend of zelda gerudos style names
+.TP
+.B \-\-legend_of_zelda\-gorons
+Generate legend of zelda gorons style names
+.TP
+.B \-\-legend_of_zelda\-humans
+Generate legend of zelda humans style names
+.TP
+.B \-\-legend_of_zelda\-korok_kokiris
+Generate legend of zelda korok kokiris style names
+.TP
+.B \-\-legend_of_zelda\-minishs
+Generate legend of zelda minishs style names
+.TP
+.B \-\-legend_of_zelda\-zoras
+Generate legend of zelda zoras style names
+.TP
+.B \-\-lord_of_the_rings\-dwarfs
+Generate lord of the rings dwarfs style names
+.TP
+.B \-\-lord_of_the_rings\-hobbits
+Generate lord of the rings hobbits style names
+.TP
+.B \-\-lord_of_the_rings\-humans
+Generate lord of the rings humans style names
+.TP
+.B \-\-lord_of_the_rings\-maiars
+Generate lord of the rings maiars style names
+.TP
+.B \-\-lord_of_the_rings\-orcs
+Generate lord of the rings orcs style names
+.TP
+.B \-\-lord_of_the_rings_online\-beorning
+Generate lord of the rings online beorning style names
+.TP
+.B \-\-lord_of_the_rings_online\-dwarf
+Generate lord of the rings online dwarf style names
+.TP
+.B \-\-lord_of_the_rings_online\-elf
+Generate lord of the rings online elf style names
+.TP
+.B \-\-lord_of_the_rings_online\-hobbit
+Generate lord of the rings online hobbit style names
+.TP
+.B \-\-lord_of_the_rings_online\-human
+Generate lord of the rings online human style names
+.TP
+.B \-\-mass_effect\-asaris
+Generate mass effect asaris style names
+.TP
+.B \-\-mass_effect\-batarians
+Generate mass effect batarians style names
+.TP
+.B \-\-mass_effect\-drells
+Generate mass effect drells style names
+.TP
+.B \-\-mass_effect\-geths
+Generate mass effect geths style names
+.TP
+.B \-\-mass_effect\-humans
+Generate mass effect humans style names
+.TP
+.B \-\-mass_effect\-krogans
+Generate mass effect krogans style names
+.TP
+.B \-\-mass_effect\-quarians
+Generate mass effect quarians style names
+.TP
+.B \-\-mass_effect\-salarians
+Generate mass effect salarians style names
+.TP
+.B \-\-mass_effect\-turians
+Generate mass effect turians style names
+.TP
+.B \-\-military\-itu
+Generate military itu style names
+.TP
+.B \-\-military\-nato
+Generate military nato style names
+.TP
+.B \-\-military\-numeric
+Generate military numeric style names
+.TP
+.B \-\-military\-royal_air_force
+Generate military royal air force style names
+.TP
+.B \-\-military\-royal_navy
+Generate military royal navy style names
+.TP
+.B \-\-military\-signalese
+Generate military signalese style names
+.TP
+.B \-\-military\-telegram
+Generate military telegram style names
+.TP
+.B \-\-military\-united_states
+Generate military united states style names
+.TP
+.B \-\-miscellaneous\-afterlifes
+Generate miscellaneous afterlifes style names
+.TP
+.B \-\-miscellaneous\-airplanes
+Generate miscellaneous airplanes style names
+.TP
+.B \-\-miscellaneous\-airships
+Generate miscellaneous airships style names
+.TP
+.B \-\-miscellaneous\-alliances
+Generate miscellaneous alliances style names
+.TP
+.B \-\-miscellaneous\-animal_groups
+Generate miscellaneous animal groups style names
+.TP
+.B \-\-miscellaneous\-anime_attacks
+Generate miscellaneous anime attacks style names
+.TP
+.B \-\-miscellaneous\-apocalypses
+Generate miscellaneous apocalypses style names
+.TP
+.B \-\-miscellaneous\-armys
+Generate miscellaneous armys style names
+.TP
+.B \-\-miscellaneous\-artifacts
+Generate miscellaneous artifacts style names
+.TP
+.B \-\-miscellaneous\-attack_moves
+Generate miscellaneous attack moves style names
+.TP
+.B \-\-miscellaneous\-awards
+Generate miscellaneous awards style names
+.TP
+.B \-\-miscellaneous\-bands
+Generate miscellaneous bands style names
+.TP
+.B \-\-miscellaneous\-battles
+Generate miscellaneous battles style names
+.TP
+.B \-\-miscellaneous\-birds
+Generate miscellaneous birds style names
+.TP
+.B \-\-miscellaneous\-board_games
+Generate miscellaneous board games style names
+.TP
+.B \-\-miscellaneous\-book_titles
+Generate miscellaneous book titles style names
+.TP
+.B \-\-miscellaneous\-bouquets
+Generate miscellaneous bouquets style names
+.TP
+.B \-\-miscellaneous\-brands
+Generate miscellaneous brands style names
+.TP
+.B \-\-miscellaneous\-candys
+Generate miscellaneous candys style names
+.TP
+.B \-\-miscellaneous\-cars
+Generate miscellaneous cars style names
+.TP
+.B \-\-miscellaneous\-chivalric_orders
+Generate miscellaneous chivalric orders style names
+.TP
+.B \-\-miscellaneous\-class
+Generate miscellaneous class style names
+.TP
+.B \-\-miscellaneous\-clothing_brands
+Generate miscellaneous clothing brands style names
+.TP
+.B \-\-miscellaneous\-colors
+Generate miscellaneous colors style names
+.TP
+.B \-\-miscellaneous\-constellations
+Generate miscellaneous constellations style names
+.TP
+.B \-\-miscellaneous\-creepypastas
+Generate miscellaneous creepypastas style names
+.TP
+.B \-\-miscellaneous\-crops
+Generate miscellaneous crops style names
+.TP
+.B \-\-miscellaneous\-currencys
+Generate miscellaneous currencys style names
+.TP
+.B \-\-miscellaneous\-dances
+Generate miscellaneous dances style names
+.TP
+.B \-\-miscellaneous\-dates
+Generate miscellaneous dates style names
+.TP
+.B \-\-miscellaneous\-dinosaurs
+Generate miscellaneous dinosaurs style names
+.TP
+.B \-\-miscellaneous\-diseases
+Generate miscellaneous diseases style names
+.TP
+.B \-\-miscellaneous\-drinks
+Generate miscellaneous drinks style names
+.TP
+.B \-\-miscellaneous\-drugs
+Generate miscellaneous drugs style names
+.TP
+.B \-\-miscellaneous\-enchantments
+Generate miscellaneous enchantments style names
+.TP
+.B \-\-miscellaneous\-energy_types
+Generate miscellaneous energy types style names
+.TP
+.B \-\-miscellaneous\-epithets
+Generate miscellaneous epithets style names
+.TP
+.B \-\-miscellaneous\-evil_groups
+Generate miscellaneous evil groups style names
+.TP
+.B \-\-miscellaneous\-foods
+Generate miscellaneous foods style names
+.TP
+.B \-\-miscellaneous\-fruit_vegetables
+Generate miscellaneous fruit vegetables style names
+.TP
+.B \-\-miscellaneous\-fungis
+Generate miscellaneous fungis style names
+.TP
+.B \-\-miscellaneous\-galaxys
+Generate miscellaneous galaxys style names
+.TP
+.B \-\-miscellaneous\-game_engines
+Generate miscellaneous game engines style names
+.TP
+.B \-\-miscellaneous\-game_soundtracks
+Generate miscellaneous game soundtracks style names
+.TP
+.B \-\-miscellaneous\-gangs
+Generate miscellaneous gangs style names
+.TP
+.B \-\-miscellaneous\-gear_enchantments
+Generate miscellaneous gear enchantments style names
+.TP
+.B \-\-miscellaneous\-gem_minerals
+Generate miscellaneous gem minerals style names
+.TP
+.B \-\-miscellaneous\-graffiti_tags
+Generate miscellaneous graffiti tags style names
+.TP
+.B \-\-miscellaneous\-guilds
+Generate miscellaneous guilds style names
+.TP
+.B \-\-miscellaneous\-hackers
+Generate miscellaneous hackers style names
+.TP
+.B \-\-miscellaneous\-heists
+Generate miscellaneous heists style names
+.TP
+.B \-\-miscellaneous\-helicopters
+Generate miscellaneous helicopters style names
+.TP
+.B \-\-miscellaneous\-herbs
+Generate miscellaneous herbs style names
+.TP
+.B \-\-miscellaneous\-holidays
+Generate miscellaneous holidays style names
+.TP
+.B \-\-miscellaneous\-holy_books
+Generate miscellaneous holy books style names
+.TP
+.B \-\-miscellaneous\-human_species
+Generate miscellaneous human species style names
+.TP
+.B \-\-miscellaneous\-instruments
+Generate miscellaneous instruments style names
+.TP
+.B \-\-miscellaneous\-inventions
+Generate miscellaneous inventions style names
+.TP
+.B \-\-miscellaneous\-jewelrys
+Generate miscellaneous jewelrys style names
+.TP
+.B \-\-miscellaneous\-languages
+Generate miscellaneous languages style names
+.TP
+.B \-\-miscellaneous\-love_nicknames
+Generate miscellaneous love nicknames style names
+.TP
+.B \-\-miscellaneous\-magazines
+Generate miscellaneous magazines style names
+.TP
+.B \-\-miscellaneous\-magic_types
+Generate miscellaneous magic types style names
+.TP
+.B \-\-miscellaneous\-magical_diseases
+Generate miscellaneous magical diseases style names
+.TP
+.B \-\-miscellaneous\-magical_plants
+Generate miscellaneous magical plants style names
+.TP
+.B \-\-miscellaneous\-magical_trees
+Generate miscellaneous magical trees style names
+.TP
+.B \-\-miscellaneous\-martial_arts
+Generate miscellaneous martial arts style names
+.TP
+.B \-\-miscellaneous\-mascots
+Generate miscellaneous mascots style names
+.TP
+.B \-\-miscellaneous\-medicines
+Generate miscellaneous medicines style names
+.TP
+.B \-\-miscellaneous\-metals
+Generate miscellaneous metals style names
+.TP
+.B \-\-miscellaneous\-military_divisions
+Generate miscellaneous military divisions style names
+.TP
+.B \-\-miscellaneous\-military_operations
+Generate miscellaneous military operations style names
+.TP
+.B \-\-miscellaneous\-military_ranks
+Generate miscellaneous military ranks style names
+.TP
+.B \-\-miscellaneous\-military_vehicles
+Generate miscellaneous military vehicles style names
+.TP
+.B \-\-miscellaneous\-molecules
+Generate miscellaneous molecules style names
+.TP
+.B \-\-miscellaneous\-motorcycle_clubs
+Generate miscellaneous motorcycle clubs style names
+.TP
+.B \-\-miscellaneous\-mutant_plants
+Generate miscellaneous mutant plants style names
+.TP
+.B \-\-miscellaneous\-natural_disasters
+Generate miscellaneous natural disasters style names
+.TP
+.B \-\-miscellaneous\-newspapers
+Generate miscellaneous newspapers style names
+.TP
+.B \-\-miscellaneous\-nicknames
+Generate miscellaneous nicknames style names
+.TP
+.B \-\-miscellaneous\-noble_houses
+Generate miscellaneous noble houses style names
+.TP
+.B \-\-miscellaneous\-pirate_crews
+Generate miscellaneous pirate crews style names
+.TP
+.B \-\-miscellaneous\-pirate_ships
+Generate miscellaneous pirate ships style names
+.TP
+.B \-\-miscellaneous\-plagues
+Generate miscellaneous plagues style names
+.TP
+.B \-\-miscellaneous\-plants
+Generate miscellaneous plants style names
+.TP
+.B \-\-miscellaneous\-poisons
+Generate miscellaneous poisons style names
+.TP
+.B \-\-miscellaneous\-political_partys
+Generate miscellaneous political partys style names
+.TP
+.B \-\-miscellaneous\-post_apocalyptic_societys
+Generate miscellaneous post apocalyptic societys style names
+.TP
+.B \-\-miscellaneous\-potions
+Generate miscellaneous potions style names
+.TP
+.B \-\-miscellaneous\-professions
+Generate miscellaneous professions style names
+.TP
+.B \-\-miscellaneous\-racers
+Generate miscellaneous racers style names
+.TP
+.B \-\-miscellaneous\-railways
+Generate miscellaneous railways style names
+.TP
+.B \-\-miscellaneous\-ranks
+Generate miscellaneous ranks style names
+.TP
+.B \-\-miscellaneous\-religions
+Generate miscellaneous religions style names
+.TP
+.B \-\-miscellaneous\-scientific_creatures
+Generate miscellaneous scientific creatures style names
+.TP
+.B \-\-miscellaneous\-ships
+Generate miscellaneous ships style names
+.TP
+.B \-\-miscellaneous\-siege_engines
+Generate miscellaneous siege engines style names
+.TP
+.B \-\-miscellaneous\-softwares
+Generate miscellaneous softwares style names
+.TP
+.B \-\-miscellaneous\-song_titles
+Generate miscellaneous song titles style names
+.TP
+.B \-\-miscellaneous\-space_fleets
+Generate miscellaneous space fleets style names
+.TP
+.B \-\-miscellaneous\-spaceships
+Generate miscellaneous spaceships style names
+.TP
+.B \-\-miscellaneous\-spells
+Generate miscellaneous spells style names
+.TP
+.B \-\-miscellaneous\-sports
+Generate miscellaneous sports style names
+.TP
+.B \-\-miscellaneous\-sports_teams
+Generate miscellaneous sports teams style names
+.TP
+.B \-\-miscellaneous\-squads
+Generate miscellaneous squads style names
+.TP
+.B \-\-miscellaneous\-superpowers
+Generate miscellaneous superpowers style names
+.TP
+.B \-\-miscellaneous\-teleportations
+Generate miscellaneous teleportations style names
+.TP
+.B \-\-miscellaneous\-thrones
+Generate miscellaneous thrones style names
+.TP
+.B \-\-miscellaneous\-time_periods
+Generate miscellaneous time periods style names
+.TP
+.B \-\-miscellaneous\-titles
+Generate miscellaneous titles style names
+.TP
+.B \-\-miscellaneous\-tool_nicknames
+Generate miscellaneous tool nicknames style names
+.TP
+.B \-\-miscellaneous\-treatys
+Generate miscellaneous treatys style names
+.TP
+.B \-\-miscellaneous\-trees
+Generate miscellaneous trees style names
+.TP
+.B \-\-miscellaneous\-tribals
+Generate miscellaneous tribals style names
+.TP
+.B \-\-miscellaneous\-tribes
+Generate miscellaneous tribes style names
+.TP
+.B \-\-miscellaneous\-usernames
+Generate miscellaneous usernames style names
+.TP
+.B \-\-miscellaneous\-vehicles
+Generate miscellaneous vehicles style names
+.TP
+.B \-\-miscellaneous\-video_games
+Generate miscellaneous video games style names
+.TP
+.B \-\-miscellaneous\-vocal_groups
+Generate miscellaneous vocal groups style names
+.TP
+.B \-\-miscellaneous\-weapon_abilities
+Generate miscellaneous weapon abilities style names
+.TP
+.B \-\-miscellaneous\-web_series
+Generate miscellaneous web series style names
+.TP
+.B \-\-miscellaneous\-wines
+Generate miscellaneous wines style names
+.TP
+.B \-\-miscellaneous\-wrestlers
+Generate miscellaneous wrestlers style names
+.TP
+.B \-\-miscellaneous\-wrestling_moves
+Generate miscellaneous wrestling moves style names
+.TP
+.B \-\-pathfinder\-aasimars
+Generate pathfinder aasimars style names
+.TP
+.B \-\-pathfinder\-catfolks
+Generate pathfinder catfolks style names
+.TP
+.B \-\-pathfinder\-drows
+Generate pathfinder drows style names
+.TP
+.B \-\-pathfinder\-dwarfs
+Generate pathfinder dwarfs style names
+.TP
+.B \-\-pathfinder\-elfs
+Generate pathfinder elfs style names
+.TP
+.B \-\-pathfinder\-fetchlings
+Generate pathfinder fetchlings style names
+.TP
+.B \-\-pathfinder\-gnomes
+Generate pathfinder gnomes style names
+.TP
+.B \-\-pathfinder\-goblins
+Generate pathfinder goblins style names
+.TP
+.B \-\-pathfinder\-half_elfs
+Generate pathfinder half elfs style names
+.TP
+.B \-\-pathfinder\-half_orcs
+Generate pathfinder half orcs style names
+.TP
+.B \-\-pathfinder\-halflings
+Generate pathfinder halflings style names
+.TP
+.B \-\-pathfinder\-hobgoblins
+Generate pathfinder hobgoblins style names
+.TP
+.B \-\-pathfinder\-humans
+Generate pathfinder humans style names
+.TP
+.B \-\-pathfinder\-ifrits
+Generate pathfinder ifrits style names
+.TP
+.B \-\-pathfinder\-kobolds
+Generate pathfinder kobolds style names
+.TP
+.B \-\-pathfinder\-orcs
+Generate pathfinder orcs style names
+.TP
+.B \-\-pathfinder\-oreads
+Generate pathfinder oreads style names
+.TP
+.B \-\-pathfinder\-ratfolks
+Generate pathfinder ratfolks style names
+.TP
+.B \-\-pathfinder\-sylphs
+Generate pathfinder sylphs style names
+.TP
+.B \-\-pathfinder\-tengus
+Generate pathfinder tengus style names
+.TP
+.B \-\-pathfinder\-tians
+Generate pathfinder tians style names
+.TP
+.B \-\-pathfinder\-tieflings
+Generate pathfinder tieflings style names
+.TP
+.B \-\-pathfinder\-undines
+Generate pathfinder undines style names
+.TP
+.B \-\-pets\-aliens
+Generate pets aliens style names
+.TP
+.B \-\-pets\-amphibians
+Generate pets amphibians style names
+.TP
+.B \-\-pets\-bats
+Generate pets bats style names
+.TP
+.B \-\-pets\-bears
+Generate pets bears style names
+.TP
+.B \-\-pets\-bird_of_preys
+Generate pets bird of preys style names
+.TP
+.B \-\-pets\-birds
+Generate pets birds style names
+.TP
+.B \-\-pets\-cats
+Generate pets cats style names
+.TP
+.B \-\-pets\-cows
+Generate pets cows style names
+.TP
+.B \-\-pets\-crabs
+Generate pets crabs style names
+.TP
+.B \-\-pets\-deers
+Generate pets deers style names
+.TP
+.B \-\-pets\-dogs
+Generate pets dogs style names
+.TP
+.B \-\-pets\-elephants
+Generate pets elephants style names
+.TP
+.B \-\-pets\-fishs
+Generate pets fishs style names
+.TP
+.B \-\-pets\-horses
+Generate pets horses style names
+.TP
+.B \-\-pets\-insects
+Generate pets insects style names
+.TP
+.B \-\-pets\-lions
+Generate pets lions style names
+.TP
+.B \-\-pets\-marine_mammals
+Generate pets marine mammals style names
+.TP
+.B \-\-pets\-monkeys
+Generate pets monkeys style names
+.TP
+.B \-\-pets\-mouses
+Generate pets mouses style names
+.TP
+.B \-\-pets\-owls
+Generate pets owls style names
+.TP
+.B \-\-pets\-parrots
+Generate pets parrots style names
+.TP
+.B \-\-pets\-pigs
+Generate pets pigs style names
+.TP
+.B \-\-pets\-rabbits
+Generate pets rabbits style names
+.TP
+.B \-\-pets\-reptiles
+Generate pets reptiles style names
+.TP
+.B \-\-pets\-rodents
+Generate pets rodents style names
+.TP
+.B \-\-pets\-sheeps
+Generate pets sheeps style names
+.TP
+.B \-\-pets\-turtles
+Generate pets turtles style names
+.TP
+.B \-\-pets\-wolfs
+Generate pets wolfs style names
+.TP
+.B \-\-places\-amusement_parks
+Generate places amusement parks style names
+.TP
+.B \-\-places\-antique_stores
+Generate places antique stores style names
+.TP
+.B \-\-places\-asylums
+Generate places asylums style names
+.TP
+.B \-\-places\-bakerys
+Generate places bakerys style names
+.TP
+.B \-\-places\-banks
+Generate places banks style names
+.TP
+.B \-\-places\-battle_arenas
+Generate places battle arenas style names
+.TP
+.B \-\-places\-beachs
+Generate places beachs style names
+.TP
+.B \-\-places\-brewerys
+Generate places brewerys style names
+.TP
+.B \-\-places\-bridges
+Generate places bridges style names
+.TP
+.B \-\-places\-business
+Generate places business style names
+.TP
+.B \-\-places\-cafes
+Generate places cafes style names
+.TP
+.B \-\-places\-camps
+Generate places camps style names
+.TP
+.B \-\-places\-casinos
+Generate places casinos style names
+.TP
+.B \-\-places\-castles
+Generate places castles style names
+.TP
+.B \-\-places\-caves
+Generate places caves style names
+.TP
+.B \-\-places\-circus
+Generate places circus style names
+.TP
+.B \-\-places\-city_districts
+Generate places city districts style names
+.TP
+.B \-\-places\-civilizations
+Generate places civilizations style names
+.TP
+.B \-\-places\-cliffs
+Generate places cliffs style names
+.TP
+.B \-\-places\-companys
+Generate places companys style names
+.TP
+.B \-\-places\-continents
+Generate places continents style names
+.TP
+.B \-\-places\-countrys
+Generate places countrys style names
+.TP
+.B \-\-places\-day_cares
+Generate places day cares style names
+.TP
+.B \-\-places\-dimensions
+Generate places dimensions style names
+.TP
+.B \-\-places\-dungeons
+Generate places dungeons style names
+.TP
+.B \-\-places\-farms
+Generate places farms style names
+.TP
+.B \-\-places\-film_studios
+Generate places film studios style names
+.TP
+.B \-\-places\-fire_lands
+Generate places fire lands style names
+.TP
+.B \-\-places\-forests
+Generate places forests style names
+.TP
+.B \-\-places\-game_studios
+Generate places game studios style names
+.TP
+.B \-\-places\-grasslands
+Generate places grasslands style names
+.TP
+.B \-\-places\-graveyards
+Generate places graveyards style names
+.TP
+.B \-\-places\-harbors
+Generate places harbors style names
+.TP
+.B \-\-places\-headquarters
+Generate places headquarters style names
+.TP
+.B \-\-places\-hospitals
+Generate places hospitals style names
+.TP
+.B \-\-places\-hotels
+Generate places hotels style names
+.TP
+.B \-\-places\-inns
+Generate places inns style names
+.TP
+.B \-\-places\-islands
+Generate places islands style names
+.TP
+.B \-\-places\-jungles
+Generate places jungles style names
+.TP
+.B \-\-places\-kingdoms
+Generate places kingdoms style names
+.TP
+.B \-\-places\-laboratorys
+Generate places laboratorys style names
+.TP
+.B \-\-places\-lakes
+Generate places lakes style names
+.TP
+.B \-\-places\-lands
+Generate places lands style names
+.TP
+.B \-\-places\-librarys
+Generate places librarys style names
+.TP
+.B \-\-places\-magic_schools
+Generate places magic schools style names
+.TP
+.B \-\-places\-magic_shops
+Generate places magic shops style names
+.TP
+.B \-\-places\-mansions
+Generate places mansions style names
+.TP
+.B \-\-places\-mining_companys
+Generate places mining companys style names
+.TP
+.B \-\-places\-mountains
+Generate places mountains style names
+.TP
+.B \-\-places\-museums
+Generate places museums style names
+.TP
+.B \-\-places\-nightclubs
+Generate places nightclubs style names
+.TP
+.B \-\-places\-oasis
+Generate places oasis style names
+.TP
+.B \-\-places\-orphanages
+Generate places orphanages style names
+.TP
+.B \-\-places\-outposts
+Generate places outposts style names
+.TP
+.B \-\-places\-parks
+Generate places parks style names
+.TP
+.B \-\-places\-pirate_coves
+Generate places pirate coves style names
+.TP
+.B \-\-places\-planets
+Generate places planets style names
+.TP
+.B \-\-places\-plantations
+Generate places plantations style names
+.TP
+.B \-\-places\-plazas
+Generate places plazas style names
+.TP
+.B \-\-places\-prisons
+Generate places prisons style names
+.TP
+.B \-\-places\-realms
+Generate places realms style names
+.TP
+.B \-\-places\-restaurants
+Generate places restaurants style names
+.TP
+.B \-\-places\-rivers
+Generate places rivers style names
+.TP
+.B \-\-places\-roads
+Generate places roads style names
+.TP
+.B \-\-places\-ruins
+Generate places ruins style names
+.TP
+.B \-\-places\-schools
+Generate places schools style names
+.TP
+.B \-\-places\-shops
+Generate places shops style names
+.TP
+.B \-\-places\-sky_islands
+Generate places sky islands style names
+.TP
+.B \-\-places\-snowlands
+Generate places snowlands style names
+.TP
+.B \-\-places\-space_colonys
+Generate places space colonys style names
+.TP
+.B \-\-places\-stadiums
+Generate places stadiums style names
+.TP
+.B \-\-places\-stars
+Generate places stars style names
+.TP
+.B \-\-places\-streets
+Generate places streets style names
+.TP
+.B \-\-places\-swamps
+Generate places swamps style names
+.TP
+.B \-\-places\-temples
+Generate places temples style names
+.TP
+.B \-\-places\-theaters
+Generate places theaters style names
+.TP
+.B \-\-places\-towers
+Generate places towers style names
+.TP
+.B \-\-places\-volcanos
+Generate places volcanos style names
+.TP
+.B \-\-places\-waterfalls
+Generate places waterfalls style names
+.TP
+.B \-\-places\-waters
+Generate places waters style names
+.TP
+.B \-\-pop_culture\-arthurians
+Generate pop culture arthurians style names
+.TP
+.B \-\-pop_culture\-avatar_last_airbenders
+Generate pop culture avatar last airbenders style names
+.TP
+.B \-\-pop_culture\-digimons
+Generate pop culture digimons style names
+.TP
+.B \-\-pop_culture\-dragonriders_of_perns
+Generate pop culture dragonriders of perns style names
+.TP
+.B \-\-pop_culture\-homestucks
+Generate pop culture homestucks style names
+.TP
+.B \-\-pop_culture\-how_to_train_your_dragons
+Generate pop culture how to train your dragons style names
+.TP
+.B \-\-pop_culture\-hunger_games
+Generate pop culture hunger games style names
+.TP
+.B \-\-pop_culture\-hyborians
+Generate pop culture hyborians style names
+.TP
+.B \-\-pop_culture\-lovecraftians
+Generate pop culture lovecraftians style names
+.TP
+.B \-\-pop_culture\-maze_runners
+Generate pop culture maze runners style names
+.TP
+.B \-\-pop_culture\-mortal_kombats
+Generate pop culture mortal kombats style names
+.TP
+.B \-\-pop_culture\-my_little_ponys
+Generate pop culture my little ponys style names
+.TP
+.B \-\-pop_culture\-one_piece_devil_fruits
+Generate pop culture one piece devil fruits style names
+.TP
+.B \-\-pop_culture\-pacific_rims
+Generate pop culture pacific rims style names
+.TP
+.B \-\-pop_culture\-pokemons
+Generate pop culture pokemons style names
+.TP
+.B \-\-pop_culture\-rwbys
+Generate pop culture rwbys style names
+.TP
+.B \-\-pop_culture\-shadowhunter_chronicles
+Generate pop culture shadowhunter chronicles style names
+.TP
+.B \-\-pop_culture\-skulduggery_pleasants
+Generate pop culture skulduggery pleasants style names
+.TP
+.B \-\-pop_culture\-starcrafts
+Generate pop culture starcrafts style names
+.TP
+.B \-\-pop_culture\-stormlight_archives
+Generate pop culture stormlight archives style names
+.TP
+.B \-\-pop_culture\-transformers
+Generate pop culture transformers style names
+.TP
+.B \-\-pop_culture\-warrior_cats
+Generate pop culture warrior cats style names
+.TP
+.B \-\-pop_culture\-wheel_of_times
+Generate pop culture wheel of times style names
+.TP
+.B \-\-pop_culture\-wings_of_fires
+Generate pop culture wings of fires style names
+.TP
+.B \-\-pop_culture\-x_mens
+Generate pop culture x mens style names
+.TP
+.B \-\-real\-20th_century_englishs
+Generate real 20th century englishs style names
+.TP
+.B \-\-real\-aboriginals
+Generate real aboriginals style names
+.TP
+.B \-\-real\-african_americans
+Generate real african americans style names
+.TP
+.B \-\-real\-akans
+Generate real akans style names
+.TP
+.B \-\-real\-albanians
+Generate real albanians style names
+.TP
+.B \-\-real\-algerians
+Generate real algerians style names
+.TP
+.B \-\-real\-amazighs
+Generate real amazighs style names
+.TP
+.B \-\-real\-ancient_greeks
+Generate real ancient greeks style names
 .TP
 .B \-\-real\-anglo_saxons
-Generate real Anglo-Saxon names (male and female)
+Generate real anglo saxons style names
+.TP
+.B \-\-real\-argentinians
+Generate real argentinians style names
+.TP
+.B \-\-real\-armenians
+Generate real armenians style names
+.TP
+.B \-\-real\-assyrians
+Generate real assyrians style names
+.TP
+.B \-\-real\-azerbaijanis
+Generate real azerbaijanis style names
+.TP
+.B \-\-real\-aztecs
+Generate real aztecs style names
+.TP
+.B \-\-real\-babylonians
+Generate real babylonians style names
+.TP
+.B \-\-real\-basothos
+Generate real basothos style names
+.TP
+.B \-\-real\-basques
+Generate real basques style names
+.TP
+.B \-\-real\-belgians
+Generate real belgians style names
+.TP
+.B \-\-real\-bengalis
+Generate real bengalis style names
+.TP
+.B \-\-real\-biblicals
+Generate real biblicals style names
+.TP
+.B \-\-real\-bosnians
+Generate real bosnians style names
+.TP
+.B \-\-real\-brazilians
+Generate real brazilians style names
+.TP
+.B \-\-real\-bulgarians
+Generate real bulgarians style names
+.TP
+.B \-\-real\-burmese_myanmars
+Generate real burmese myanmars style names
+.TP
+.B \-\-real\-cajuns
+Generate real cajuns style names
+.TP
+.B \-\-real\-catalans
+Generate real catalans style names
+.TP
+.B \-\-real\-celtic_bretons
+Generate real celtic bretons style names
+.TP
+.B \-\-real\-celtic_welshs
+Generate real celtic welshs style names
+.TP
+.B \-\-real\-celtics
+Generate real celtics style names
+.TP
+.B \-\-real\-chineses
+Generate real chineses style names
+.TP
+.B \-\-real\-circassians
+Generate real circassians style names
+.TP
+.B \-\-real\-colonial_americans
+Generate real colonial americans style names
+.TP
+.B \-\-real\-croatians
+Generate real croatians style names
+.TP
+.B \-\-real\-czechs
+Generate real czechs style names
+.TP
+.B \-\-real\-danishs
+Generate real danishs style names
+.TP
+.B \-\-real\-dutchs
+Generate real dutchs style names
+.TP
+.B \-\-real\-edo_japaneses
+Generate real edo japaneses style names
+.TP
+.B \-\-real\-edwardians
+Generate real edwardians style names
+.TP
+.B \-\-real\-egyptians
+Generate real egyptians style names
+.TP
+.B \-\-real\-englishs
+Generate real englishs style names
+.TP
+.B \-\-real\-enochians
+Generate real enochians style names
+.TP
+.B \-\-real\-estonians
+Generate real estonians style names
+.TP
+.B \-\-real\-ethiopians
+Generate real ethiopians style names
+.TP
+.B \-\-real\-faroeses
+Generate real faroeses style names
+.TP
+.B \-\-real\-filipinos
+Generate real filipinos style names
+.TP
+.B \-\-real\-finnishs
+Generate real finnishs style names
+.TP
+.B \-\-real\-frankishs
+Generate real frankishs style names
+.TP
+.B \-\-real\-frenchs
+Generate real frenchs style names
+.TP
+.B \-\-real\-frisians
+Generate real frisians style names
+.TP
+.B \-\-real\-georgians
+Generate real georgians style names
+.TP
+.B \-\-real\-germans
+Generate real germans style names
+.TP
+.B \-\-real\-gothics
+Generate real gothics style names
+.TP
+.B \-\-real\-greeks
+Generate real greeks style names
+.TP
+.B \-\-real\-hausas
+Generate real hausas style names
+.TP
+.B \-\-real\-hawaiians
+Generate real hawaiians style names
+.TP
+.B \-\-real\-hebrews
+Generate real hebrews style names
+.TP
+.B \-\-real\-hillbillys
+Generate real hillbillys style names
+.TP
+.B \-\-real\-hindus
+Generate real hindus style names
+.TP
+.B \-\-real\-hippies
+Generate real hippies style names
+.TP
+.B \-\-real\-hispanics
+Generate real hispanics style names
+.TP
+.B \-\-real\-hungarians
+Generate real hungarians style names
+.TP
+.B \-\-real\-icelandics
+Generate real icelandics style names
+.TP
+.B \-\-real\-indonesians
+Generate real indonesians style names
+.TP
+.B \-\-real\-inuits
+Generate real inuits style names
+.TP
+.B \-\-real\-irishs
+Generate real irishs style names
+.TP
+.B \-\-real\-italians
+Generate real italians style names
+.TP
+.B \-\-real\-jamaicans
+Generate real jamaicans style names
+.TP
+.B \-\-real\-japaneses
+Generate real japaneses style names
+.TP
+.B \-\-real\-jewishs
+Generate real jewishs style names
+.TP
+.B \-\-real\-kazakhs
+Generate real kazakhs style names
+.TP
+.B \-\-real\-khmers
+Generate real khmers style names
+.TP
+.B \-\-real\-koreans
+Generate real koreans style names
+.TP
+.B \-\-real\-kurdishs
+Generate real kurdishs style names
+.TP
+.B \-\-real\-laotians
+Generate real laotians style names
+.TP
+.B \-\-real\-latins
+Generate real latins style names
+.TP
+.B \-\-real\-latvians
+Generate real latvians style names
+.TP
+.B \-\-real\-lithuanians
+Generate real lithuanians style names
+.TP
+.B \-\-real\-malaysians
+Generate real malaysians style names
+.TP
+.B \-\-real\-malteses
+Generate real malteses style names
+.TP
+.B \-\-real\-maoris
+Generate real maoris style names
+.TP
+.B \-\-real\-mayans
+Generate real mayans style names
+.TP
+.B \-\-real\-modern_egyptians
+Generate real modern egyptians style names
+.TP
+.B \-\-real\-mongolians
+Generate real mongolians style names
+.TP
+.B \-\-real\-moroccans
+Generate real moroccans style names
+.TP
+.B \-\-real\-muslims
+Generate real muslims style names
+.TP
+.B \-\-real\-native_americans
+Generate real native americans style names
+.TP
+.B \-\-real\-natures
+Generate real natures style names
+.TP
+.B \-\-real\-nepaleses
+Generate real nepaleses style names
+.TP
+.B \-\-real\-normans
+Generate real normans style names
+.TP
+.B \-\-real\-norwegians
+Generate real norwegians style names
+.TP
+.B \-\-real\-old_high_germans
+Generate real old high germans style names
+.TP
+.B \-\-real\-pashtuns
+Generate real pashtuns style names
+.TP
+.B \-\-real\-persians
+Generate real persians style names
+.TP
+.B \-\-real\-polishs
+Generate real polishs style names
+.TP
+.B \-\-real\-portugueses
+Generate real portugueses style names
+.TP
+.B \-\-real\-poshs
+Generate real poshs style names
+.TP
+.B \-\-real\-punjabis
+Generate real punjabis style names
+.TP
+.B \-\-real\-puritans
+Generate real puritans style names
+.TP
+.B \-\-real\-quebecois
+Generate real quebecois style names
+.TP
+.B \-\-real\-roma_gypsys
+Generate real roma gypsys style names
+.TP
+.B \-\-real\-romanians
+Generate real romanians style names
+.TP
+.B \-\-real\-romans
+Generate real romans style names
+.TP
+.B \-\-real\-russians
+Generate real russians style names
+.TP
+.B \-\-real\-serbians
+Generate real serbians style names
+.TP
+.B \-\-real\-shakespeareans
+Generate real shakespeareans style names
+.TP
+.B \-\-real\-shonas
+Generate real shonas style names
+.TP
+.B \-\-real\-sikhs
+Generate real sikhs style names
+.TP
+.B \-\-real\-sinhaleses
+Generate real sinhaleses style names
+.TP
+.B \-\-real\-slavics
+Generate real slavics style names
+.TP
+.B \-\-real\-slovenians
+Generate real slovenians style names
+.TP
+.B \-\-real\-somalis
+Generate real somalis style names
+.TP
+.B \-\-real\-stages
+Generate real stages style names
+.TP
+.B \-\-real\-suebis
+Generate real suebis style names
+.TP
+.B \-\-real\-sumerians
+Generate real sumerians style names
+.TP
+.B \-\-real\-swahilis
+Generate real swahilis style names
+.TP
+.B \-\-real\-swedishs
+Generate real swedishs style names
+.TP
+.B \-\-real\-swiss
+Generate real swiss style names
+.TP
+.B \-\-real\-tajiks
+Generate real tajiks style names
+.TP
+.B \-\-real\-tamils
+Generate real tamils style names
+.TP
+.B \-\-real\-telugus
+Generate real telugus style names
+.TP
+.B \-\-real\-thais
+Generate real thais style names
+.TP
+.B \-\-real\-tibetans
+Generate real tibetans style names
+.TP
+.B \-\-real\-turkishs
+Generate real turkishs style names
+.TP
+.B \-\-real\-twins
+Generate real twins style names
+.TP
+.B \-\-real\-ukrainians
+Generate real ukrainians style names
+.TP
+.B \-\-real\-victorians
+Generate real victorians style names
+.TP
+.B \-\-real\-vietnameses
+Generate real vietnameses style names
+.TP
+.B \-\-real\-vikings
+Generate real vikings style names
+.TP
+.B \-\-real\-yorubas
+Generate real yorubas style names
+.TP
+.B \-\-real\-zulus
+Generate real zulus style names
+.TP
+.B \-\-rift\-bahmis
+Generate rift bahmis style names
+.TP
+.B \-\-rift\-dwarfs
+Generate rift dwarfs style names
+.TP
+.B \-\-rift\-eths
+Generate rift eths style names
+.TP
+.B \-\-rift\-high_elfs
+Generate rift high elfs style names
+.TP
+.B \-\-rift\-kelaris
+Generate rift kelaris style names
+.TP
+.B \-\-rift\-mathosians
+Generate rift mathosians style names
+.TP
+.B \-\-star_trek\-andorians
+Generate star trek andorians style names
+.TP
+.B \-\-star_trek\-bajorans
+Generate star trek bajorans style names
+.TP
+.B \-\-star_trek\-benzites
+Generate star trek benzites style names
+.TP
+.B \-\-star_trek\-betazoids
+Generate star trek betazoids style names
+.TP
+.B \-\-star_trek\-bolians
+Generate star trek bolians style names
+.TP
+.B \-\-star_trek\-caitians
+Generate star trek caitians style names
+.TP
+.B \-\-star_trek\-ferengis
+Generate star trek ferengis style names
+.TP
+.B \-\-star_trek\-gorns
+Generate star trek gorns style names
+.TP
+.B \-\-star_trek\-jemhadars
+Generate star trek jemhadars style names
+.TP
+.B \-\-star_trek\-klingons
+Generate star trek klingons style names
+.TP
+.B \-\-star_trek\-letheans
+Generate star trek letheans style names
+.TP
+.B \-\-star_trek\-nausicaans
+Generate star trek nausicaans style names
+.TP
+.B \-\-star_trek\-orions
+Generate star trek orions style names
+.TP
+.B \-\-star_trek\-pakleds
+Generate star trek pakleds style names
+.TP
+.B \-\-star_trek\-remans
+Generate star trek remans style names
+.TP
+.B \-\-star_trek\-rigelians
+Generate star trek rigelians style names
+.TP
+.B \-\-star_trek\-romulans
+Generate star trek romulans style names
+.TP
+.B \-\-star_trek\-saurians
+Generate star trek saurians style names
+.TP
+.B \-\-star_trek\-tellarites
+Generate star trek tellarites style names
+.TP
+.B \-\-star_trek\-trills
+Generate star trek trills style names
+.TP
+.B \-\-star_trek\-vulcans
+Generate star trek vulcans style names
+.TP
+.B \-\-star_wars\-anzatis
+Generate star wars anzatis style names
+.TP
+.B \-\-star_wars\-biths
+Generate star wars biths style names
+.TP
+.B \-\-star_wars\-bothans
+Generate star wars bothans style names
+.TP
+.B \-\-star_wars\-darths
+Generate star wars darths style names
+.TP
+.B \-\-star_wars\-devaronians
+Generate star wars devaronians style names
+.TP
+.B \-\-star_wars\-dugs
+Generate star wars dugs style names
+.TP
+.B \-\-star_wars\-duross
+Generate star wars duross style names
+.TP
+.B \-\-star_wars\-ewoks
+Generate star wars ewoks style names
+.TP
+.B \-\-star_wars\-falleens
+Generate star wars falleens style names
+.TP
+.B \-\-star_wars\-gamorreans
+Generate star wars gamorreans style names
+.TP
+.B \-\-star_wars\-gands
+Generate star wars gands style names
+.TP
+.B \-\-star_wars\-gotals
+Generate star wars gotals style names
+.TP
+.B \-\-star_wars\-grans
+Generate star wars grans style names
+.TP
+.B \-\-star_wars\-gungans
+Generate star wars gungans style names
+.TP
+.B \-\-star_wars\-hutts
+Generate star wars hutts style names
+.TP
+.B \-\-star_wars\-iktotchis
+Generate star wars iktotchis style names
+.TP
+.B \-\-star_wars\-ishi_tibs
+Generate star wars ishi tibs style names
+.TP
+.B \-\-star_wars\-ithorians
+Generate star wars ithorians style names
+.TP
+.B \-\-star_wars\-jawas
+Generate star wars jawas style names
+.TP
+.B \-\-star_wars\-kel_dors
+Generate star wars kel dors style names
+.TP
+.B \-\-star_wars\-korunnais
+Generate star wars korunnais style names
+.TP
+.B \-\-star_wars\-mandalorians
+Generate star wars mandalorians style names
+.TP
+.B \-\-star_wars\-mon_calamaris
+Generate star wars mon calamaris style names
+.TP
+.B \-\-star_wars\-nautolans
+Generate star wars nautolans style names
+.TP
+.B \-\-star_wars\-neimoidians
+Generate star wars neimoidians style names
+.TP
+.B \-\-star_wars\-niktos
+Generate star wars niktos style names
+.TP
+.B \-\-star_wars\-ortolans
+Generate star wars ortolans style names
+.TP
+.B \-\-star_wars\-quarrens
+Generate star wars quarrens style names
+.TP
+.B \-\-star_wars\-rodians
+Generate star wars rodians style names
+.TP
+.B \-\-star_wars\-shistavanens
+Generate star wars shistavanens style names
+.TP
+.B \-\-star_wars\-sullustans
+Generate star wars sullustans style names
+.TP
+.B \-\-star_wars\-swiss
+Generate star wars swiss style names
+.TP
+.B \-\-star_wars\-toydarians
+Generate star wars toydarians style names
+.TP
+.B \-\-star_wars\-trandoshans
+Generate star wars trandoshans style names
+.TP
+.B \-\-star_wars\-tusken_raiders
+Generate star wars tusken raiders style names
+.TP
+.B \-\-star_wars\-weequays
+Generate star wars weequays style names
+.TP
+.B \-\-star_wars\-wookiees
+Generate star wars wookiees style names
+.TP
+.B \-\-star_wars_the_old_republic\-cathars
+Generate star wars the old republic cathars style names
+.TP
+.B \-\-star_wars_the_old_republic\-chiss
+Generate star wars the old republic chiss style names
+.TP
+.B \-\-star_wars_the_old_republic\-cyborgs
+Generate star wars the old republic cyborgs style names
+.TP
+.B \-\-star_wars_the_old_republic\-human_sws
+Generate star wars the old republic human sws style names
+.TP
+.B \-\-star_wars_the_old_republic\-miralukas
+Generate star wars the old republic miralukas style names
+.TP
+.B \-\-star_wars_the_old_republic\-mirialans
+Generate star wars the old republic mirialans style names
+.TP
+.B \-\-star_wars_the_old_republic\-rattatakis
+Generate star wars the old republic rattatakis style names
+.TP
+.B \-\-star_wars_the_old_republic\-siths
+Generate star wars the old republic siths style names
+.TP
+.B \-\-star_wars_the_old_republic\-togrutas
+Generate star wars the old republic togrutas style names
+.TP
+.B \-\-star_wars_the_old_republic\-twileks
+Generate star wars the old republic twileks style names
+.TP
+.B \-\-star_wars_the_old_republic\-zabraks
+Generate star wars the old republic zabraks style names
+.TP
+.B \-\-the_witcher\-dwarfs
+Generate the witcher dwarfs style names
+.TP
+.B \-\-the_witcher\-elfs
+Generate the witcher elfs style names
+.TP
+.B \-\-the_witcher\-halflings
+Generate the witcher halflings style names
+.TP
+.B \-\-the_witcher\-humans
+Generate the witcher humans style names
+.TP
+.B \-\-towns_and_cities\-ancient_greek_towns
+Generate towns and cities ancient greek towns style names
+.TP
+.B \-\-towns_and_cities\-apocalypse_towns
+Generate towns and cities apocalypse towns style names
+.TP
+.B \-\-towns_and_cities\-central_african_towns
+Generate towns and cities central african towns style names
+.TP
+.B \-\-towns_and_cities\-central_american_towns
+Generate towns and cities central american towns style names
+.TP
+.B \-\-towns_and_cities\-central_east_african_towns
+Generate towns and cities central east african towns style names
+.TP
+.B \-\-towns_and_cities\-city_nicknames
+Generate towns and cities city nicknames style names
+.TP
+.B \-\-towns_and_cities\-citys
+Generate towns and cities citys style names
+.TP
+.B \-\-towns_and_cities\-dwarven_citys
+Generate towns and cities dwarven citys style names
+.TP
+.B \-\-towns_and_cities\-east_asian_towns
+Generate towns and cities east asian towns style names
+.TP
+.B \-\-towns_and_cities\-east_european_towns
+Generate towns and cities east european towns style names
+.TP
+.B \-\-towns_and_cities\-egyptian_towns
+Generate towns and cities egyptian towns style names
+.TP
+.B \-\-towns_and_cities\-elven_citys
+Generate towns and cities elven citys style names
+.TP
+.B \-\-towns_and_cities\-fantasy_towns
+Generate towns and cities fantasy towns style names
+.TP
+.B \-\-towns_and_cities\-middle_eastern_towns
+Generate towns and cities middle eastern towns style names
+.TP
+.B \-\-towns_and_cities\-north_african_towns
+Generate towns and cities north african towns style names
+.TP
+.B \-\-towns_and_cities\-north_american_towns
+Generate towns and cities north american towns style names
+.TP
+.B \-\-towns_and_cities\-north_european_towns
+Generate towns and cities north european towns style names
+.TP
+.B \-\-towns_and_cities\-northern_south_american_towns
+Generate towns and cities northern south american towns style names
+.TP
+.B \-\-towns_and_cities\-oceania_towns
+Generate towns and cities oceania towns style names
+.TP
+.B \-\-towns_and_cities\-orcish_citys
+Generate towns and cities orcish citys style names
+.TP
+.B \-\-towns_and_cities\-roman_towns
+Generate towns and cities roman towns style names
+.TP
+.B \-\-towns_and_cities\-russian_towns
+Generate towns and cities russian towns style names
+.TP
+.B \-\-towns_and_cities\-south_african_towns
+Generate towns and cities south african towns style names
+.TP
+.B \-\-towns_and_cities\-south_american_towns
+Generate towns and cities south american towns style names
+.TP
+.B \-\-towns_and_cities\-south_asian_towns
+Generate towns and cities south asian towns style names
+.TP
+.B \-\-towns_and_cities\-south_european_towns
+Generate towns and cities south european towns style names
+.TP
+.B \-\-towns_and_cities\-southeast_african_towns
+Generate towns and cities southeast african towns style names
+.TP
+.B \-\-towns_and_cities\-southeast_asian_towns
+Generate towns and cities southeast asian towns style names
+.TP
+.B \-\-towns_and_cities\-southeast_european
+Generate towns and cities southeast european style names
+.TP
+.B \-\-towns_and_cities\-steampunk_citys
+Generate towns and cities steampunk citys style names
+.TP
+.B \-\-towns_and_cities\-towns
+Generate towns and cities towns style names
+.TP
+.B \-\-towns_and_cities\-underwater_citys
+Generate towns and cities underwater citys style names
+.TP
+.B \-\-towns_and_cities\-viking_towns
+Generate towns and cities viking towns style names
+.TP
+.B \-\-towns_and_cities\-west_african_towns
+Generate towns and cities west african towns style names
+.TP
+.B \-\-towns_and_cities\-west_european_towns
+Generate towns and cities west european towns style names
+.TP
+.B \-\-towns_and_cities\-wild_west_towns
+Generate towns and cities wild west towns style names
+.TP
+.B \-\-warhammer\-beastmens
+Generate warhammer beastmens style names
+.TP
+.B \-\-warhammer\-bretonnias
+Generate warhammer bretonnias style names
+.TP
+.B \-\-warhammer\-daemons_of_chaos
+Generate warhammer daemons of chaos style names
+.TP
+.B \-\-warhammer\-dark_elfs
+Generate warhammer dark elfs style names
+.TP
+.B \-\-warhammer\-dwarfs
+Generate warhammer dwarfs style names
+.TP
+.B \-\-warhammer\-empires
+Generate warhammer empires style names
+.TP
+.B \-\-warhammer\-goblins
+Generate warhammer goblins style names
+.TP
+.B \-\-warhammer\-high_elfs
+Generate warhammer high elfs style names
+.TP
+.B \-\-warhammer\-lizardmens
+Generate warhammer lizardmens style names
+.TP
+.B \-\-warhammer\-ogres
+Generate warhammer ogres style names
+.TP
+.B \-\-warhammer\-orcs
+Generate warhammer orcs style names
+.TP
+.B \-\-warhammer\-skavens
+Generate warhammer skavens style names
+.TP
+.B \-\-warhammer\-tomb_kings
+Generate warhammer tomb kings style names
+.TP
+.B \-\-warhammer\-vampire_counts
+Generate warhammer vampire counts style names
+.TP
+.B \-\-warhammer\-warriors_of_chaos
+Generate warhammer warriors of chaos style names
+.TP
+.B \-\-warhammer\-wood_elfs
+Generate warhammer wood elfs style names
+.TP
+.B \-\-warhammer_40k\-chaos
+Generate warhammer 40k chaos style names
+.TP
+.B \-\-warhammer_40k\-dark_eldars
+Generate warhammer 40k dark eldars style names
+.TP
+.B \-\-warhammer_40k\-eldars
+Generate warhammer 40k eldars style names
+.TP
+.B \-\-warhammer_40k\-necrons
+Generate warhammer 40k necrons style names
+.TP
+.B \-\-warhammer_40k\-orks
+Generate warhammer 40k orks style names
+.TP
+.B \-\-warhammer_40k\-sisters_of_battles
+Generate warhammer 40k sisters of battles style names
+.TP
+.B \-\-warhammer_40k\-space_marines
+Generate warhammer 40k space marines style names
+.TP
+.B \-\-warhammer_40k\-taus
+Generate warhammer 40k taus style names
+.TP
+.B \-\-weapons\-battle_axes
+Generate weapons battle axes style names
+.TP
+.B \-\-weapons\-bomb_missiles
+Generate weapons bomb missiles style names
+.TP
+.B \-\-weapons\-bows
+Generate weapons bows style names
+.TP
+.B \-\-weapons\-claw_weapons
+Generate weapons claw weapons style names
+.TP
+.B \-\-weapons\-daggers
+Generate weapons daggers style names
+.TP
+.B \-\-weapons\-dual_wields
+Generate weapons dual wields style names
+.TP
+.B \-\-weapons\-fist_weapons
+Generate weapons fist weapons style names
+.TP
+.B \-\-weapons\-flails
+Generate weapons flails style names
+.TP
+.B \-\-weapons\-magic_books
+Generate weapons magic books style names
+.TP
+.B \-\-weapons\-magic_weapons
+Generate weapons magic weapons style names
+.TP
+.B \-\-weapons\-pistols
+Generate weapons pistols style names
+.TP
+.B \-\-weapons\-rifles
+Generate weapons rifles style names
+.TP
+.B \-\-weapons\-sci_fi_guns
+Generate weapons sci fi guns style names
+.TP
+.B \-\-weapons\-scythes
+Generate weapons scythes style names
+.TP
+.B \-\-weapons\-shotguns
+Generate weapons shotguns style names
+.TP
+.B \-\-weapons\-spears
+Generate weapons spears style names
+.TP
+.B \-\-weapons\-staffs
+Generate weapons staffs style names
+.TP
+.B \-\-weapons\-swords
+Generate weapons swords style names
+.TP
+.B \-\-weapons\-throwing_weapons
+Generate weapons throwing weapons style names
+.TP
+.B \-\-weapons\-war_hammers
+Generate weapons war hammers style names
+.TP
+.B \-\-weapons\-whips
+Generate weapons whips style names
+.TP
+.B \-\-wildstar\-aurins
+Generate wildstar aurins style names
+.TP
+.B \-\-wildstar\-cassians
+Generate wildstar cassians style names
+.TP
+.B \-\-wildstar\-chuas
+Generate wildstar chuas style names
+.TP
+.B \-\-wildstar\-drakens
+Generate wildstar drakens style names
+.TP
+.B \-\-wildstar\-granoks
+Generate wildstar granoks style names
+.TP
+.B \-\-wildstar\-humans
+Generate wildstar humans style names
+.TP
+.B \-\-wildstar\-mecharis
+Generate wildstar mecharis style names
+.TP
+.B \-\-wildstar\-mordeshs
+Generate wildstar mordeshs style names
+.TP
+.B \-\-world_of_warcraft\-blood_elf
+Generate world of warcraft blood elf style names
+.TP
+.B \-\-world_of_warcraft\-draenei
+Generate world of warcraft draenei style names
+.TP
+.B \-\-world_of_warcraft\-dwarf
+Generate world of warcraft dwarf style names
+.TP
+.B \-\-world_of_warcraft\-forsaken
+Generate world of warcraft forsaken style names
+.TP
+.B \-\-world_of_warcraft\-gnome
+Generate world of warcraft gnome style names
+.TP
+.B \-\-world_of_warcraft\-goblin
+Generate world of warcraft goblin style names
+.TP
+.B \-\-world_of_warcraft\-human
+Generate world of warcraft human style names
+.TP
+.B \-\-world_of_warcraft\-night_elf
+Generate world of warcraft night elf style names
+.TP
+.B \-\-world_of_warcraft\-orc
+Generate world of warcraft orc style names
+.TP
+.B \-\-world_of_warcraft\-pandaren
+Generate world of warcraft pandaren style names
+.TP
+.B \-\-world_of_warcraft\-tauren
+Generate world of warcraft tauren style names
+.TP
+.B \-\-world_of_warcraft\-troll
+Generate world of warcraft troll style names
+.TP
+.B \-\-world_of_warcraft\-worgen
+Generate world of warcraft worgen style names
+.TP
+.B \-\-world_of_warcraft_pets\-bat_dragonhawks
+Generate world of warcraft pets bat dragonhawks style names
+.TP
+.B \-\-world_of_warcraft_pets\-birds
+Generate world of warcraft pets birds style names
+.TP
+.B \-\-world_of_warcraft_pets\-boars_bears
+Generate world of warcraft pets boars bears style names
+.TP
+.B \-\-world_of_warcraft_pets\-cats
+Generate world of warcraft pets cats style names
+.TP
+.B \-\-world_of_warcraft_pets\-crabs
+Generate world of warcraft pets crabs style names
+.TP
+.B \-\-world_of_warcraft_pets\-dino_rhinos
+Generate world of warcraft pets dino rhinos style names
+.TP
+.B \-\-world_of_warcraft_pets\-dog_wolfs
+Generate world of warcraft pets dog wolfs style names
+.TP
+.B \-\-world_of_warcraft_pets\-goat_porcupines
+Generate world of warcraft pets goat porcupines style names
+.TP
+.B \-\-world_of_warcraft_pets\-gorilla_monkeys
+Generate world of warcraft pets gorilla monkeys style names
+.TP
+.B \-\-world_of_warcraft_pets\-insects
+Generate world of warcraft pets insects style names
+.TP
+.B \-\-world_of_warcraft_pets\-reptiles
+Generate world of warcraft pets reptiles style names
+.TP
+.B \-\-world_of_warcraft_pets\-wow_pets
+Generate world of warcraft pets wow pets style names
 .TP
 .B \-h, \-\-help
-Show this help message and exit
-.SH ENVIRONMENT
-.TP
-.B ASSETS_DIR
-Path to assets directory (default: ./assets)
-.TP
-.B ADJ_FOLDER
-Path to adjectives folder (default: ${ASSETS_DIR}/adjectives)
-.TP
-.B NOUN_FOLDER
-Path to nouns folder (default: ${ASSETS_DIR}/nouns)
-.TP
-.B ADJ_FILE
-Path to specific adjective file (overrides random selection from folder)
-.TP
-.B NOUN_FILE
-Path to specific noun file (overrides random selection from folder)
-.TP
-.B SEPARATOR
-Separator to use between adjective and noun (default: \-)
-.TP
-.B NULL_SEPARATOR
-Set to "true" to disable separator (overrides \-x flag)
-.TP
-.B CAPCASING
-Set to "true" to capitalize first letter of both adjective and noun
-.TP
-.B CAMELCASING
-Set to "true" to use CamelCase style (adjective lower\-cased, noun capitalized)
-.TP
-.B counto
-Number of names to generate (overrides \-c flag)
-.SH EXAMPLES
-.Generate 5 fantasy names:
-.EX
-namgen \-c 5
-.EE
-.Generate 3 names with custom separator:
-.EX
-namgen \-c 3 \-s "_"
-.EE
-.Generate Anglo-Saxon names:
-.EX
-namgen \-\-real\-anglo_saxons \-c 5
-.EE
-.SH AUTHOR
-Written by the namgen development team.
-.SH "REPORTING BUGS"
-Report bugs to the project maintainers.
-.SH "COPYRIGHT"
-Copyright © 2023 namgen developers
-.LP
-This is free software; see the source for copying conditions. There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Show help message and exit
+.SH AUTHORS
+Written by Joshua Edward McLaughlin Cox and contributors.
+.SH COPYRIGHT
+GNU General Public License v3.

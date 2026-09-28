@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export PATH=".:$PATH"
 for i in $(ls src/*lib.h)
 do
   echo $i \

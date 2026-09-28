@@ -1,0 +1,33 @@
+#include "miscellaneous-military_vehicles_lib.h"
+#include "generator_common.h"
+#include <string_view>
+#include <string>
+#include <iterator>
+
+std::string generate_miscellaneous_military_vehicles_name(std::mt19937& rng, int type) {
+    static constexpr std::string_view nm3[] = {"-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    static constexpr std::string_view nm4[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"};
+    static constexpr std::string_view nm5[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    static constexpr std::string_view nm6[] = {"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+    static constexpr std::string_view nm1[] = {"Aegis", "Amazon", "Arachnid", "Arbiter", "Armadillo", "Atilla", "Augury", "Aurora", "Badger", "Bane", "Bargaining Chip", "Barrage", "Basilisk", "Bayonet", "Beast", "Behemoth", "Bigwig", "Bison", "Black Knight", "Blitz", "Blizzard", "Boar", "Bolide", "Bolt", "Bouncer", "Bronco", "Buffalo", "Buffer", "Bulldozer", "Bulwark", "Buttress", "Canine", "Cavalier", "Centurion", "Cerberus", "Challenger", "Chaperon", "Chelonian", "Chief", "Chieftain", "Citadel", "Cobra", "Colossus", "Colt", "Comet", "Commander", "Commando", "Cooter", "Covenant", "Coyote", "Croc", "Cruiser", "Cthulu", "Curator", "Custodian", "Cyclone", "Cyclops", "Czar", "Dawn", "Deputy", "Devil", "Diablo", "Dire", "Dire Wolf", "Dirge", "Djinn", "Doom", "Dragon", "Drake", "Dread", "Duster", "Edge", "Elephant", "Emperor", "Enigma", "Feline", "Fiend", "Fortress", "Fox", "Furor", "Fury", "Gargantua", "Gargoyle", "Gauntlet", "Genesis", "Genghis", "Gloom", "Glutton", "Goliath", "Gopher", "Governor", "Grimace", "Grizzly", "Guardian", "Guerilla", "Hades", "Harmattan", "Harvester", "Hedgehog", "Heimlich", "Hellhound", "Hellion", "Herald", "Hercules", "Honcho", "Honey Badger", "Horror", "Horus", "Hun", "Hurricane", "Hydra", "Hyena", "Hymn", "Ibis", "Imp", "Inferno", "Jackal", "Jaguar", "Judge", "Judgement", "Kaiser", "Khamsin", "Khan", "King Crab", "Knave", "Knight", "Lament", "Leatherback", "Leonidas", "Leopard", "Leviathan", "Lightning Bolt", "Lucifer", "Magister", "Maharajah", "Mammoth", "Marshal", "Mastodon", "Matador", "Maverick", "Meteor", "Minion", "Mogul", "Mollusk", "Monarch", "Mongrel", "Mug", "Mule", "Mutt", "Ogre", "Oracle", "Outcast", "Overlord", "Overseer", "Paladin", "Pangolin", "Panther", "Paradox", "Paragon", "Parapet", "Patron", "Porcupine", "Prime", "Primus", "Pulse", "Purgatory", "Rajah", "Rampart", "Rascal", "Rattlesnake", "Requiem", "Rex", "Rhino", "Rogue", "Ruffian", "Samaritan", "Samson", "Samurai", "Savage", "Scalawag", "Scallion", "Scimitar", "Scorpion", "Scoundrel", "Scourge", "Scythe", "Sentinel", "Serpent", "Shaitan", "Shepherd", "Sherpa", "Shooting Star", "Sickle", "Siren", "Sirocco", "Skunk", "Smirk", "Snapper", "Spartan", "Sphinx", "Spitfire", "Stallion", "Stark", "Steward", "Storm", "Striker", "Sultan", "Swine", "Tarantula", "Tarragon", "Tempest", "Templar", "Terror", "Thor", "Thunder", "Tigress", "Titan", "Torment", "Tormentor", "Tornado", "Tortoise", "Trooper", "Tusker", "Tycoon", "Typhoon", "Tyrant", "Valkyrie", "Vallation", "Varlet", "Viking", "Viper", "Virago", "Visage", "Vixen", "Vulture", "Warden", "White Knight", "Wolfhound", "Wyvern"};
+    static constexpr std::string_view nm2[] = {"Amphibious Vehicle", "Anti-Tank Vehicle", "Armored Car", "Armored Personal Carrier", "Armored Security Vehicle", "Armored Utility Vehicle", "Armored Vehicle", "Artillery Command Vehicle", "Artillery Tractor", "Battle Tank", "Bridging Vehicle", "Cargo Carrier", "Carrier", "Command Vehicle", "Cruiser Tank", "Engineering Vehicle", "Fire Support Vehicle", "Heavy Tank", "Infantry Fighting Vehicle", "Infantry Tank", "Launcher", "Light Tank", "Maintenance and Recovery Vehicle", "Medium Tank", "Mine Clearing Vehicle", "Personal Carrier", "Reconnaissance Vehicle", "Recovery Vehicle", "Repair Vehicle", "Self-Propelled Anti-Tank Vehicle", "Self-Propelled Gun", "Self-Propelled Mortar", "Supply Vehicle", "Tank", "Tank Destroyer", "Transport", "Utility Vehicle"};
+
+    std::string names; size_t rnd = 0; size_t rnd2 = 0; size_t rnd3 = 0; size_t rnd4 = 0; size_t rnd5 = 0; size_t rnd6 = 0; size_t rnd7 = 0; int i = 0;
+
+i = rng() % 10; {
+    rnd3 = rng() % std::size(nm4);
+    rnd4 = rng() % std::size(nm3);
+    rnd5 = rng() % std::size(nm3);
+    if (rnd4 < 10) {
+    while (rnd5 < 10) {
+    rnd5 = rng() % std::size(nm3);
+    }
+    }
+    rnd6 = rng() % std::size(nm5);
+    rnd7 = rng() % std::size(nm6);
+    rnd = rng() % std::size(nm1);
+    rnd2 = rng() % std::size(nm2);
+    names = nm4[rnd3] + nm3[rnd4] + nm3[rnd5] + nm5[rnd6] + nm6[rnd7] + " " + nm1[rnd] + " " + nm2[rnd2];
+    return names;
+    }
+}
