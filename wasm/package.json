@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "High-performance WebAssembly build of namgen fantasy name generator with 900+ generators",
   "main": "namgen-cli.js",
+  "types": "./index.d.ts",
   "bin": {
     "namgen-wasm": "./namgen-cli.js"
   },

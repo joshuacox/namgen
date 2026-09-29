@@ -5,6 +5,12 @@ complete -c namgen -s h -l help -d 'Show help message'
 complete -c namgen -s c -l count -d 'Number of names to generate' -x
 complete -c namgen -s S -l seed -d 'Seed random number generator deterministically' -x
 complete -c namgen -s u -l unique -d 'Ensure no duplicate names are emitted'
+complete -c namgen -s m -l match -d 'Filter names by regular expression' -x
+complete -c namgen -l min-len -d 'Minimum character length' -x
+complete -c namgen -l max-len -d 'Maximum character length' -x
+complete -c namgen -l compose -d 'Compose multiple generators together' -x
+complete -c namgen -l template -d 'Template for composition' -x
+complete -c namgen -s i -l interactive -d 'Launch interactive terminal explorer UI'
 complete -c namgen -l json -d 'Output results as a JSON array'
 complete -c namgen -l csv -d 'Output results in CSV format'
 complete -c namgen -l slug -d 'Convert output to lowercase kebab-case slugs'

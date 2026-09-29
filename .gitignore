@@ -1,4 +1,4 @@
-namgen
+/namgen
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -30,4 +30,8 @@ web/.next/
 web/out/
 web/node_modules/
 web/public/wasm/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
 

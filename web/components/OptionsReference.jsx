@@ -20,6 +20,31 @@ export default function OptionsReference() {
       defaultVal: 'false',
     },
     {
+      flags: '-m, --match REGEX',
+      description: 'Filter generated names by regular expression pattern.',
+      defaultVal: 'None',
+    },
+    {
+      flags: '--min-len NUM, --max-len NUM',
+      description: 'Set minimum and maximum character length constraints on generated names.',
+      defaultVal: 'None',
+    },
+    {
+      flags: '--compose GEN1,GEN2',
+      description: 'Compose multiple generators together (e.g. fantasy-dragons,places-castles).',
+      defaultVal: 'None',
+    },
+    {
+      flags: '--template STRING',
+      description: 'Template format string for generator composition (e.g. "{1} of {2}").',
+      defaultVal: '"{1} of {2}"',
+    },
+    {
+      flags: '-i, --interactive',
+      description: 'Launch full-screen interactive terminal explorer UI with search and live rolls.',
+      defaultVal: 'false',
+    },
+    {
       flags: '--json',
       description: 'Output results as a structured JSON array of strings.',
       defaultVal: 'false',

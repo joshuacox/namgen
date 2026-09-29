@@ -7,6 +7,12 @@ _arguments -s -S \
   '(-c --count)'{-c,--count}'[Number of names to generate]:count:' \
   '(-S --seed)'{-S,--seed}'[Seed random number generator deterministically]:seed:' \
   '(-u --unique)'{-u,--unique}'[Ensure no duplicate names are emitted]' \
+  '(-m --match)'{-m,--match}'[Filter generated names by regular expression]:regex:' \
+  '--min-len[Minimum character length]:length:' \
+  '--max-len[Maximum character length]:length:' \
+  '--compose[Compose multiple generators together]:generators:' \
+  '--template[Template for composition]:template:' \
+  '(-i --interactive)'{-i,--interactive}'[Launch interactive terminal explorer UI]' \
   '--json[Output results as a JSON array]' \
   '--csv[Output results in CSV format]' \
   '(--slug --kebab)'{--slug,--kebab}'[Convert output to lowercase kebab-case slugs]' \

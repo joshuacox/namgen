@@ -33,6 +33,24 @@ Seed random number generator deterministically for reproducible runs
 .B \-u, \-\-unique
 Ensure no duplicate names are emitted in the generated batch
 .TP
+.B \-m REGEX, \-\-match REGEX
+Filter generated names by regular expression pattern
+.TP
+.B \-\-min\-len NUM
+Minimum character length constraint for generated names
+.TP
+.B \-\-max\-len NUM
+Maximum character length constraint for generated names
+.TP
+.B \-\-compose GEN1,GEN2
+Compose multiple generators together in a structured format
+.TP
+.B \-\-template STRING
+Template format string for generator composition (default: "{1} of {2}")
+.TP
+.B \-i, \-\-interactive
+Launch full-screen interactive terminal explorer UI with live search and preview
+.TP
 .B \-\-json
 Output results as a JSON array of strings
 .TP

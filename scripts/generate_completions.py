@@ -40,6 +40,10 @@ def generate_bash(gens):
         "-c", "--count",
         "-S", "--seed",
         "-u", "--unique",
+        "-m", "--match",
+        "--min-len", "--max-len",
+        "--compose", "--template",
+        "-i", "--interactive",
         "--json",
         "--csv",
         "--slug", "--kebab",
@@ -65,7 +69,7 @@ _namgen_completions() {{
             COMPREPLY=( $(compgen -f -- "${{cur}}") )
             return 0
             ;;
-        -s|--separator|-c|--count|-S|--seed)
+        -s|--separator|-c|--count|-S|--seed|-m|--match|--min-len|--max-len|--compose|--template)
             return 0
             ;;
     esac
@@ -93,6 +97,12 @@ def generate_zsh(gens):
         "  '(-c --count)'{-c,--count}'[Number of names to generate]:count:' \\",
         "  '(-S --seed)'{-S,--seed}'[Seed random number generator deterministically]:seed:' \\",
         "  '(-u --unique)'{-u,--unique}'[Ensure no duplicate names are emitted]' \\",
+        "  '(-m --match)'{-m,--match}'[Filter generated names by regular expression]:regex:' \\",
+        "  '--min-len[Minimum character length]:length:' \\",
+        "  '--max-len[Maximum character length]:length:' \\",
+        "  '--compose[Compose multiple generators together]:generators:' \\",
+        "  '--template[Template for composition]:template:' \\",
+        "  '(-i --interactive)'{-i,--interactive}'[Launch interactive terminal explorer UI]' \\",
         "  '--json[Output results as a JSON array]' \\",
         "  '--csv[Output results in CSV format]' \\",
         "  '(--slug --kebab)'{--slug,--kebab}'[Convert output to lowercase kebab-case slugs]' \\",
@@ -120,6 +130,12 @@ def generate_fish(gens):
         "complete -c namgen -s c -l count -d 'Number of names to generate' -x",
         "complete -c namgen -s S -l seed -d 'Seed random number generator deterministically' -x",
         "complete -c namgen -s u -l unique -d 'Ensure no duplicate names are emitted'",
+        "complete -c namgen -s m -l match -d 'Filter names by regular expression' -x",
+        "complete -c namgen -l min-len -d 'Minimum character length' -x",
+        "complete -c namgen -l max-len -d 'Maximum character length' -x",
+        "complete -c namgen -l compose -d 'Compose multiple generators together' -x",
+        "complete -c namgen -l template -d 'Template for composition' -x",
+        "complete -c namgen -s i -l interactive -d 'Launch interactive terminal explorer UI'",
         "complete -c namgen -l json -d 'Output results as a JSON array'",
         "complete -c namgen -l csv -d 'Output results in CSV format'",
         "complete -c namgen -l slug -d 'Convert output to lowercase kebab-case slugs'",

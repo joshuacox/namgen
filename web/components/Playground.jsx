@@ -8,13 +8,23 @@ import { loadGenerator, executeGenerator } from '../lib/generatorLoader';
 export default function Playground() {
   const [activeTab, setActiveTab] = useState('combinator'); // 'combinator' | 'procedural'
 
+  // Engine selection (WASM vs JS)
+  const [engine, setEngine] = useState('wasm'); // 'wasm' | 'js'
+  const [wasmInstance, setWasmInstance] = useState(null);
+  const [execMetrics, setExecMetrics] = useState({ timeMs: 0, count: 5, engine: 'wasm' });
+
   // Common CLI options
   const [count, setCount] = useState(5);
   const [seed, setSeed] = useState('');
   const [unique, setUnique] = useState(false);
   const [format, setFormat] = useState('plain'); // 'plain' | 'json' | 'csv' | 'slug'
+  const [matchRegex, setMatchRegex] = useState('');
   const [copiedCmd, setCopiedCmd] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
+
+  // Favorites state
+  const [favorites, setFavorites] = useState([]);
+  const [showFavorites, setShowFavorites] = useState(false);
 
   // Combinator state
   const [separator, setSeparator] = useState('-');
@@ -28,6 +38,79 @@ export default function Playground() {
   const [proceduralResults, setProceduralResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingGen, setLoadingGen] = useState(false);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('namgen_favorites');
+      if (saved) setFavorites(JSON.parse(saved));
+    } catch (_) {}
+  }, []);
+
+  const toggleFavorite = (name) => {
+    if (!name || name === '(No matching names found)') return;
+    setFavorites((prev) => {
+      const next = prev.includes(name) ? prev.filter((x) => x !== name) : [...prev, name];
+      try {
+        localStorage.setItem('namgen_favorites', JSON.stringify(next));
+      } catch (_) {}
+      return next;
+    });
+  };
+
+  const exportFavorites = (type) => {
+    let content = '';
+    let mime = 'text/plain';
+    let filename = 'namgen-favorites.txt';
+    if (type === 'json') {
+      content = JSON.stringify(favorites, null, 2);
+      mime = 'application/json';
+      filename = 'namgen-favorites.json';
+    } else if (type === 'csv') {
+      content = '"name"\n' + favorites.map((n) => `"${n.replace(/"/g, '""')}"`).join('\n');
+      mime = 'text/csv';
+      filename = 'namgen-favorites.csv';
+    } else {
+      content = favorites.join('\n');
+    }
+    const blob = new Blob([content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Initialize WebAssembly engine on mount
+  useEffect(() => {
+    let isMounted = true;
+    async function initWasm() {
+      try {
+        if (!window.createNamgen) {
+          const script = document.createElement('script');
+          script.src = '/wasm/namgen.js';
+          script.async = true;
+          document.body.appendChild(script);
+          await new Promise((res, rej) => {
+            script.onload = res;
+            script.onerror = rej;
+          });
+        }
+        if (window.createNamgen && isMounted) {
+          const inst = await window.createNamgen({
+            locateFile: (f) => `/wasm/${f}`,
+            noInitialRun: true,
+          });
+          if (isMounted) setWasmInstance(inst);
+        }
+      } catch (err) {
+        console.warn('WASM module load warning in Playground:', err);
+      }
+    }
+    initWasm();
+    return () => { isMounted = false; };
+  }, []);
 
   // Handle URL deep-linking on mount
   useEffect(() => {
@@ -139,16 +222,54 @@ export default function Playground() {
   // Find currently selected generator
   const currentGen = generatorsData.find((g) => g.id === selectedGenId) || generatorsData[0];
 
-  // Execute the REAL JavaScript Generator live in the browser
+  // Execute either WebAssembly Engine or JavaScript Generator
   const rollProcedural = async () => {
     if (!currentGen) return;
     setLoadingGen(true);
+    const start = performance.now();
     try {
-      const genFn = await loadGenerator(currentGen.id);
-      const liveNames = executeGenerator(genFn, count, { seed, unique });
-      setProceduralResults(liveNames.length > 0 ? liveNames : ['(No names generated)']);
+      let liveNames = [];
+      if (engine === 'wasm' && wasmInstance) {
+        const genWasm = wasmInstance.cwrap('namgen_generate_wasm', 'string', ['string', 'number']);
+        const seedNum = seed ? parseInt(seed, 10) || 1 : 0;
+        const seen = new Set();
+        let attempts = 0;
+        while (liveNames.length < count && attempts < count * 200 + 1000) {
+          attempts++;
+          const currentSeed = seedNum ? (seedNum + attempts) : 0;
+          const name = genWasm(currentGen.flag, currentSeed);
+          if (!name || name.startsWith('Error:')) break;
+          if (matchRegex) {
+            try {
+              const re = new RegExp(matchRegex);
+              if (!re.test(name)) continue;
+            } catch (_) {}
+          }
+          if (unique) {
+            if (!seen.has(name)) {
+              seen.add(name);
+              liveNames.push(name);
+            }
+          } else {
+            liveNames.push(name);
+          }
+        }
+      } else {
+        const genFn = await loadGenerator(currentGen.id);
+        let names = executeGenerator(genFn, count * 3, { seed, unique });
+        if (matchRegex) {
+          try {
+            const re = new RegExp(matchRegex);
+            names = names.filter((n) => re.test(n));
+          } catch (_) {}
+        }
+        liveNames = names.slice(0, count);
+      }
+      const elapsed = Math.max(0.01, performance.now() - start);
+      setExecMetrics({ timeMs: elapsed, count: liveNames.length, engine });
+      setProceduralResults(liveNames.length > 0 ? liveNames : ['(No matching names found)']);
     } catch (err) {
-      console.warn('Falling back to static samples for:', currentGen.id, err);
+      console.warn('Procedural roll fallback:', err);
       let samples = currentGen.samples || ['Sample name'];
       if (unique) samples = Array.from(new Set(samples));
       setProceduralResults(samples.slice(0, count));
@@ -163,7 +284,7 @@ export default function Playground() {
 
   useEffect(() => {
     rollProcedural();
-  }, [selectedGenId, count, seed, unique]);
+  }, [selectedGenId, count, seed, unique, engine, wasmInstance, matchRegex]);
 
   // Construct CLI command for current state
   const getCombinatorCommand = () => {
@@ -186,6 +307,7 @@ export default function Playground() {
     let cmd = `namgen ${currentGen.flag} -c ${count}`;
     if (seed) cmd += ` -S ${seed}`;
     if (unique) cmd += ' -u';
+    if (matchRegex) cmd += ` -m "${matchRegex}"`;
     if (format === 'json') cmd += ' --json';
     else if (format === 'csv') cmd += ' --csv';
     else if (format === 'slug') cmd += ' --slug';
@@ -254,8 +376,22 @@ export default function Playground() {
     return (
       <div className="space-y-1">
         {rawList.map((sample, idx) => (
-          <div key={idx} className="py-1 border-b border-slate-800/50 last:border-0 font-medium text-slate-200">
-            {sample}
+          <div key={idx} className="py-1 border-b border-slate-800/50 last:border-0 font-medium text-slate-200 flex items-center justify-between group">
+            <span>{sample}</span>
+            {sample && sample !== '(No matching names found)' && (
+              <button
+                type="button"
+                onClick={() => toggleFavorite(sample)}
+                className={`p-1 text-xs rounded transition-all ${
+                  favorites.includes(sample)
+                    ? 'text-red-400 hover:text-red-300 scale-110'
+                    : 'text-slate-600 hover:text-red-400 opacity-40 group-hover:opacity-100'
+                }`}
+                title={favorites.includes(sample) ? 'Remove favorite' : 'Save to favorites'}
+              >
+                {favorites.includes(sample) ? '❤️' : '🤍'}
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -573,6 +709,39 @@ export default function Playground() {
                 />
               </div>
 
+              {/* Execution Engine Selector */}
+              <div>
+                <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
+                  Execution Engine
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEngine('wasm')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${
+                      engine === 'wasm'
+                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold'
+                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <span>⚡ WebAssembly</span>
+                    <span className="text-[10px] px-1 rounded bg-slate-900 text-slate-400">C++17</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEngine('js')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${
+                      engine === 'js'
+                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold'
+                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <span>📜 JavaScript</span>
+                    <span className="text-[10px] px-1 rounded bg-slate-900 text-slate-400">ESM</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Output Format Controls for Procedural */}
               <div>
                 <label className="block text-xs font-semibold uppercase text-slate-400 mb-1.5">
@@ -646,6 +815,20 @@ export default function Playground() {
                 </div>
               </div>
 
+              {/* Regex Filter */}
+              <div>
+                <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">
+                  Regex Filter (<code className="text-emerald-400">-m</code>)
+                </label>
+                <input
+                  type="text"
+                  value={matchRegex}
+                  onChange={(e) => setMatchRegex(e.target.value)}
+                  placeholder="e.g. ^[A-Z].*th$ (leave empty for none)"
+                  className="w-full px-2.5 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-xs text-slate-100 font-mono focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
               <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1 border border-slate-800 rounded-xl p-2 bg-slate-950/50">
                 {filteredGenerators.map((gen) => (
                   <button
@@ -689,8 +872,9 @@ export default function Playground() {
                     <span className="ml-2 text-xs font-mono text-slate-400">
                       namgen {currentGen.flag}
                     </span>
-                    <span className="hidden sm:inline-flex px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      Live Engine
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      {execMetrics.timeMs.toFixed(2)}ms ({execMetrics.engine.toUpperCase()})
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -743,6 +927,80 @@ export default function Playground() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Favorites Drawer */}
+        {favorites.length > 0 && (
+          <div className="mt-10 p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2.5">
+                <span className="text-red-400 text-lg">❤️</span>
+                <span className="text-base font-bold text-white">
+                  Saved Favorites ({favorites.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowFavorites(!showFavorites)}
+                  className="text-xs text-emerald-400 hover:underline ml-2"
+                >
+                  {showFavorites ? '▲ Collapse' : '▼ Expand'}
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => exportFavorites('txt')}
+                  className="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+                >
+                  Export TXT
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exportFavorites('json')}
+                  className="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+                >
+                  Export JSON
+                </button>
+                <button
+                  type="button"
+                  onClick={() => exportFavorites('csv')}
+                  className="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+                >
+                  Export CSV
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFavorites([]);
+                    try { localStorage.removeItem('namgen_favorites'); } catch (_) {}
+                  }}
+                  className="px-3 py-1.5 text-xs font-mono rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition-colors"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            {showFavorites && (
+              <div className="pt-3 border-t border-slate-800 flex flex-wrap gap-2 max-h-48 overflow-y-auto">
+                {favorites.map((fav, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs bg-slate-950 border border-slate-800 text-slate-200 shadow-sm"
+                  >
+                    <span>{fav}</span>
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorite(fav)}
+                      className="text-slate-500 hover:text-red-400 text-sm font-bold ml-1 leading-none"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

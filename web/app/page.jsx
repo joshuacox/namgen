@@ -4,6 +4,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Playground from '../components/Playground';
+import WebTerminal from '../components/WebTerminal';
 import Features from '../components/Features';
 import Installation from '../components/Installation';
 import OptionsReference from '../components/OptionsReference';
@@ -19,6 +20,7 @@ export default function HomePage() {
       <main className="flex-grow">
         <Hero />
         <Playground />
+        <WebTerminal />
         <Features />
         <Installation />
         <OptionsReference />

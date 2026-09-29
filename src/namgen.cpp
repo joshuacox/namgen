@@ -8,10 +8,13 @@
 #include <fstream>
 #include <iostream>
 #include <random>
+#include <regex>
+#include <sstream>
 #include <string>
 #include <vector>
 
 #include "generator_registry.h"
+#include "tui.h"
 
 namespace fs = std::filesystem;
 
@@ -225,7 +228,47 @@ struct CommandLineOptions {
     uint64_t seed = 0;
     OutputFormat format = OutputFormat::Plain;
     const GeneratorInfo* activeGenerator = nullptr;
+    bool interactive = false;
+    bool matchSet = false;
+    std::string matchPattern;
+    std::regex matchRegex;
+    bool minLenSet = false;
+    std::size_t minLen = 0;
+    bool maxLenSet = false;
+    std::size_t maxLen = 0;
+    bool composeSet = false;
+    std::vector<const GeneratorInfo*> composeGenerators;
+    std::string composeTemplate = "{1} of {2}";
 };
+
+inline bool isValidCandidate(const std::string& s, const CommandLineOptions& opts) {
+    if (opts.minLenSet && s.length() < opts.minLen) return false;
+    if (opts.maxLenSet && s.length() > opts.maxLen) return false;
+    if (opts.matchSet) {
+        if (!std::regex_search(s, opts.matchRegex)) return false;
+    }
+    return true;
+}
+
+inline std::string renderCompose(const std::vector<const GeneratorInfo*>& gens,
+                                 const std::string& tmpl,
+                                 std::mt19937& rng) {
+    std::vector<std::string> parts;
+    parts.reserve(gens.size());
+    for (const auto* g : gens) {
+        parts.push_back(g->generate(rng));
+    }
+    std::string result = tmpl;
+    for (std::size_t i = 0; i < parts.size(); ++i) {
+        std::string placeholder = "{" + std::to_string(i + 1) + "}";
+        std::size_t pos = 0;
+        while ((pos = result.find(placeholder, pos)) != std::string::npos) {
+            result.replace(pos, placeholder.length(), parts[i]);
+            pos += parts[i].length();
+        }
+    }
+    return result;
+}
 
 void emitOutput(const std::vector<std::string>& results,
                 const CommandLineOptions& opts,
@@ -448,6 +491,84 @@ int main(int argc, char* argv[]) {
             opts.format = OutputFormat::Slug;
         } else if (arg == "--unique" || arg == "-u") {
             opts.unique = true;
+        } else if (arg == "--interactive" || arg == "-i") {
+            opts.interactive = true;
+        } else if (arg == "--match" || arg == "-m") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: " << arg << " requires a regular expression argument.\n";
+                return 1;
+            }
+            ++i;
+            opts.matchPattern = argv[i];
+            try {
+                opts.matchRegex = std::regex(opts.matchPattern);
+                opts.matchSet = true;
+            } catch (const std::regex_error& e) {
+                std::cerr << "Error: invalid regular expression '" << opts.matchPattern << "': " << e.what() << "\n";
+                return 1;
+            }
+        } else if (arg == "--min-len") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --min-len requires a positive integer argument.\n";
+                return 1;
+            }
+            ++i;
+            try {
+                opts.minLen = static_cast<std::size_t>(std::stoul(argv[i]));
+                opts.minLenSet = true;
+            } catch (const std::exception&) {
+                std::cerr << "Error: invalid --min-len value '" << argv[i] << "'. Must be an unsigned integer.\n";
+                return 1;
+            }
+        } else if (arg == "--max-len") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --max-len requires a positive integer argument.\n";
+                return 1;
+            }
+            ++i;
+            try {
+                opts.maxLen = static_cast<std::size_t>(std::stoul(argv[i]));
+                opts.maxLenSet = true;
+            } catch (const std::exception&) {
+                std::cerr << "Error: invalid --max-len value '" << argv[i] << "'. Must be an unsigned integer.\n";
+                return 1;
+            }
+        } else if (arg == "--template") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --template requires a string format argument.\n";
+                return 1;
+            }
+            ++i;
+            opts.composeTemplate = argv[i];
+        } else if (arg == "--compose") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --compose requires a comma-separated list of generator names.\n";
+                return 1;
+            }
+            ++i;
+            std::string compArg = argv[i];
+            std::stringstream ss(compArg);
+            std::string token;
+            while (std::getline(ss, token, ',')) {
+                // Trim token
+                token.erase(token.begin(), std::find_if(token.begin(), token.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+                token.erase(std::find_if(token.rbegin(), token.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), token.end());
+                if (token.empty()) continue;
+                const GeneratorInfo* g = GeneratorRegistry::instance().find(token);
+                if (!g && token.rfind("--", 0) != 0) {
+                    g = GeneratorRegistry::instance().find("--" + token);
+                }
+                if (!g) {
+                    std::cerr << "Error: unknown generator in --compose: '" << token << "'\n";
+                    return 1;
+                }
+                opts.composeGenerators.push_back(g);
+            }
+            if (opts.composeGenerators.empty()) {
+                std::cerr << "Error: --compose requires at least one valid generator.\n";
+                return 1;
+            }
+            opts.composeSet = true;
         } else if (arg == "--debug") {
             optDebug = true;
         } else if (arg == "--help" || arg == "-h") {
@@ -461,6 +582,12 @@ int main(int argc, char* argv[]) {
             std::cout << "  -c COUNT, --count COUNT  Number of names to generate (default: terminal height)\n";
             std::cout << "  -S NUM, --seed NUM       Seed random number generator deterministically\n";
             std::cout << "  -u, --unique             Ensure no duplicate names are emitted\n";
+            std::cout << "  -m, --match REGEX        Filter generated names by regular expression\n";
+            std::cout << "  --min-len NUM            Minimum character length of generated names\n";
+            std::cout << "  --max-len NUM            Maximum character length of generated names\n";
+            std::cout << "  --compose GEN1,GEN2      Compose multiple generators together\n";
+            std::cout << "  --template STRING        Template for composition (default: \"{1} of {2}\")\n";
+            std::cout << "  -i, --interactive        Launch interactive terminal explorer UI\n";
             std::cout << "  --json                   Output results as a JSON array of strings\n";
             std::cout << "  --csv                    Output results in CSV format\n";
             std::cout << "  --slug                   Convert output to lowercase kebab-case slugs\n";
@@ -542,16 +669,45 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Interactive TUI mode
+    if (opts.interactive) {
+        return namgen::runInteractiveTui(rng);
+    }
+
+    // Generator composition
+    if (opts.composeSet) {
+        std::vector<std::string> results;
+        results.reserve(counto);
+        std::unordered_set<std::string> seen;
+        std::size_t attempts = 0;
+        const std::size_t maxAttempts = counto * 200 + 5000;
+        while (results.size() < counto && attempts < maxAttempts) {
+            ++attempts;
+            std::string name = renderCompose(opts.composeGenerators, opts.composeTemplate, rng);
+            if (!isValidCandidate(name, opts)) continue;
+            if (opts.unique) {
+                if (seen.insert(name).second) {
+                    results.push_back(std::move(name));
+                }
+            } else {
+                results.push_back(std::move(name));
+            }
+        }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "");
+        return 0;
+    }
+
     // If a specialized generator was selected, run it and exit
     if (opts.activeGenerator) {
         std::vector<std::string> results;
         results.reserve(counto);
         std::unordered_set<std::string> seen;
         std::size_t attempts = 0;
-        const std::size_t maxAttempts = counto * 100 + 1000;
+        const std::size_t maxAttempts = counto * 200 + 5000;
         while (results.size() < counto && attempts < maxAttempts) {
             ++attempts;
             std::string name = opts.activeGenerator->generate(rng);
+            if (!isValidCandidate(name, opts)) continue;
             if (opts.unique) {
                 if (seen.insert(name).second) {
                     results.push_back(std::move(name));
@@ -658,6 +814,7 @@ int main(int argc, char* argv[]) {
         }
 
         std::string generatedName = generateName(adjective, noun, nullSeparator, separator, camelcasing);
+        if (!isValidCandidate(generatedName, opts)) continue;
         if (opts.unique) {
             if (seen.insert(generatedName).second) {
                 results.push_back(std::move(generatedName));

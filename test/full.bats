@@ -418,3 +418,36 @@ setup() {
   [[ "$r1" == "$r2" ]]
 }
 
+@test "test namgen --match regex filtering" {
+  result=$(./namgen --fantasy-dragons -c 5 -m "^[A-Z][a-z]+th$")
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 5 ]]
+  # Assert all end with 'th'
+  invalid=$(echo "$result" | grep -v 'th$' || true)
+  [[ -z "$invalid" ]]
+}
+
+@test "test namgen --min-len and --max-len length bounds" {
+  result=$(./namgen --fantasy-dragons -c 5 --min-len 5 --max-len 6)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 5 ]]
+  while IFS= read -r line; do
+    len=${#line}
+    [[ "$len" -ge 5 && "$len" -le 6 ]]
+  done <<< "$result"
+}
+
+@test "test namgen --compose and --template" {
+  result=$(./namgen --compose "fantasy-dragons,places-castles" --template "{1} of {2}" -c 3)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 3 ]]
+  has_of=$(echo "$result" | grep " of " | wc -l)
+  [[ "$has_of" -eq 3 ]]
+}
+
+@test "test namgen interactive mode TTY guard" {
+  run ./namgen -i < /dev/null
+  [[ "$status" -ne 0 ]]
+}
+
+

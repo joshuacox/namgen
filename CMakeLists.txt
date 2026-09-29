@@ -9,6 +9,7 @@ file(GLOB GENERATOR_SOURCES CONFIGURE_DEPENDS "src/*_lib.cpp")
 add_executable(namgen
     src/namgen.cpp
     src/generator_registry.cpp
+    src/tui.cpp
     ${GENERATOR_SOURCES}
 )
 
