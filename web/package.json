@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "python3 ../scripts/export_web_generators.py 2>/dev/null || true",
+    "prebuild": "python3 ../scripts/export_web_generators.py 2>/dev/null || true && mkdir -p public/wasm && cp ../wasm/namgen.* public/wasm/ 2>/dev/null || true",
     "build": "next build",
     "start": "next start"
   },

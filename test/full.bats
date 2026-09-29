@@ -394,3 +394,27 @@ setup() {
   ./namgen --descriptions-cities -c 1
   ./namgen --towns_and_cities-cities -c 1
 }
+
+@test "test namgen.wasm CLI runner" {
+  if ! command -v node >/dev/null 2>&1; then
+    skip "node not found"
+  fi
+  if [ ! -f "wasm/namgen.js" ]; then
+    skip "wasm/namgen.js not built"
+  fi
+  result=$(node wasm/namgen-cli.js --fantasy-dragons -c 5 | wc -l)
+  [[ "$result" -eq 5 ]]
+}
+
+@test "test namgen.wasm deterministic seed" {
+  if ! command -v node >/dev/null 2>&1; then
+    skip "node not found"
+  fi
+  if [ ! -f "wasm/namgen.js" ]; then
+    skip "wasm/namgen.js not built"
+  fi
+  r1=$(node wasm/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
+  r2=$(node wasm/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
+  [[ "$r1" == "$r2" ]]
+}
+

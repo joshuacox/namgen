@@ -35,7 +35,18 @@ g++ -std=c++17 -O2 src/*.cpp -o namgen
 sudo cp namgen /usr/local/bin/
 sudo mkdir -p /usr/local/share/namgen
 sudo cp -r assets /usr/local/share/namgen/`,
-    test: `# Run automated test suite (77 tests)
+    wasm: `# WebAssembly (Node.js & Browser)
+# 1. Run immediately via Node.js CLI runner (no C++ toolchain needed)
+node wasm/namgen-cli.js --fantasy-dragons -c 5
+
+# 2. Or rebuild WebAssembly bundle from source using Emscripten
+make wasm
+
+# 3. Use programmatically in Node.js or modern browsers
+const { initNamgen } = require('./wasm/namgen-cli.js');
+const namgen = await initNamgen();
+console.log(namgen.generate('--fantasy-dragons', 3));`,
+    test: `# Run automated test suite (86 tests)
 ./test.sh
 
 # Run Bats integration tests directly
@@ -110,6 +121,17 @@ bash test/tester.sh`,
               }`}
             >
               Direct g++
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('wasm')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                activeTab === 'wasm'
+                  ? 'bg-emerald-500 text-slate-950 shadow'
+                  : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-white'
+              }`}
+            >
+              WebAssembly / Node.js
             </button>
             <button
               type="button"

@@ -35,6 +35,12 @@ export default function Features() {
         'Generate combinations from built-in or custom wordlists with versatile casing styles (CapWords, camelCase, lowercase), arbitrary separators, and character exclusion filters.',
     },
     {
+      icon: '🌐',
+      title: 'WebAssembly & Node.js (`namgen.wasm`)',
+      description:
+        'All 907 C++ generators compile to standalone WebAssembly via Emscripten. Includes an out-of-the-box Node.js CLI runner and full C-export interop for client-side web applications.',
+    },
+    {
       icon: '🐧',
       title: 'Unix Standard & Environment Config',
       description:

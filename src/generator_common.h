@@ -146,6 +146,13 @@ inline std::string operator+(const std::string& a, double b) {
     if (!s.empty() && s.back() == '.') s.pop_back();
     return a + s;
 }
+inline std::string operator+(std::string&& a, double b) {
+    std::string s = std::to_string(b);
+    while (s.size() > 1 && s.back() == '0') s.pop_back();
+    if (!s.empty() && s.back() == '.') s.pop_back();
+    a += s;
+    return std::move(a);
+}
 inline std::string operator+(double a, const std::string& b) {
     std::string s = std::to_string(a);
     while (s.size() > 1 && s.back() == '0') s.pop_back();
@@ -161,6 +168,10 @@ inline std::string operator+(double a, std::string_view b) {
 
 inline std::string operator+(const std::string& a, int b) {
     return a + std::to_string(b);
+}
+inline std::string operator+(std::string&& a, int b) {
+    a += std::to_string(b);
+    return std::move(a);
 }
 inline std::string operator+(int a, const std::string& b) {
     return std::to_string(a) + b;

@@ -19,6 +19,34 @@ static constexpr int DEFAULT_TERMINAL_LINES = 24;
 
 enum class OutputFormat { Plain, Json, Csv, Slug };
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+
+extern "C" {
+EMSCRIPTEN_KEEPALIVE
+const char* namgen_generate_wasm(const char* flag, uint32_t seed) {
+    static std::string result;
+    static std::mt19937 rng(std::random_device{}());
+    if (seed != 0) {
+        rng.seed(seed);
+    }
+    std::string key = (flag != nullptr) ? flag : "";
+    if (const auto* gen = GeneratorRegistry::instance().find(key)) {
+        result = gen->generate(rng);
+    } else {
+        result = "Error: Unknown generator flag '" + key + "'";
+    }
+    return result.c_str();
+}
+
+EMSCRIPTEN_KEEPALIVE
+int namgen_has_generator_wasm(const char* flag) {
+    std::string key = (flag != nullptr) ? flag : "";
+    return GeneratorRegistry::instance().find(key) != nullptr ? 1 : 0;
+}
+}
+#endif
+
 std::string escapeJson(const std::string& s) {
     std::string out;
     out.reserve(s.size() + 8);

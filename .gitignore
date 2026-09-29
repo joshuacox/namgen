@@ -20,6 +20,7 @@ CMakeUserPresets.json
 #cmake-build-*
 .aider*
 build/
+build-wasm/
 log/
 .venv/
 node_modules/
@@ -28,3 +29,5 @@ out/
 web/.next/
 web/out/
 web/node_modules/
+web/public/wasm/
+
