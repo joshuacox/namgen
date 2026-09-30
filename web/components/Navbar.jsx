@@ -28,7 +28,7 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
             <a href="#simulator" className="hover:text-emerald-400 transition-colors">Simulator</a>
-            <a href="#worldbuilder" className="hover:text-emerald-400 transition-colors">Worldbuilder</a>
+            <a href="#worldbuilder" className="hover:text-emerald-400 transition-colors flex items-center gap-1"><span>🎲</span> DM Studio</a>
             <a href="#terminal" className="hover:text-emerald-400 transition-colors">Web Terminal</a>
             <a href="#features" className="hover:text-emerald-400 transition-colors">Features</a>
             <a href="#installation" className="hover:text-emerald-400 transition-colors">Installation</a>
@@ -78,6 +78,13 @@ export default function Navbar() {
               className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
             >
               Simulator
+            </a>
+            <a
+              href="#worldbuilder"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium text-emerald-400 hover:text-emerald-300 hover:bg-slate-800 flex items-center gap-1.5"
+            >
+              <span>🎲</span> DM Studio
             </a>
             <a
               href="#features"
