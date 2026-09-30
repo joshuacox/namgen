@@ -1,0 +1,17 @@
+[package]
+name = "namgen"
+version = "1.1.0"
+edition = "2021"
+authors = ["Joshua Cox"]
+description = "Ultra-fast fantasy and sci-fi name generator library and bindings for namgen"
+license = "Apache-2.0"
+repository = "https://github.com/joshuacox/namgen"
+readme = "README.md"
+keywords = ["fantasy", "names", "generator", "rpg", "worldbuilding"]
+categories = ["games", "text-processing"]
+
+[dependencies]
+libc = "0.2"
+
+[build-dependencies]
+cc = "1.0"

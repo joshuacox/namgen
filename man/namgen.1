@@ -42,6 +42,39 @@ Minimum character length constraint for generated names
 .B \-\-max\-len NUM
 Maximum character length constraint for generated names
 .TP
+.B \-\-syllables RANGE
+Constraint syllable count (e.g. 2 or 2-3)
+.TP
+.B \-\-alliterate
+Filter for alliterative multi-word names
+.TP
+.B \-\-with\-lore, \-\-meaning
+Append procedural lore epithet and etymological meaning
+.TP
+.B \-\-markov [GEN]
+Generate novel names using character n-gram Markov model trained on generator
+.TP
+.B \-\-order NUM
+N-gram order for Markov synthesizer (default: 3)
+.TP
+.B \-\-train FILE
+Train Markov synthesizer from external text corpus
+.TP
+.B \-\-synthesize COUNT
+Synthesize novel names from trained Markov model
+.TP
+.B \-\-find KEYWORD
+Search available generators matching keyword/pattern
+.TP
+.B \-\-serve [ADDR:PORT]
+Run embedded zero-dependency HTTP REST daemon (default: 127.0.0.1:8080)
+.TP
+.B \-
+Stream standard input line-by-line through casing/formatting pipeline
+.TP
+.B \-\-color[=WHEN]
+Colorize output (auto, always, never; default: auto)
+.TP
 .B \-\-compose GEN1,GEN2
 Compose multiple generators together in a structured format
 .TP

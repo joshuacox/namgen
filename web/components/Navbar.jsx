@@ -28,6 +28,7 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
             <a href="#simulator" className="hover:text-emerald-400 transition-colors">Simulator</a>
+            <a href="#worldbuilder" className="hover:text-emerald-400 transition-colors">Worldbuilder</a>
             <a href="#terminal" className="hover:text-emerald-400 transition-colors">Web Terminal</a>
             <a href="#features" className="hover:text-emerald-400 transition-colors">Features</a>
             <a href="#installation" className="hover:text-emerald-400 transition-colors">Installation</a>

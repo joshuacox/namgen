@@ -15,6 +15,14 @@
 
 #include "generator_registry.h"
 #include "tui.h"
+#include "markov.h"
+#include "linguistics.h"
+#include "lore.h"
+#include "http_server.h"
+
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+#include <unistd.h>
+#endif
 
 namespace fs = std::filesystem;
 
@@ -239,6 +247,24 @@ struct CommandLineOptions {
     bool composeSet = false;
     std::vector<const GeneratorInfo*> composeGenerators;
     std::string composeTemplate = "{1} of {2}";
+    bool markovMode = false;
+    std::string markovGen;
+    int markovOrder = 3;
+    bool trainSet = false;
+    std::string trainFile;
+    bool syllablesSet = false;
+    int minSyllables = 0;
+    int maxSyllables = 0;
+    bool alliterate = false;
+    bool withLore = false;
+    bool findSet = false;
+    std::string findQuery;
+    bool serveMode = false;
+    std::string serveAddress = "127.0.0.1";
+    int servePort = 8080;
+    bool stdinMode = false;
+    bool colorSet = false;
+    std::string colorMode = "auto";
 };
 
 inline bool isValidCandidate(const std::string& s, const CommandLineOptions& opts) {
@@ -246,6 +272,12 @@ inline bool isValidCandidate(const std::string& s, const CommandLineOptions& opt
     if (opts.maxLenSet && s.length() > opts.maxLen) return false;
     if (opts.matchSet) {
         if (!std::regex_search(s, opts.matchRegex)) return false;
+    }
+    if (opts.syllablesSet) {
+        if (!Linguistics::matchesSyllables(s, opts.minSyllables, opts.maxSyllables)) return false;
+    }
+    if (opts.alliterate) {
+        if (!Linguistics::isAlliterative(s)) return false;
     }
     return true;
 }
@@ -268,6 +300,17 @@ inline std::string renderCompose(const std::vector<const GeneratorInfo*>& gens,
         }
     }
     return result;
+}
+
+static bool shouldUseColor(const CommandLineOptions& opts) {
+    if (opts.colorMode == "always") return true;
+    if (opts.colorMode == "never") return false;
+    if (std::getenv("NO_COLOR") != nullptr) return false;
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+    return isatty(STDOUT_FILENO);
+#else
+    return false;
+#endif
 }
 
 void emitOutput(const std::vector<std::string>& results,
@@ -295,9 +338,19 @@ void emitOutput(const std::vector<std::string>& results,
             std::cout << toSlug(name) << "\n";
         }
     } else {
+        bool useColor = shouldUseColor(opts);
         for (std::size_t i = 0; i < results.size(); ++i) {
             if (optDebug) {
                 printGeneratedName(results[i], i, results.size(), adjFile, adjFolder, nounFile, nounFolder, separator);
+            } else if (useColor) {
+                std::string line = results[i];
+                size_t lorePos = line.find(" [");
+                if (lorePos != std::string::npos) {
+                    std::cout << "\033[1;36m" << line.substr(0, lorePos) << "\033[0m \033[33m"
+                              << line.substr(lorePos + 1) << "\033[0m\n";
+                } else {
+                    std::cout << "\033[1;36m" << line << "\033[0m\n";
+                }
             } else {
                 std::cout << results[i] << "\n";
             }
@@ -569,10 +622,93 @@ int main(int argc, char* argv[]) {
                 return 1;
             }
             opts.composeSet = true;
+        } else if (arg == "--markov") {
+            opts.markovMode = true;
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+                ++i;
+                opts.markovGen = argv[i];
+            }
+        } else if (arg == "--order") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --order requires an integer argument.\n";
+                return 1;
+            }
+            ++i;
+            opts.markovOrder = std::stoi(argv[i]);
+        } else if (arg == "--train") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --train requires a file path argument.\n";
+                return 1;
+            }
+            ++i;
+            opts.trainSet = true;
+            opts.trainFile = argv[i];
+            opts.markovMode = true;
+        } else if (arg == "--synthesize") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --synthesize requires a numeric argument.\n";
+                return 1;
+            }
+            ++i;
+            counto = static_cast<std::size_t>(std::stoul(argv[i]));
+            optCountSet = true;
+            opts.markovMode = true;
+        } else if (arg == "--syllables") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --syllables requires a range (e.g. 2 or 2-3).\n";
+                return 1;
+            }
+            ++i;
+            std::string sArg = argv[i];
+            size_t dash = sArg.find('-');
+            if (dash != std::string::npos) {
+                opts.minSyllables = std::stoi(sArg.substr(0, dash));
+                opts.maxSyllables = std::stoi(sArg.substr(dash + 1));
+            } else {
+                opts.minSyllables = std::stoi(sArg);
+                opts.maxSyllables = opts.minSyllables;
+            }
+            opts.syllablesSet = true;
+        } else if (arg == "--alliterate") {
+            opts.alliterate = true;
+        } else if (arg == "--with-lore" || arg == "--meaning") {
+            opts.withLore = true;
+        } else if (arg == "--find") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --find requires a search keyword.\n";
+                return 1;
+            }
+            ++i;
+            opts.findSet = true;
+            opts.findQuery = argv[i];
+        } else if (arg == "--serve") {
+            opts.serveMode = true;
+            if (i + 1 < argc && argv[i + 1][0] != '-') {
+                ++i;
+                std::string sArg = argv[i];
+                size_t colon = sArg.find(':');
+                if (colon != std::string::npos) {
+                    opts.serveAddress = sArg.substr(0, colon);
+                    opts.servePort = std::stoi(sArg.substr(colon + 1));
+                } else {
+                    opts.servePort = std::stoi(sArg);
+                }
+            }
+        } else if (arg == "-") {
+            opts.stdinMode = true;
+        } else if (arg.rfind("--color=", 0) == 0) {
+            opts.colorSet = true;
+            opts.colorMode = arg.substr(8);
+        } else if (arg == "--color") {
+            opts.colorSet = true;
+            opts.colorMode = "always";
+        } else if (arg == "--no-color") {
+            opts.colorSet = true;
+            opts.colorMode = "never";
         } else if (arg == "--debug") {
             optDebug = true;
         } else if (arg == "--help" || arg == "-h") {
-            std::cout << "Usage: ./namgen [options]\n\n";
+            std::cout << "Usage: ./namgen [options] [generator]\n\n";
             std::cout << "Options:\n";
             std::cout << "  -a, --adj-file FILE      Path to custom adjectives file\n";
             std::cout << "  -e, --exclude STRING     Characters to strip from generated words\n";
@@ -585,8 +721,19 @@ int main(int argc, char* argv[]) {
             std::cout << "  -m, --match REGEX        Filter generated names by regular expression\n";
             std::cout << "  --min-len NUM            Minimum character length of generated names\n";
             std::cout << "  --max-len NUM            Maximum character length of generated names\n";
+            std::cout << "  --syllables RANGE        Constraint syllable count (e.g. 2 or 2-3)\n";
+            std::cout << "  --alliterate             Filter for alliterative multi-word names\n";
+            std::cout << "  --with-lore, --meaning   Append procedural lore epithet and meaning\n";
+            std::cout << "  --markov [GEN]           Generate novel names using Markov n-gram model\n";
+            std::cout << "  --order NUM              N-gram order for Markov synthesizer (default: 3)\n";
+            std::cout << "  --train FILE             Train Markov synthesizer from external text corpus\n";
+            std::cout << "  --synthesize COUNT       Synthesize novel names from trained Markov model\n";
+            std::cout << "  --find KEYWORD           Search generators matching keyword/pattern\n";
             std::cout << "  --compose GEN1,GEN2      Compose multiple generators together\n";
             std::cout << "  --template STRING        Template for composition (default: \"{1} of {2}\")\n";
+            std::cout << "  --serve [ADDR:PORT]      Run embedded zero-dependency HTTP REST daemon (default: 127.0.0.1:8080)\n";
+            std::cout << "  -                        Stream stdin line-by-line through casing/formatting pipeline\n";
+            std::cout << "  --color[=WHEN]           Colorize output (auto, always, never; default: auto)\n";
             std::cout << "  -i, --interactive        Launch interactive terminal explorer UI\n";
             std::cout << "  --json                   Output results as a JSON array of strings\n";
             std::cout << "  --csv                    Output results in CSV format\n";
@@ -669,9 +816,127 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // Embedded HTTP daemon mode
+    if (opts.serveMode) {
+        return namgen::runHttpServer(opts.serveAddress, opts.servePort);
+    }
+
+    // Stdin stream processing mode
+    if (opts.stdinMode) {
+        std::string line;
+        std::vector<std::string> results;
+        while (std::getline(std::cin, line)) {
+            if (line.empty()) continue;
+            std::string item = line;
+            if (opts.composeSet) {
+                std::string tmpl = opts.composeTemplate;
+                size_t pos = 0;
+                while ((pos = tmpl.find("{0}", pos)) != std::string::npos) {
+                    tmpl.replace(pos, 3, item);
+                    pos += item.length();
+                }
+                item = renderCompose(opts.composeGenerators, tmpl, rng);
+            }
+            if (capcasing) {
+                capitalizeFirst(item);
+            }
+            if (opts.format == OutputFormat::Slug) {
+                item = toSlug(item);
+            }
+            if (!isValidCandidate(item, opts)) continue;
+            if (opts.withLore) {
+                item = Lore::formatWithLore(item, rng);
+            }
+            results.push_back(std::move(item));
+        }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "");
+        return 0;
+    }
+
+    // Keyword search mode
+    if (opts.findSet) {
+        auto matches = GeneratorRegistry::instance().search(opts.findQuery);
+        if (matches.empty()) {
+            std::cout << "No generators found matching '" << opts.findQuery << "'.\n";
+            return 0;
+        }
+        std::cout << "Found " << matches.size() << " matching generator(s):\n\n";
+        for (const auto* gen : matches) {
+            std::string sample = gen->generate(rng);
+            std::cout << "  --" << gen->flag << "\n";
+            std::cout << "      Description : " << gen->description << "\n";
+            std::cout << "      Sample Roll : " << sample << "\n\n";
+        }
+        return 0;
+    }
+
     // Interactive TUI mode
     if (opts.interactive) {
         return namgen::runInteractiveTui(rng);
+    }
+
+    // Markov synthesis mode
+    if (opts.markovMode) {
+        MarkovModel model(opts.markovOrder);
+        if (opts.trainSet) {
+            if (!model.trainFromFile(opts.trainFile)) {
+                std::cerr << "Error: could not train Markov model from file '" << opts.trainFile << "'\n";
+                return 1;
+            }
+        } else {
+            const GeneratorInfo* targetGen = nullptr;
+            if (!opts.markovGen.empty()) {
+                targetGen = GeneratorRegistry::instance().find(opts.markovGen);
+                if (!targetGen && opts.markovGen.rfind("--", 0) != 0) {
+                    targetGen = GeneratorRegistry::instance().find("--" + opts.markovGen);
+                }
+                if (!targetGen) {
+                    std::cerr << "Error: unknown generator for Markov synthesis: '" << opts.markovGen << "'\n";
+                    return 1;
+                }
+            } else if (opts.activeGenerator) {
+                targetGen = opts.activeGenerator;
+            }
+
+            std::vector<std::string> trainingSamples;
+            trainingSamples.reserve(100);
+            if (targetGen) {
+                for (int s = 0; s < 100; ++s) {
+                    trainingSamples.push_back(targetGen->generate(rng));
+                }
+            } else {
+                if (const auto* elfGen = GeneratorRegistry::instance().find("fantasy-elves")) {
+                    for (int s = 0; s < 100; ++s) {
+                        trainingSamples.push_back(elfGen->generate(rng));
+                    }
+                }
+            }
+            model.train(trainingSamples);
+        }
+
+        std::vector<std::string> results;
+        results.reserve(counto);
+        std::unordered_set<std::string> seen;
+        std::size_t attempts = 0;
+        const std::size_t maxAttempts = counto * 200 + 5000;
+        while (results.size() < counto && attempts < maxAttempts) {
+            ++attempts;
+            std::string name = model.generate(rng);
+            if (name.empty()) continue;
+            if (!isValidCandidate(name, opts)) continue;
+            if (opts.withLore) {
+                name = Lore::formatWithLore(name, rng);
+            }
+            if (opts.unique) {
+                if (seen.insert(name).second) {
+                    results.push_back(std::move(name));
+                }
+            } else {
+                results.push_back(std::move(name));
+            }
+        }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "");
+        return 0;
     }
 
     // Generator composition
@@ -685,6 +950,9 @@ int main(int argc, char* argv[]) {
             ++attempts;
             std::string name = renderCompose(opts.composeGenerators, opts.composeTemplate, rng);
             if (!isValidCandidate(name, opts)) continue;
+            if (opts.withLore) {
+                name = Lore::formatWithLore(name, rng);
+            }
             if (opts.unique) {
                 if (seen.insert(name).second) {
                     results.push_back(std::move(name));
@@ -708,6 +976,9 @@ int main(int argc, char* argv[]) {
             ++attempts;
             std::string name = opts.activeGenerator->generate(rng);
             if (!isValidCandidate(name, opts)) continue;
+            if (opts.withLore) {
+                name = Lore::formatWithLore(name, rng);
+            }
             if (opts.unique) {
                 if (seen.insert(name).second) {
                     results.push_back(std::move(name));
@@ -815,6 +1086,9 @@ int main(int argc, char* argv[]) {
 
         std::string generatedName = generateName(adjective, noun, nullSeparator, separator, camelcasing);
         if (!isValidCandidate(generatedName, opts)) continue;
+        if (opts.withLore) {
+            generatedName = Lore::formatWithLore(generatedName, rng);
+        }
         if (opts.unique) {
             if (seen.insert(generatedName).second) {
                 results.push_back(std::move(generatedName));

@@ -82,6 +82,16 @@ export default function Playground() {
     URL.revokeObjectURL(url);
   };
 
+  const speakName = (name) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window && name) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(name);
+      utterance.rate = 0.85;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   // Initialize WebAssembly engine on mount
   useEffect(() => {
     let isMounted = true;
@@ -379,18 +389,28 @@ export default function Playground() {
           <div key={idx} className="py-1 border-b border-slate-800/50 last:border-0 font-medium text-slate-200 flex items-center justify-between group">
             <span>{sample}</span>
             {sample && sample !== '(No matching names found)' && (
-              <button
-                type="button"
-                onClick={() => toggleFavorite(sample)}
-                className={`p-1 text-xs rounded transition-all ${
-                  favorites.includes(sample)
-                    ? 'text-red-400 hover:text-red-300 scale-110'
-                    : 'text-slate-600 hover:text-red-400 opacity-40 group-hover:opacity-100'
-                }`}
-                title={favorites.includes(sample) ? 'Remove favorite' : 'Save to favorites'}
-              >
-                {favorites.includes(sample) ? '❤️' : '🤍'}
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => speakName(sample)}
+                  className="p-1 text-xs rounded text-slate-500 hover:text-emerald-400 opacity-40 group-hover:opacity-100 transition-all"
+                  title="Pronounce with audio synthesis"
+                >
+                  🔊
+                </button>
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(sample)}
+                  className={`p-1 text-xs rounded transition-all ${
+                    favorites.includes(sample)
+                      ? 'text-red-400 hover:text-red-300 scale-110'
+                      : 'text-slate-600 hover:text-red-400 opacity-40 group-hover:opacity-100'
+                  }`}
+                  title={favorites.includes(sample) ? 'Remove favorite' : 'Save to favorites'}
+                >
+                  {favorites.includes(sample) ? '❤️' : '🤍'}
+                </button>
+              </div>
             )}
           </div>
         ))}

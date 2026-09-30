@@ -450,4 +450,59 @@ setup() {
   [[ "$status" -ne 0 ]]
 }
 
+@test "test namgen --find keyword search" {
+  result=$(./namgen --find dragon)
+  has_match=$(echo "$result" | grep -c "\-\-descriptions-dragons")
+  [[ "$has_match" -ge 1 ]]
+}
+
+@test "test namgen --markov n-gram synthesis" {
+  result=$(./namgen --markov fantasy-elfs -c 5 --seed 42)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 5 ]]
+}
+
+@test "test namgen --syllables constraint" {
+  result=$(./namgen --syllables 2 -c 5 --seed 42)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 5 ]]
+}
+
+@test "test namgen --alliterate constraint" {
+  result=$(./namgen --fantasy-elfs --alliterate -c 5 --seed 100)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 5 ]]
+  while IFS= read -r line; do
+    first_char=$(echo "$line" | cut -c1 | tr '[:upper:]' '[:lower:]')
+    second_word_char=$(echo "$line" | awk '{print $2}' | cut -c1 | tr '[:upper:]' '[:lower:]')
+    [[ "$first_char" == "$second_word_char" ]]
+  done <<< "$result"
+}
+
+@test "test namgen --with-lore formatting" {
+  result=$(./namgen --fantasy-elfs --with-lore -c 3 --seed 777)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 3 ]]
+  has_bracket=$(echo "$result" | grep -c "\[")
+  [[ "$has_bracket" -eq 3 ]]
+}
+
+@test "test namgen stdin stream pipeline" {
+  result=$(echo -e "Alpha Beta\nGamma Delta" | ./namgen - --slug)
+  line_count=$(echo "$result" | wc -l)
+  [[ "$line_count" -eq 2 ]]
+  line1=$(echo "$result" | head -n 1)
+  [[ "$line1" == "alpha-beta" ]]
+}
+
+@test "test namgen --serve HTTP REST daemon" {
+  ./namgen --serve 127.0.0.1:8988 > /dev/null 2>&1 &
+  PID=$!
+  sleep 1
+  resp=$(curl -s http://127.0.0.1:8988/healthz)
+  kill -9 $PID
+  [[ "$resp" =~ "ok" ]]
+}
+
+
 

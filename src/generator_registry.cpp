@@ -966,6 +966,23 @@ static std::vector<std::string> generateSpellingVariants(const std::string& key)
     if (key.size() >= 4 && key.rfind("ies") == key.size() - 3 && isConsonant(key[key.size() - 4])) {
         variants.push_back(key.substr(0, key.size() - 3) + "ys");
     }
+    // elfs <-> elves, dwarfs <-> dwarves, wolfs <-> wolves, halfs <-> halves
+    auto replaceAll = [](std::string str, const std::string& from, const std::string& to) -> std::string {
+        size_t start_pos = 0;
+        while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+            str.replace(start_pos, from.length(), to);
+            start_pos += to.length();
+        }
+        return str;
+    };
+    if (key.find("elfs") != std::string::npos) variants.push_back(replaceAll(key, "elfs", "elves"));
+    if (key.find("elves") != std::string::npos) variants.push_back(replaceAll(key, "elves", "elfs"));
+    if (key.find("dwarfs") != std::string::npos) variants.push_back(replaceAll(key, "dwarfs", "dwarves"));
+    if (key.find("dwarves") != std::string::npos) variants.push_back(replaceAll(key, "dwarves", "dwarfs"));
+    if (key.find("wolfs") != std::string::npos) variants.push_back(replaceAll(key, "wolfs", "wolves"));
+    if (key.find("wolves") != std::string::npos) variants.push_back(replaceAll(key, "wolves", "wolfs"));
+    if (key.find("halfs") != std::string::npos) variants.push_back(replaceAll(key, "halfs", "halves"));
+    if (key.find("halves") != std::string::npos) variants.push_back(replaceAll(key, "halves", "halfs"));
     return variants;
 }
 
@@ -1003,6 +1020,44 @@ const GeneratorInfo* GeneratorRegistry::find(const std::string& flagName) const 
         }
     }
     return nullptr;
+}
+
+std::vector<const GeneratorInfo*> GeneratorRegistry::search(const std::string& query) const {
+    std::vector<const GeneratorInfo*> results;
+    if (query.empty()) return results;
+
+    std::string q = query;
+    std::transform(q.begin(), q.end(), q.begin(), [](unsigned char c) { return std::tolower(c); });
+    std::string qNorm = normalizeKey(q);
+
+    for (const auto& gen : generators_) {
+        std::string flagLower = gen->flag;
+        std::transform(flagLower.begin(), flagLower.end(), flagLower.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::string flagNorm = normalizeKey(gen->flag);
+
+        std::string descLower = gen->description;
+        std::transform(descLower.begin(), descLower.end(), descLower.begin(), [](unsigned char c) { return std::tolower(c); });
+
+        bool match = (flagLower.find(q) != std::string::npos) ||
+                     (flagNorm.find(qNorm) != std::string::npos) ||
+                     (descLower.find(q) != std::string::npos);
+
+        if (!match) {
+            for (const auto& alias : gen->aliases) {
+                std::string aLower = alias;
+                std::transform(aLower.begin(), aLower.end(), aLower.begin(), [](unsigned char c) { return std::tolower(c); });
+                if (aLower.find(q) != std::string::npos || normalizeKey(alias).find(qNorm) != std::string::npos) {
+                    match = true;
+                    break;
+                }
+            }
+        }
+
+        if (match) {
+            results.push_back(gen.get());
+        }
+    }
+    return results;
 }
 
 const std::vector<std::unique_ptr<GeneratorInfo>>& GeneratorRegistry::getAll() const {

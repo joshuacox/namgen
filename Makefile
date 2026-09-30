@@ -1,12 +1,13 @@
 MAKEFLAGS += -j$(shell nproc 2>/dev/null || echo 4)
 
 CXX ?= g++
-CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -Isrc
+CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -Isrc -fPIC
 SRCS := $(wildcard src/*.cpp)
 OBJS := $(SRCS:src/%.cpp=build/%.o)
 TARGET := namgen
+LIB_TARGET := libnamgen.so
 
-all: $(TARGET)
+all: $(TARGET) $(LIB_TARGET)
 
 build:
 	mkdir -p build
@@ -16,6 +17,9 @@ build/%.o: src/%.cpp | build
 
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) -o $@
+
+$(LIB_TARGET): $(OBJS)
+	$(CXX) -shared $(OBJS) -o $@
 
 clean:
 	rm -rf build $(WASM_BUILD) $(TARGET) $(WASM_DIR)

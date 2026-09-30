@@ -40,8 +40,9 @@ jobs:
 
       - name: Package Release Archive
         run: |
-          mkdir -p package/bin package/share/namgen package/share/man/man1 package/completions
+          mkdir -p package/bin package/lib package/share/namgen package/share/man/man1 package/completions
           cp namgen package/bin/
+          cp libnamgen.* package/lib/ 2>/dev/null || true
           cp -r assets package/share/namgen/
           cp man/namgen.1 package/share/man/man1/
           cp completions/* package/completions/

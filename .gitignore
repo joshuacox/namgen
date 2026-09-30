@@ -34,4 +34,7 @@ __pycache__/
 *.pyc
 *.egg-info/
 dist/
+*.so
+*.dylib
+*.dll
 

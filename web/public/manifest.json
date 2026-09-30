@@ -1,21 +1,16 @@
 {
-  "name": "namgen - Flexible & Procedural Name Generator",
+  "name": "namgen — Ultra-Fast Procedural Name Generator",
   "short_name": "namgen",
-  "description": "Ultra-fast procedural fantasy, sci-fi, and combinator name generator CLI and interactive playground.",
-  "start_url": "./",
+  "description": "High-performance procedural fantasy and sci-fi name generator with 907 modules and WebAssembly engine.",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#090d16",
-  "theme_color": "#6366f1",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
   "icons": [
     {
-      "src": "images/hero-banner.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "images/hero-banner.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
   ]
 }

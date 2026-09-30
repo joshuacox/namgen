@@ -10,12 +10,32 @@ add_executable(namgen
     src/namgen.cpp
     src/generator_registry.cpp
     src/tui.cpp
+    src/markov.cpp
+    src/linguistics.cpp
+    src/lore.cpp
+    src/http_server.cpp
+    src/libnamgen.cpp
     ${GENERATOR_SOURCES}
 )
 
 target_include_directories(namgen PRIVATE src)
 
-install(TARGETS namgen DESTINATION bin)
+add_library(libnamgen SHARED
+    src/generator_registry.cpp
+    src/markov.cpp
+    src/linguistics.cpp
+    src/lore.cpp
+    src/libnamgen.cpp
+    ${GENERATOR_SOURCES}
+)
+set_target_properties(libnamgen PROPERTIES OUTPUT_NAME "namgen")
+target_include_directories(libnamgen PRIVATE src)
+
+install(TARGETS namgen libnamgen
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
 install(DIRECTORY assets/ DESTINATION share/namgen/assets)
 install(FILES man/namgen.1 DESTINATION share/man/man1)
 install(FILES completions/namgen.bash DESTINATION share/bash-completion/completions RENAME namgen)

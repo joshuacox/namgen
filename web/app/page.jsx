@@ -4,6 +4,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Playground from '../components/Playground';
+import WorldbuilderBoard from '../components/WorldbuilderBoard';
 import WebTerminal from '../components/WebTerminal';
 import Features from '../components/Features';
 import Installation from '../components/Installation';
@@ -20,6 +21,7 @@ export default function HomePage() {
       <main className="flex-grow">
         <Hero />
         <Playground />
+        <WorldbuilderBoard />
         <WebTerminal />
         <Features />
         <Installation />

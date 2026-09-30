@@ -27,6 +27,9 @@ public:
     // Lookup a generator by flag name or alias (with or without leading "--", hyphen/underscore tolerant)
     const GeneratorInfo* find(const std::string& flagName) const;
 
+    // Search generators by substring / keyword in flag, alias, or description
+    std::vector<const GeneratorInfo*> search(const std::string& query) const;
+
     // Get all registered generators in insertion order
     const std::vector<std::unique_ptr<GeneratorInfo>>& getAll() const;
 
