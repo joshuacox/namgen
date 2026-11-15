@@ -30,6 +30,16 @@ web/.next/
 web/out/
 web/node_modules/
 web/public/wasm/
+apps/githubio/.next/
+apps/githubio/out/
+apps/githubio/node_modules/
+apps/githubio/public/generators/
+apps/githubio/public/wasm/
+apps/web/.next/
+apps/web/out/
+apps/web/node_modules/
+apps/web/.namgen-dm/
+packages/namgen.js/node_modules/
 __pycache__/
 *.pyc
 *.egg-info/

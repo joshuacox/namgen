@@ -1,0 +1,33 @@
+{
+  "name": "namgen.js",
+  "version": "1.0.0",
+  "description": "Isomorphic JavaScript and WebAssembly SDK for namgen's 907 procedural name generators, word combinator, and tabletop RPG datasets.",
+  "main": "./src/index.js",
+  "types": "./index.d.ts",
+  "bin": {
+    "namgen-wasm": "./bin/namgen-cli.js",
+    "namgen-js": "./bin/namgen-cli.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./browser": "./src/browser.js",
+    "./node": "./src/node.js",
+    "./dnd": "./src/dnd.js",
+    "./data/*": "./data/*"
+  },
+  "scripts": {
+    "test": "node --test test/namgen.test.js"
+  },
+  "keywords": [
+    "namgen",
+    "name-generator",
+    "fantasy-names",
+    "dnd",
+    "dungeon-master",
+    "wasm",
+    "webassembly",
+    "procedural-generation"
+  ],
+  "author": "Joshua Cox",
+  "license": "GPL-3.0-only"
+}

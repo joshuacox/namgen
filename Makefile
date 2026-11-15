@@ -22,7 +22,7 @@ $(LIB_TARGET): $(OBJS)
 	$(CXX) -shared $(OBJS) -o $@
 
 clean:
-	rm -rf build $(WASM_BUILD) $(TARGET) $(WASM_DIR)
+	rm -rf build $(WASM_BUILD) $(TARGET) $(LIB_TARGET)
 
 test: $(TARGET)
 	bash test/tester.sh
@@ -34,7 +34,7 @@ completions: $(TARGET)
 WASM_CXX ?= em++
 WASM_CXXFLAGS ?= -std=c++17 -O2 -Isrc
 WASM_BUILD := build-wasm
-WASM_DIR := wasm
+WASM_DIR := packages/namgen.js/wasm
 WASM_OBJS := $(SRCS:src/%.cpp=$(WASM_BUILD)/%.o)
 WASM_TARGET := $(WASM_DIR)/namgen.js
 
@@ -56,10 +56,6 @@ $(WASM_TARGET): $(WASM_OBJS)
 	  -sMODULARIZE=1 \
 	  -sEXPORT_NAME="createNamgen" \
 	  --preload-file assets@/usr/local/share/namgen/assets
-	mkdir -p web/public/wasm
-	cp $(WASM_DIR)/namgen.wasm web/public/wasm/ 2>/dev/null || true
-	cp $(WASM_DIR)/namgen.js web/public/wasm/ 2>/dev/null || true
-	cp $(WASM_DIR)/namgen.data web/public/wasm/ 2>/dev/null || true
 
 
 install: $(TARGET) completions

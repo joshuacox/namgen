@@ -5,7 +5,10 @@ on:
     branches:
       - main
     paths:
-      - 'web/**'
+      - 'apps/githubio/**'
+      - 'packages/namgen.js/**'
+      - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/deploy-web.yml'
       - 'scripts/export_web_generators.py'
       - '.javascript-fantasy-names-deprecated/**'
@@ -35,31 +38,26 @@ jobs:
         with:
           node-version: 22
           cache: 'npm'
-          cache-dependency-path: 'web/package-lock.json'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Setup GitHub Pages configuration
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: |
-          cd web
-          npm ci
+        run: npm ci
 
       - name: Export live JavaScript generator scripts
-        run: |
-          python3 scripts/export_web_generators.py
+        run: python3 scripts/export_web_generators.py
 
       - name: Build static site with Next.js export
         env:
           GITHUB_PAGES: 'true'
-        run: |
-          cd web
-          npm run build
+        run: npm run build --workspace=apps/githubio
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './web/out'
+          path: './apps/githubio/out'
 
   deploy:
     environment:

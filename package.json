@@ -1,0 +1,20 @@
+{
+  "name": "namgen-monorepo",
+  "private": true,
+  "version": "2.0.0",
+  "description": "Monorepo for namgen C++17 procedural name generator, namgen.js shared SDK, GitHub Pages showcase, and private local Dungeon Master tabletop app.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "dev:dm": "npm run dev --workspace=apps/web",
+    "dev:githubio": "npm run dev --workspace=apps/githubio",
+    "build": "npm run build --workspace=apps/githubio && npm run build --workspace=apps/web",
+    "build:githubio": "npm run build --workspace=apps/githubio",
+    "build:web": "npm run build --workspace=apps/web",
+    "start": "npm run start --workspace=apps/web",
+    "test:js": "npm run test --workspace=packages/namgen.js"
+  }
+}

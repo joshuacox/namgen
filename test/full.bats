@@ -399,10 +399,10 @@ setup() {
   if ! command -v node >/dev/null 2>&1; then
     skip "node not found"
   fi
-  if [ ! -f "wasm/namgen.js" ]; then
-    skip "wasm/namgen.js not built"
+  if [ ! -f "packages/namgen.js/wasm/namgen.js" ]; then
+    skip "packages/namgen.js/wasm/namgen.js not built"
   fi
-  result=$(node wasm/namgen-cli.js --fantasy-dragons -c 5 | wc -l)
+  result=$(node packages/namgen.js/bin/namgen-cli.js --fantasy-dragons -c 5 | wc -l)
   [[ "$result" -eq 5 ]]
 }
 
@@ -410,12 +410,20 @@ setup() {
   if ! command -v node >/dev/null 2>&1; then
     skip "node not found"
   fi
-  if [ ! -f "wasm/namgen.js" ]; then
-    skip "wasm/namgen.js not built"
+  if [ ! -f "packages/namgen.js/wasm/namgen.js" ]; then
+    skip "packages/namgen.js/wasm/namgen.js not built"
   fi
-  r1=$(node wasm/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
-  r2=$(node wasm/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
+  r1=$(node packages/namgen.js/bin/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
+  r2=$(node packages/namgen.js/bin/namgen-cli.js --fantasy-dragons -c 3 --seed 12345)
   [[ "$r1" == "$r2" ]]
+}
+
+@test "test packages/namgen.js programmatic generation" {
+  if ! command -v node >/dev/null 2>&1; then
+    skip "node not found"
+  fi
+  result=$(node -e "const n = require('./packages/namgen.js/src/node.js'); console.log(n.generateNames('dungeon_and_dragons-elfs', 3).join('\n'));" | wc -l)
+  [[ "$result" -eq 3 ]]
 }
 
 @test "test namgen --match regex filtering" {

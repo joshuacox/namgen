@@ -59,6 +59,11 @@ curl https://raw.githubusercontent.com/joshuacox/namgen/refs/heads/main/scripts/
 
 ```text
 namgen/
+├── apps/
+│   ├── githubio/         # Next.js static documentation site & simulator (GitHub Pages)
+│   └── web/              # Private local-first D&D Dungeon Master command center app
+├── packages/
+│   └── namgen.js/        # Shared isomorphic JS/WASM SDK, 907 modules, & D&D datasets
 ├── assets/               # Default wordlists (adjectives, nouns)
 ├── harness/              # AI porting & evaluation harness (Aider, Loopster, models)
 │   ├── fantasyloop.sh    # Generator porting loop runner
@@ -71,11 +76,43 @@ namgen/
 │   ├── generator_registry.h / .cpp # Centralized dynamic generator registry
 │   └── *_lib.cpp / *_lib.h # 907 modular procedural name generators (zero-allocation .rodata)
 ├── test/                 # Test suites (Bats integration tests & tester.sh)
-├── web/                  # Next.js static documentation website & interactive simulator
 ├── CMakeLists.txt        # CMake configuration with dynamic source discovery
 ├── Makefile              # Parallel build & installation targets
+├── package.json          # npm workspaces monorepo configuration
 └── Dockerfile            # Container build specification
 ```
+
+---
+
+## Monorepo Apps & `namgen.js`
+
+This repository is organized as an npm workspaces monorepo alongside the native C++17 CLI, Go, Python, and Rust bindings:
+
+- **`packages/namgen.js`**: Shared JS & WebAssembly runtime exposing all 907 procedural generators, combinator, formatting/linguistics helpers, and D&D 5e datasets (`namgen.js`, `namgen.js/node`, `namgen.js/browser`, `namgen.js/dnd`).
+- **`apps/web`**: Private, offline-capable local Next.js Dungeon Master Command Center for running D&D sessions on your laptop (NPC Forge, Combat & Initiative Tracker, Taverns & Shops, 5-Room Dungeons, Loot & Encounters, Factions, Local Campaign Codex & Markdown Vault, and spoiler-free `/handout` second-screen view).
+- **`apps/githubio`**: Static documentation and interactive showcase published to GitHub Pages.
+
+### Running the Private Local D&D DM App
+
+```bash
+# Install monorepo dependencies once
+npm install
+
+# Run the private Dungeon Master app locally (http://localhost:3000)
+npm run dev
+
+# Or build and run in production mode locally
+npm run build:web
+npm run start
+
+# Run the static GitHub Pages documentation app locally (http://localhost:3001)
+npm run dev:githubio
+
+# Run namgen.js tests
+npm run test:js
+```
+
+Campaigns, saved NPCs, combat state, and Markdown session notes are stored privately on your local disk under `apps/web/.namgen-dm/` (override with `NAMGEN_DM_DATA_DIR`).
 
 ---
 

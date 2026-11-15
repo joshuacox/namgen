@@ -113,7 +113,9 @@ def main():
     generators.sort(key=lambda g: (g['categoryName'], g['name']))
 
     # Write generators.json
-    out_path = os.path.join(repo_root, 'web', 'data', 'generators.json')
+    data_dir = os.path.join(repo_root, 'packages', 'namgen.js', 'data')
+    os.makedirs(data_dir, exist_ok=True)
+    out_path = os.path.join(data_dir, 'generators.json')
     with open(out_path, 'w', encoding='utf-8') as f:
         json.dump(generators, f, indent=2, ensure_ascii=False)
     print(f"Wrote {len(generators)} generators to {out_path}")
@@ -132,7 +134,7 @@ def main():
         cats_map[cid]['count'] += 1
 
     categories = sorted(cats_map.values(), key=lambda c: -c['count'])
-    cat_path = os.path.join(repo_root, 'web', 'data', 'categories.json')
+    cat_path = os.path.join(data_dir, 'categories.json')
     with open(cat_path, 'w', encoding='utf-8') as f:
         json.dump(categories, f, indent=2, ensure_ascii=False)
     print(f"Wrote {len(categories)} categories to {cat_path}")
@@ -146,7 +148,7 @@ def main():
     with open(noun_file) as f:
         nouns = [line.strip() for line in f if line.strip()][:150]
 
-    words_path = os.path.join(repo_root, 'web', 'data', 'words.json')
+    words_path = os.path.join(data_dir, 'words.json')
     with open(words_path, 'w', encoding='utf-8') as f:
         json.dump({'adjectives': adjs, 'nouns': nouns}, f, indent=2)
     print(f"Wrote {len(adjs)} adjectives and {len(nouns)} nouns to {words_path}")

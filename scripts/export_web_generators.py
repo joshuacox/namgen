@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Export all 907 JavaScript generators from .javascript-fantasy-names-deprecated/generators
-into web/public/generators/<gen_id>.js wrapped for direct, safe execution in the browser.
+into packages/namgen.js/generators/<gen_id>.js wrapped for direct, safe execution in browser and Node.js.
 """
 import os
 import re
@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-GENS_JSON = REPO_ROOT / "web" / "data" / "generators.json"
+GENS_JSON = REPO_ROOT / "packages" / "namgen.js" / "data" / "generators.json"
 SOURCE_BASE = REPO_ROOT / ".javascript-fantasy-names-deprecated" / "generators"
-TARGET_DIR = REPO_ROOT / "web" / "public" / "generators"
+TARGET_DIR = REPO_ROOT / "packages" / "namgen.js" / "generators"
 
 def main():
     TARGET_DIR.mkdir(parents=True, exist_ok=True)
