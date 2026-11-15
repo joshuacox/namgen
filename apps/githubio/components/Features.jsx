@@ -12,7 +12,7 @@ export default function Features() {
     },
     {
       icon: '⚡',
-      title: '907 Lore-Accurate Generators',
+      title: '917 Lore-Accurate Generators',
       description:
         'Over 900 standalone procedural generators spanning 40 categories—from narrative character & planet descriptions to DnD, Star Wars, Warhammer, Elder Scrolls, Pokémon, and historical cultures.',
     },
@@ -20,7 +20,7 @@ export default function Features() {
       icon: '🚀',
       title: 'Sub-Millisecond Execution',
       description:
-        'Compiled directly with GCC/Clang with -O2 optimization. All 907 generators can be executed sequentially in under 19 seconds, making namgen ideal for scripts, game development, and pipelines.',
+        'Compiled directly with GCC/Clang with -O2 optimization. All 917 generators can be executed sequentially in under 19 seconds, making namgen ideal for scripts, game development, and pipelines.',
     },
     {
       icon: '🧩',
@@ -38,7 +38,7 @@ export default function Features() {
       icon: '🌐',
       title: 'WebAssembly & Node.js (`namgen.wasm`)',
       description:
-        'All 907 C++ generators compile to standalone WebAssembly via Emscripten. Includes an out-of-the-box Node.js CLI runner and full C-export interop for client-side web applications.',
+        'All 917 C++ generators compile to standalone WebAssembly via Emscripten. Includes an out-of-the-box Node.js CLI runner and full C-export interop for client-side web applications.',
     },
     {
       icon: '🐧',

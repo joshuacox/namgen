@@ -18,7 +18,7 @@ export default function Navbar() {
               <span>namgen</span>
             </a>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-950/70 border border-emerald-500/30 text-emerald-400">
-              907 Generators
+              917 Generators
             </span>
             <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-slate-800 text-slate-300">
               C++17

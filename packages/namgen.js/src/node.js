@@ -8,6 +8,7 @@ const {
   generateCombinations,
   composeGenerators,
 } = require('./combinator');
+const nameChecker = require('./nameChecker');
 
 let cachedPkgRoot = null;
 let cachedWasmPromise = null;
@@ -81,7 +82,7 @@ function loadGeneratorNode(idOrFlag) {
 }
 
 /**
- * Generate `count` names using any of the 907 procedural generators or the combinator.
+ * Generate `count` names using any of the 917 procedural generators or the combinator.
  */
 function generateNames(idOrFlag, count = 1, options = {}) {
   if (!idOrFlag || idOrFlag === 'combinator' || idOrFlag === 'default') {
@@ -169,4 +170,5 @@ module.exports = {
   composeNamesNode,
   generateBatch,
   initNodeWasm,
+  nameChecker,
 };

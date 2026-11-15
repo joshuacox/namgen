@@ -13,6 +13,11 @@
 #include "armour-pauldrons_lib.h"
 #include "armour-shields_lib.h"
 #include "armour-vambraces_lib.h"
+#include "brand-arcane_cyberpunk_lib.h"
+#include "brand-classical_etymology_lib.h"
+#include "brand-functional_minimalist_lib.h"
+#include "brand-punchy_portmanteaus_lib.h"
+#include "brand-sovereign_neologisms_lib.h"
 #include "descriptions-aliens_lib.h"
 #include "descriptions-animals_lib.h"
 #include "descriptions-armys_lib.h"
@@ -792,6 +797,11 @@
 #include "star_wars_the_old_republic-togrutas_lib.h"
 #include "star_wars_the_old_republic-twileks_lib.h"
 #include "star_wars_the_old_republic-zabraks_lib.h"
+#include "tabletop-dungeon_traps_lib.h"
+#include "tabletop-item_quirks_lib.h"
+#include "tabletop-plot_hooks_lib.h"
+#include "tabletop-tavern_rumors_lib.h"
+#include "tabletop-villain_schemes_lib.h"
 #include "the_witcher-dwarfs_lib.h"
 #include "the_witcher-elfs_lib.h"
 #include "the_witcher-halflings_lib.h"
@@ -1124,6 +1134,36 @@ void GeneratorRegistry::initBuiltins() {
         {},
         "Generate Armour Vambraces style names",
         [](std::mt19937& rng) { return generate_armour_vambraces_name(rng, 0); }
+    });
+    registerGenerator({
+        "brand-arcane_cyberpunk",
+        {},
+        "Generate Arcane / Cyberpunk brand and game title candidates",
+        [](std::mt19937& rng) { return generate_brand_arcane_cyberpunk_name(rng); }
+    });
+    registerGenerator({
+        "brand-classical_etymology",
+        {},
+        "Generate Classical Etymology Latin and Greek brand names",
+        [](std::mt19937& rng) { return generate_brand_classical_etymology_name(rng); }
+    });
+    registerGenerator({
+        "brand-functional_minimalist",
+        {},
+        "Generate Functional Minimalist two-word title candidates",
+        [](std::mt19937& rng) { return generate_brand_functional_minimalist_name(rng); }
+    });
+    registerGenerator({
+        "brand-punchy_portmanteaus",
+        {},
+        "Generate Punchy Portmanteau compound brand and game titles",
+        [](std::mt19937& rng) { return generate_brand_punchy_portmanteaus_name(rng); }
+    });
+    registerGenerator({
+        "brand-sovereign_neologisms",
+        {},
+        "Generate Sovereign Neologism coined phonetic brand names",
+        [](std::mt19937& rng) { return generate_brand_sovereign_neologisms_name(rng); }
     });
     registerGenerator({
         "descriptions-aliens",
@@ -5798,6 +5838,36 @@ void GeneratorRegistry::initBuiltins() {
         {},
         "Generate Star Wars The Old Republic Zabraks style names",
         [](std::mt19937& rng) { return generate_star_wars_the_old_republic_zabraks_name(rng, 0); }
+    });
+    registerGenerator({
+        "tabletop-dungeon_traps",
+        {},
+        "Generate dungeon traps, hazards, and arcane puzzles",
+        [](std::mt19937& rng) { return generate_tabletop_dungeon_traps_name(rng); }
+    });
+    registerGenerator({
+        "tabletop-item_quirks",
+        {},
+        "Generate magic item quirks, curses, and arcane history",
+        [](std::mt19937& rng) { return generate_tabletop_item_quirks_name(rng); }
+    });
+    registerGenerator({
+        "tabletop-plot_hooks",
+        {},
+        "Generate tabletop RPG plot hooks and quest sparks",
+        [](std::mt19937& rng) { return generate_tabletop_plot_hooks_name(rng); }
+    });
+    registerGenerator({
+        "tabletop-tavern_rumors",
+        {},
+        "Generate fantasy tavern rumors and town gossip",
+        [](std::mt19937& rng) { return generate_tabletop_tavern_rumors_name(rng); }
+    });
+    registerGenerator({
+        "tabletop-villain_schemes",
+        {},
+        "Generate antagonist plots, schemes, and masterplans",
+        [](std::mt19937& rng) { return generate_tabletop_villain_schemes_name(rng); }
     });
     registerGenerator({
         "the_witcher-dwarfs",

@@ -4,9 +4,9 @@ const namgen = require('../src/index');
 const nodeApi = require('../src/node');
 const dnd = require('../src/dnd');
 
-test('metadata loads all 907 generators and categories', () => {
-  assert.equal(namgen.generators.length, 907);
-  assert.ok(namgen.categories.length >= 35);
+test('metadata loads all 917 generators and categories', () => {
+  assert.equal(namgen.generators.length, 917);
+  assert.ok(namgen.categories.length >= 42);
   assert.ok(namgen.words.adjectives.length > 0);
   assert.ok(namgen.words.nouns.length > 0);
 });
@@ -21,7 +21,7 @@ test('getGenerator resolves canonical IDs, CLI flags, and natural spelling alias
   assert.equal(namgen.getGenerator('nonexistent-xyz-gen'), null);
 });
 
-test('all 907 procedural JS generators execute and emit non-empty output in Node', () => {
+test('all 917 procedural JS generators execute and emit non-empty output in Node', () => {
   for (const gen of namgen.generators) {
     const out = nodeApi.generateNames(gen.id, 1);
     assert.equal(out.length, 1, `Expected 1 result for ${gen.id}`);
@@ -107,4 +107,68 @@ test('WASM runtime initializes and produces deterministic seeded names in Node',
   const r2 = wasm.generate('--fantasy-dragons', 3, 12345);
   assert.deepEqual(r1, r2);
   assert.equal(r1.length, 3);
+});
+
+test('all 10 new brand-* and tabletop-* generators resolve and emit output', () => {
+  const expectedNewIds = [
+    'brand-arcane_cyberpunk',
+    'brand-classical_etymology',
+    'brand-punchy_portmanteaus',
+    'brand-functional_minimalist',
+    'brand-sovereign_neologisms',
+    'tabletop-plot_hooks',
+    'tabletop-tavern_rumors',
+    'tabletop-item_quirks',
+    'tabletop-villain_schemes',
+    'tabletop-dungeon_traps',
+  ];
+  for (const id of expectedNewIds) {
+    assert.equal(namgen.getGenerator(id)?.id, id, `Missing metadata for ${id}`);
+    const results = nodeApi.generateNames(id, 3);
+    assert.equal(results.length, 3);
+    assert.ok(results.every((r) => typeof r === 'string' && r.trim().length > 4));
+  }
+});
+
+test('nameChecker exports linguistics, USPTO CSV scanning, offline pool verification, and markdown reporting', async () => {
+  const fs = require('fs');
+  const os = require('os');
+  const path = require('path');
+  const checker = require('namgen.js/name-checker');
+  assert.equal(nodeApi.nameChecker.toSlug('Locus-Pact!'), 'locuspact');
+  assert.equal(checker.countSyllables('Locuspact'), 3);
+  assert.match(checker.pronunciationSigil('Locuspact'), /^\/[A-Z]+.*\/$/);
+
+  const missingCsv = await checker.scanUsptoBulkCsv(['Locuspact'], '/tmp/definitely-missing-uspto-12345.csv');
+  assert.equal(missingCsv.scanned, false);
+  assert.equal(missingCsv.hits.size, 0);
+
+  const tmpCsv = path.join(os.tmpdir(), `namgen-uspto-test-${Date.now()}.csv`);
+  fs.writeFileSync(tmpCsv, 'mark_id_char,serial_no,international_class\nLOCUSPACT,99000111,009\nOTHERMARK,99000222,042\n', 'utf8');
+  try {
+    const scanned = await checker.scanUsptoBulkCsv(['Locuspact', 'Orvaxis'], tmpCsv);
+    assert.equal(scanned.scanned, true);
+    assert.equal(scanned.hits.has('locuspact'), true);
+    assert.equal(scanned.hits.has('orvaxis'), false);
+  } finally {
+    fs.rmSync(tmpCsv, { force: true });
+  }
+
+  const run = await checker.verifyCandidatePool(
+    [
+      { name: 'Locuspact', archetype: 'Classical Etymology' },
+      { name: 'Orvaxis', archetype: 'Sovereign Neologisms' },
+    ],
+    {
+      tlds: [],
+      registries: [],
+      marketChecks: false,
+      signal: new AbortController().signal,
+    }
+  );
+  assert.equal(run.results.length, 2);
+  const md = checker.renderSurvivalReportMarkdown(run, { title: 'Test Matrix' });
+  assert.ok(md.includes('Locuspact'));
+  assert.ok(md.includes('Orvaxis'));
+  assert.ok(md.includes('flowchart LR'));
 });

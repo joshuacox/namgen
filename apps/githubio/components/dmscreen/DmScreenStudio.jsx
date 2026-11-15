@@ -34,7 +34,7 @@ export default function DmScreenStudio() {
 
   const copyQuickSummary = async () => {
     const summary = `# Dungeon Master Studio - Quick Reference
-Generated with namgen (907 C++ procedural modules)
+Generated with namgen (917 C++ procedural modules)
 https://github.com/joshuacox/namgen
 
 - Faction Matrix: High Fantasy, Grimdark, Space Opera, Underdark, High Seas, Mythic Norse

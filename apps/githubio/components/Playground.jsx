@@ -405,7 +405,7 @@ export default function Playground() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              2. 907 Live JavaScript Generators
+              2. 917 Live JavaScript Generators
             </button>
           </div>
         </div>
@@ -658,7 +658,7 @@ export default function Playground() {
                   >
                     {loadingGen ? '⏳ Generating...' : '⚡ Re-roll'}
                   </button>
-                  <span className="text-xs text-emerald-400 font-mono">907 Available</span>
+                  <span className="text-xs text-emerald-400 font-mono">917 Available</span>
                 </div>
               </h3>
 
@@ -816,9 +816,9 @@ export default function Playground() {
               </div>
 
               <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-                <span>Showing {filteredGenerators.length} of 907 generators</span>
+                <span>Showing {filteredGenerators.length} of 917 generators</span>
                 <a href="#generators" className="text-emerald-400 hover:underline">
-                  Browse all 907 →
+                  Browse all 917 →
                 </a>
               </div>
             </div>

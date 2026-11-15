@@ -37,12 +37,19 @@ void MarkovModel::addWord(const std::string& rawWord) {
 void MarkovModel::train(const std::vector<std::string>& samples) {
     transitions_.clear();
     startPrefixes_.clear();
-    for (const auto& sample : samples) {
-        // If sample has multiple words, train on each word
-        std::istringstream iss(sample);
-        std::string token;
-        while (iss >> token) {
-            addWord(token);
+    addSamples(samples, 1);
+}
+
+void MarkovModel::addSamples(const std::vector<std::string>& samples, int weight) {
+    int copies = weight < 1 ? 1 : weight;
+    for (int w = 0; w < copies; ++w) {
+        for (const auto& sample : samples) {
+            // If sample has multiple words, train on each word
+            std::istringstream iss(sample);
+            std::string token;
+            while (iss >> token) {
+                addWord(token);
+            }
         }
     }
 }

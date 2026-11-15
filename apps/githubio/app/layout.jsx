@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'namgen — Ultra-Fast C++17 Procedural Name Generator & 907 Modules',
-  description: 'A high-performance C++17 name generator combining adjectives and nouns with 907 zero-allocation procedural generators spanning 40 fantasy, sci-fi, and real-world universes.',
+  title: 'namgen — Ultra-Fast C++17 Procedural Name Generator & 917 Modules',
+  description: 'A high-performance C++17 name generator combining adjectives and nouns with 917 zero-allocation procedural generators spanning 40 fantasy, sci-fi, and real-world universes.',
   keywords: 'name generator, fantasy names, sci-fi names, procedural generation, C++17, zero allocation, CLI tool, open source',
   authors: [{ name: 'Joshua Cox' }],
 };

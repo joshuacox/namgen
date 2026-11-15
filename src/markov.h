@@ -13,8 +13,10 @@ public:
     void setOrder(int order);
     int getOrder() const { return order_; }
 
-    // Train on a list of words or sample names
+    // Train on a list of words or sample names (clears prior model state)
     void train(const std::vector<std::string>& samples);
+    // Append additional training samples without clearing existing model state
+    void addSamples(const std::vector<std::string>& samples, int weight = 1);
     bool trainFromFile(const std::string& filepath);
 
     // Generate a novel name using the trained n-gram model

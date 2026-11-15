@@ -1,7 +1,7 @@
 {
   "name": "namgen — Ultra-Fast Procedural Name Generator",
   "short_name": "namgen",
-  "description": "High-performance procedural fantasy and sci-fi name generator with 907 modules and WebAssembly engine.",
+  "description": "High-performance procedural fantasy and sci-fi name generator with 917 modules and WebAssembly engine.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",

@@ -1,7 +1,7 @@
 {
   "name": "namgen.js",
   "version": "1.0.0",
-  "description": "Isomorphic JavaScript and WebAssembly SDK for namgen's 907 procedural name generators, word combinator, and tabletop RPG datasets.",
+  "description": "Isomorphic JavaScript and WebAssembly SDK for namgen's 917 procedural name generators, word combinator, and tabletop RPG datasets.",
   "main": "./src/index.js",
   "types": "./index.d.ts",
   "bin": {
@@ -13,6 +13,7 @@
     "./browser": "./src/browser.js",
     "./node": "./src/node.js",
     "./dnd": "./src/dnd.js",
+    "./name-checker": "./src/nameChecker.js",
     "./data/*": "./data/*"
   },
   "scripts": {

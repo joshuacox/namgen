@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { categories, searchGenerators, getGenerator } from 'namgen.js';
+import { categories, searchGenerators, getGenerator, generators as allGenerators } from 'namgen.js';
 
 export default function GeneratorStudioPanel({
   pinnedGenerators = [],
@@ -11,7 +11,7 @@ export default function GeneratorStudioPanel({
 }) {
   const [mode, setMode] = useState('browser');
 
-  // Mode 1: 907 Generator Browser
+  // Mode 1: Generator Browser
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGenId, setSelectedGenId] = useState('fantasy-dragons');
@@ -46,6 +46,52 @@ export default function GeneratorStudioPanel({
   const [names, setNames] = useState([]);
   const [formattedText, setFormattedText] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Mode 4: C++ Markov, Portmanteau & Archetype Lab
+  const [labGens, setLabGens] = useState('fantasy-elfs,brand-sovereign_neologisms');
+  const [labKeywords, setLabKeywords] = useState('arcane, sigil, storm, rift');
+  const [labOrder, setLabOrder] = useState(3);
+  const [labCount, setLabCount] = useState(12);
+  const [labMode, setLabMode] = useState('markov'); // 'markov' | 'blend'
+  const [labEngine, setLabEngine] = useState('');
+
+  const runLab = async (overrideGenId = '') => {
+    setLoading(true);
+    try {
+      let body;
+      if (overrideGenId) {
+        body = { action: 'roll', generator: overrideGenId, count: Number(labCount) || 10, unique: true };
+      } else if (labMode === 'blend') {
+        body = {
+          action: 'blend',
+          keywords: labKeywords.split(/[\s,;]+/).filter(Boolean),
+          generator: labGens.split(',')[0]?.trim() || '',
+          count: Number(labCount) || 12,
+        };
+      } else {
+        body = {
+          action: 'markov',
+          generators: labGens.split(',').map((s) => s.trim()).filter(Boolean),
+          keywords: labKeywords.split(/[\s,;]+/).filter(Boolean),
+          order: Number(labOrder) || 3,
+          count: Number(labCount) || 12,
+        };
+      }
+      const res = await fetch('/api/namgen', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      setNames(data.names || []);
+      setFormattedText(data.formatted || (data.names || []).join('\n'));
+      setLabEngine(data.engine || '');
+    } catch (err) {
+      onNotify?.(`Lab error: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const matchingGenerators = useMemo(
     () => searchGenerators(query, selectedCategory, 80),
@@ -160,9 +206,10 @@ export default function GeneratorStudioPanel({
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/80 border border-slate-800 rounded-2xl p-3">
         <div className="flex flex-wrap gap-1.5">
           {[
-            { id: 'browser', label: '📚 907 Generator Browser' },
+            { id: 'browser', label: `📚 ${allGenerators.length} Generator Browser` },
             { id: 'combinator', label: '🧪 Word Combinator' },
             { id: 'composer', label: '🧩 {1} of {2} Composer' },
+            { id: 'lab', label: '⚡ C++ Markov, Portmanteau & Archetype Lab' },
           ].map((t) => (
             <button
               key={t.id}
@@ -179,7 +226,7 @@ export default function GeneratorStudioPanel({
           ))}
         </div>
         <span className="text-xs font-mono text-slate-400">
-          Offline Node Engine • 907 Procedural Scripts Loaded Locally
+          C++17 &amp; Offline Engine • {allGenerators.length} Procedural Scripts
         </span>
       </div>
 
@@ -192,7 +239,7 @@ export default function GeneratorStudioPanel({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search 907 generators (taverns, swords, elves, demons)..."
+              placeholder={`Search ${allGenerators.length} generators (taverns, swords, elves, demons)...`}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500"
             />
 
@@ -570,6 +617,115 @@ export default function GeneratorStudioPanel({
                   className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white"
                 />
               </div>
+            </div>
+          </div>
+
+          <StudioResults names={names} formatted={formattedText} format="plain" onCopy={copyItem} onSaveCodex={onSaveCodex} />
+        </section>
+      )}
+
+      {/* Mode 4: C++ Markov, Portmanteau & Archetype Lab */}
+      {mode === 'lab' && (
+        <section className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-white">⚡ C++ Markov, Portmanteau &amp; Archetype Lab</h3>
+              <p className="text-xs text-slate-400">
+                Blend multiple generators &amp; keywords via the native C++17 n-gram Markov synthesizer or overlap-fusing Portmanteau blender.
+              </p>
+            </div>
+            {labEngine && (
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 font-mono text-[11px] text-emerald-300">
+                Engine: {labEngine}
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+            <div className="md:col-span-2">
+              <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Source Generators (comma-separated)</label>
+              <input
+                type="text"
+                value={labGens}
+                onChange={(e) => setLabGens(e.target.value)}
+                placeholder="fantasy-elfs,brand-sovereign_neologisms"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 font-mono text-emerald-200"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Theme Keywords</label>
+              <input
+                type="text"
+                value={labKeywords}
+                onChange={(e) => setLabKeywords(e.target.value)}
+                placeholder="deck, moba, arcane, rift"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Order</label>
+                <select
+                  value={labOrder}
+                  onChange={(e) => setLabOrder(Number(e.target.value))}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-white"
+                >
+                  {[2, 3, 4, 5].map((o) => <option key={o} value={o}>{o}-gram</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">Count</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={50}
+                  value={labCount}
+                  onChange={(e) => setLabCount(Number(e.target.value) || 12)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-white"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => { setLabMode('markov'); runLab(); }}
+              disabled={loading}
+              className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold"
+            >
+              🧬 Synthesize C++ Markov
+            </button>
+            <button
+              type="button"
+              onClick={() => { setLabMode('blend'); runLab(); }}
+              disabled={loading}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold"
+            >
+              🔀 Fuse Portmanteaus
+            </button>
+            <div className="flex flex-wrap gap-1.5 ml-auto text-[11px]">
+              {[
+                'brand-arcane_cyberpunk',
+                'brand-classical_etymology',
+                'brand-punchy_portmanteaus',
+                'brand-functional_minimalist',
+                'brand-sovereign_neologisms',
+                'tabletop-plot_hooks',
+                'tabletop-tavern_rumors',
+                'tabletop-item_quirks',
+                'tabletop-villain_schemes',
+                'tabletop-dungeon_traps',
+              ].map((gid) => (
+                <button
+                  key={gid}
+                  type="button"
+                  onClick={() => runLab(gid)}
+                  className="px-2 py-1 rounded-lg bg-slate-950 border border-slate-800 hover:border-emerald-500/60 text-slate-300 font-mono"
+                >
+                  {gid.replace(/^(brand|tabletop)-/, '')}
+                </button>
+              ))}
             </div>
           </div>
 

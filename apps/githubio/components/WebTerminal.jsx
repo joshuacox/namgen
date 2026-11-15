@@ -5,7 +5,7 @@ import { initBrowserWasm } from 'namgen.js/browser';
 
 export default function WebTerminal() {
   const [history, setHistory] = useState([
-    { type: 'system', text: 'namgen WebAssembly Runtime initialized (v1.0.0, 907 C++17 generators).' },
+    { type: 'system', text: 'namgen WebAssembly Runtime initialized (v1.0.0, 917 C++17 generators).' },
     { type: 'system', text: 'Type "namgen --help" or click any preset below to run real WebAssembly in your browser.' },
   ]);
   const [inputVal, setInputVal] = useState('');
@@ -27,7 +27,7 @@ export default function WebTerminal() {
         if (isMounted && wasm?.instance) {
           setWasmModule(wasm.instance);
           setLoading(false);
-          setStatusText('namgen.wasm Ready (14MB / 907 engines in Memory)');
+          setStatusText('namgen.wasm Ready (14MB / 917 engines in Memory)');
         }
       })
       .catch((err) => {

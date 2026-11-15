@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata = {
   title: 'namgen DM Vault — Private Local D&D Dungeon Master Screen',
   description:
-    'Private, offline-first D&D Dungeon Master command center powered by namgen.js (907 procedural generators, NPC forge, initiative tracker, taverns, dungeons, loot, and local Markdown vault).',
+    'Private, offline-first D&D Dungeon Master command center powered by namgen.js (917 procedural generators, NPC forge, initiative tracker, taverns, dungeons, loot, and local Markdown vault).',
 };
 
 export default function RootLayout({ children }) {

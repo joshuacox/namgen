@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { GENRE_PRESETS } from 'namgen.js/dnd';
 
-export default function WorldMatrixPanel({ onSaveCodex, onNotify }) {
+export default function WorldMatrixPanel({ onSaveCodex, onWeaveWithAi, onNotify }) {
   const presets = Object.values(GENRE_PRESETS);
   const [genreId, setGenreId] = useState('fantasy');
   const [seed, setSeed] = useState('');
@@ -175,6 +175,22 @@ export default function WorldMatrixPanel({ onSaveCodex, onNotify }) {
               >
                 + Save Faction to Codex
               </button>
+              {onWeaveWithAi && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onWeaveWithAi({
+                      tool: 'three-clue',
+                      title: faction.factionName,
+                      prompt: `Build a Three-Clue investigation and political intrigue web centered on ${faction.factionName} (${faction.genreName}), tying in their holdings and heraldry.`,
+                      contextText: `Coat of Arms: ${faction.coatOfArms}\nHoldings: ${faction.slots.map((s) => `${s.title}: ${s.name}`).join(' | ')}\nLaw: ${faction.law}`,
+                    })
+                  }
+                  className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                >
+                  ✨ Weave with AI
+                </button>
+              )}
             </div>
           </div>
 

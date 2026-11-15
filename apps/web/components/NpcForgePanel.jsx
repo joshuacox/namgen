@@ -40,6 +40,7 @@ export default function NpcForgePanel({
   onSendToCombat,
   onAppendSessionNote,
   onRevealHandout,
+  onWeaveWithAi,
   onNotify,
 }) {
   // Quick Name Matrix state
@@ -525,6 +526,22 @@ export default function NpcForgePanel({
                 >
                   📺 Reveal to Players
                 </button>
+                {onWeaveWithAi && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onWeaveWithAi({
+                        tool: 'npc-roleplay',
+                        title: `Roleplay: ${npc.name}`,
+                        prompt: `Step into character as ${npc.name} (${npc.ancestry} ${npc.occupation}). Voice/cadence: ${npc.voice}. Secret agenda (DM eyes only): ${npc.secretAgenda}. Deliver an opening greeting and a veiled threat or hook.`,
+                        contextText: JSON.stringify(npc, null, 2),
+                      })
+                    }
+                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                  >
+                    ✨ Weave with AI
+                  </button>
+                )}
               </div>
             </div>
 

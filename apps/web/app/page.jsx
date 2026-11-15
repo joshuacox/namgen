@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { getGenerator } from 'namgen.js';
+import { getGenerator, generators as allGenerators } from 'namgen.js';
 import NpcForgePanel from '../components/NpcForgePanel';
 import CombatTrackerPanel from '../components/CombatTrackerPanel';
 import EstablishmentsPanel from '../components/EstablishmentsPanel';
@@ -9,6 +9,9 @@ import AdventureForgePanel from '../components/AdventureForgePanel';
 import WorldMatrixPanel from '../components/WorldMatrixPanel';
 import CampaignCodexPanel from '../components/CampaignCodexPanel';
 import GeneratorStudioPanel from '../components/GeneratorStudioPanel';
+import GlobalSettingsModal from '../components/GlobalSettingsModal';
+import NamespaceOracleWorkspace from '../components/NamespaceOracleWorkspace';
+import AiStorytellerWorkspace from '../components/AiStorytellerWorkspace';
 import QuickRollModal from '../components/QuickRollModal';
 import HandoutPreviewModal from '../components/HandoutPreviewModal';
 import DiceRollerDrawer from '../components/DiceRollerDrawer';
@@ -21,15 +24,24 @@ const TABS = [
   { id: 'adventure', label: 'Dungeons & Loot', icon: '🏰' },
   { id: 'world', label: 'Factions & Realms', icon: '🗺️' },
   { id: 'codex', label: 'Codex & Journal', icon: '📚' },
-  { id: 'studio', label: '907 Generator Studio', icon: '🎲' },
+  { id: 'studio', label: `${allGenerators.length} Generator Studio`, icon: '🎲' },
 ];
 
-export default function DmCommandCenterPage() {
+export default function DmCommandCenterPage({ initialWorkspace = '' }) {
   const [vault, setVault] = useState(null);
   const [storageInfo, setStorageInfo] = useState(null);
   const [activeTab, setActiveTab] = useState('npc');
   const [saveState, setSaveState] = useState('idle'); // idle | saving | saved | error
   const [toast, setToast] = useState('');
+
+  // Workspace Launchpad & AI/Oracle Settings
+  const [workspace, setWorkspace] = useState(
+    initialWorkspace === 'storyteller' || initialWorkspace === 'oracle' ? initialWorkspace : 'dm'
+  );
+  const [settings, setSettings] = useState(null);
+  const [cppEngine, setCppEngine] = useState(null);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [handoffContext, setHandoffContext] = useState(null);
 
   // Floating Modals & Tools
   const [quickRollOpen, setQuickRollOpen] = useState(false);
@@ -52,6 +64,50 @@ export default function DmCommandCenterPage() {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(''), 3200);
   }, []);
+
+  const switchWorkspace = useCallback((next) => {
+    setWorkspace(next);
+    try {
+      localStorage.setItem('namgen_active_workspace', next);
+    } catch {}
+  }, []);
+
+  const handleWeaveWithAi = useCallback(
+    (ctx) => {
+      setHandoffContext(ctx || null);
+      switchWorkspace('storyteller');
+    },
+    [switchWorkspace]
+  );
+
+  // Restore saved/query workspace & load Global AI/Oracle Settings on mount
+  useEffect(() => {
+    if (!initialWorkspace) {
+      try {
+        const param = new URLSearchParams(window.location.search).get('workspace');
+        const saved = localStorage.getItem('namgen_active_workspace');
+        const target = param || saved;
+        if (target === 'dm' || target === 'storyteller' || target === 'oracle') {
+          setWorkspace(target);
+        }
+      } catch {}
+    }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/settings');
+        const data = await res.json();
+        if (!cancelled && res.ok) {
+          setSettings(data.settings || null);
+          setCppEngine(data.cppEngine || null);
+        }
+      } catch {}
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [initialWorkspace]);
 
   // Load Vault on mount
   useEffect(() => {
@@ -120,6 +176,7 @@ export default function DmCommandCenterPage() {
         setPreviewHandout(null);
         setPinnedResult(null);
         setNewCampModalOpen(false);
+        setSettingsModalOpen(false);
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -331,27 +388,65 @@ export default function DmCommandCenterPage() {
       {/* Top Command Header */}
       <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 no-print">
         <div className="max-w-[1440px] mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
-          {/* Brand & Campaign Switcher */}
+          {/* Brand, Launchpad Workspace Switcher & Campaign Switcher */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-amber-500 flex items-center justify-center text-slate-950 font-black text-sm">
-                🐉
+                {workspace === 'oracle' ? '🔮' : workspace === 'storyteller' ? '✨' : '🐉'}
               </span>
               <div>
                 <div className="text-sm font-extrabold text-white leading-none">
-                  namgen <span className="text-amber-400">DM Vault</span>
+                  namgen{' '}
+                  <span
+                    className={
+                      workspace === 'oracle'
+                        ? 'text-cyan-400'
+                        : workspace === 'storyteller'
+                        ? 'text-fuchsia-400'
+                        : 'text-amber-400'
+                    }
+                  >
+                    {workspace === 'oracle'
+                      ? 'Namespace Oracle'
+                      : workspace === 'storyteller'
+                      ? 'AI Storyteller'
+                      : 'DM Vault'}
+                  </span>
                 </div>
                 <div className="text-[10px] font-mono text-slate-400 mt-0.5">
-                  Private Offline Tabletop Screen • Localhost
+                  {allGenerators.length} Engines • C++17 + Local Ollama
                 </div>
               </div>
+            </div>
+
+            {/* Unified Multi-Workspace Switcher */}
+            <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900 border border-slate-800">
+              {[
+                { id: 'dm', label: 'DM Vault', icon: '🐉', activeCls: 'bg-amber-500/20 text-amber-200 border-amber-500/40' },
+                { id: 'storyteller', label: 'AI Storyteller', icon: '✨', activeCls: 'bg-fuchsia-500/20 text-fuchsia-200 border-fuchsia-500/40' },
+                { id: 'oracle', label: 'Namespace Oracle', icon: '🔮', activeCls: 'bg-cyan-500/20 text-cyan-200 border-cyan-500/40' },
+              ].map((ws) => (
+                <button
+                  key={ws.id}
+                  type="button"
+                  onClick={() => switchWorkspace(ws.id)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1.5 ${
+                    workspace === ws.id
+                      ? ws.activeCls
+                      : 'border-transparent text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  }`}
+                >
+                  <span>{ws.icon}</span>
+                  <span>{ws.label}</span>
+                </button>
+              ))}
             </div>
 
             <div className="flex items-center gap-1.5 pl-2 border-l border-slate-800">
               <select
                 value={activeCampaign.id}
                 onChange={(e) => switchCampaign(e.target.value)}
-                className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white max-w-[220px]"
+                className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-white max-w-[200px]"
               >
                 {vault.campaigns.map((camp) => (
                   <option key={camp.id} value={camp.id}>
@@ -382,6 +477,27 @@ export default function DmCommandCenterPage() {
 
           {/* Global DM Utilities */}
           <div className="flex flex-wrap items-center gap-2">
+            {cppEngine?.available && (
+              <span
+                className="px-2 py-1 rounded-full text-[11px] font-mono border border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
+                title={cppEngine.binaryPath || 'Native C++17 engine enabled'}
+              >
+                ⚡ C++17
+              </span>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setSettingsModalOpen(true)}
+              className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-cyan-500/35 text-xs font-semibold text-cyan-200 flex items-center gap-1.5"
+              title="Configure Ollama URL, model, GitHub PAT, and USPTO bulk CSV"
+            >
+              <span>⚙️ AI & Oracle</span>
+              <span className="px-1.5 py-0.5 rounded bg-slate-950 text-[10px] font-mono text-slate-300 max-w-[110px] truncate">
+                {settings?.model || 'Configure AI'}
+              </span>
+            </button>
+
             <span
               className={`px-2.5 py-1 rounded-full text-[11px] font-mono border ${
                 saveState === 'saving'
@@ -392,10 +508,10 @@ export default function DmCommandCenterPage() {
               }`}
             >
               {saveState === 'saving'
-                ? '● Saving to disk...'
+                ? '● Saving...'
                 : saveState === 'error'
                 ? '▲ Save Error'
-                : '✓ Saved to Disk'}
+                : '✓ Saved'}
             </span>
 
             <button
@@ -429,67 +545,70 @@ export default function DmCommandCenterPage() {
           </div>
         </div>
 
-        {/* Pinned Campaign Quick-Roll Bar */}
-        <div className="bg-slate-900/70 border-t border-slate-800/80">
-          <div className="max-w-[1440px] mx-auto px-4 py-1.5 flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-[10px] font-mono uppercase text-slate-500 mr-1">
-              Pinned Rolls:
-            </span>
-            {(activeCampaign.pinnedGenerators || []).map((genId) => {
-              const meta = getGenerator(genId);
-              return (
-                <button
-                  key={genId}
-                  type="button"
-                  onClick={() => rollPinned(genId)}
-                  className={`px-2 py-0.5 rounded-lg border text-[11px] transition-colors ${
-                    pinnedResult?.genId === genId
-                      ? 'bg-amber-500/20 border-amber-500/60 text-amber-200 font-semibold'
-                      : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-200'
-                  }`}
-                >
-                  🎲 {meta?.name || genId}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        {/* DM Vault Pinned Quick-Roll Bar & Navigation Tabs */}
+        {workspace === 'dm' && (
+          <>
+            <div className="bg-slate-900/70 border-t border-slate-800/80">
+              <div className="max-w-[1440px] mx-auto px-4 py-1.5 flex flex-wrap items-center gap-1.5 text-xs">
+                <span className="text-[10px] font-mono uppercase text-slate-500 mr-1">
+                  Pinned Rolls:
+                </span>
+                {(activeCampaign.pinnedGenerators || []).map((genId) => {
+                  const meta = getGenerator(genId);
+                  return (
+                    <button
+                      key={genId}
+                      type="button"
+                      onClick={() => rollPinned(genId)}
+                      className={`px-2 py-0.5 rounded-lg border text-[11px] transition-colors ${
+                        pinnedResult?.genId === genId
+                          ? 'bg-amber-500/20 border-amber-500/60 text-amber-200 font-semibold'
+                          : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-200'
+                      }`}
+                    >
+                      🎲 {meta?.name || genId}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-        {/* Navigation Tabs */}
-        <nav className="max-w-[1440px] mx-auto px-4 pt-2 flex gap-1 overflow-x-auto">
-          {TABS.map((tab) => {
-            const active = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-3.5 py-2 rounded-t-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 border-t border-x transition-colors ${
-                  active
-                    ? 'bg-slate-900 border-slate-800 text-amber-300'
-                    : 'bg-transparent border-transparent text-slate-400 hover:text-white'
-                }`}
-              >
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
-                {tab.id === 'combat' && combatCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-rose-500/25 text-rose-200 font-mono text-[10px]">
-                    {combatCount}
-                  </span>
-                )}
-                {tab.id === 'codex' && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 font-mono text-[10px]">
-                    {codexCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
+            <nav className="max-w-[1440px] mx-auto px-4 pt-2 flex gap-1 overflow-x-auto">
+              {TABS.map((tab) => {
+                const active = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-3.5 py-2 rounded-t-xl text-xs font-bold whitespace-nowrap flex items-center gap-1.5 border-t border-x transition-colors ${
+                      active
+                        ? 'bg-slate-900 border-slate-800 text-amber-300'
+                        : 'bg-transparent border-transparent text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <span>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                    {tab.id === 'combat' && combatCount > 0 && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-rose-500/25 text-rose-200 font-mono text-[10px]">
+                        {combatCount}
+                      </span>
+                    )}
+                    {tab.id === 'codex' && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 font-mono text-[10px]">
+                        {codexCount}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </nav>
+          </>
+        )}
       </header>
 
       {/* Pinned Roll Popover Strip */}
-      {pinnedResult && (
+      {workspace === 'dm' && pinnedResult && (
         <div className="max-w-[1440px] w-full mx-auto px-4 pt-3 no-print">
           <div className="bg-slate-900 border border-amber-500/40 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 shadow-xl">
             <div className="flex flex-wrap items-center gap-2">
@@ -532,66 +651,103 @@ export default function DmCommandCenterPage() {
 
       {/* Active Panel */}
       <main className="flex-1 max-w-[1440px] w-full mx-auto p-4 pb-20">
-        {activeTab === 'npc' && (
-          <NpcForgePanel
+        {workspace === 'dm' && (
+          <>
+            {activeTab === 'npc' && (
+              <NpcForgePanel
+                onSaveCodex={handleSaveCodex}
+                onSendToCombat={handleSendToCombat}
+                onAppendSessionNote={handleAppendSessionNote}
+                onRevealHandout={handleRevealHandout}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'combat' && (
+              <CombatTrackerPanel
+                party={activeCampaign.party || []}
+                combat={activeCampaign.combat || { round: 1, turnIndex: 0, combatants: [] }}
+                onUpdateParty={(party) => mutateActiveCampaign({ party })}
+                onUpdateCombat={(combat) => mutateActiveCampaign({ combat })}
+                onRevealHandout={handleRevealHandout}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'shops' && (
+              <EstablishmentsPanel
+                onSaveCodex={handleSaveCodex}
+                onAppendSessionNote={handleAppendSessionNote}
+                onRevealHandout={handleRevealHandout}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'adventure' && (
+              <AdventureForgePanel
+                partyTier={activeCampaign.partyLevelTier || 1}
+                onChangeTier={(tier) => mutateActiveCampaign({ partyLevelTier: tier })}
+                onSaveCodex={handleSaveCodex}
+                onSendToCombat={handleSendToCombat}
+                onRevealHandout={handleRevealHandout}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'world' && (
+              <WorldMatrixPanel
+                onSaveCodex={handleSaveCodex}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'codex' && (
+              <CampaignCodexPanel
+                campaign={activeCampaign}
+                storageInfo={storageInfo}
+                onUpdateCodex={(codex) => mutateActiveCampaign({ codex })}
+                onUpdateSessionNotes={(sessionNotes) => mutateActiveCampaign({ sessionNotes })}
+                onRevealHandout={handleRevealHandout}
+                onWeaveWithAi={handleWeaveWithAi}
+                onNotify={notify}
+              />
+            )}
+
+            {activeTab === 'studio' && (
+              <GeneratorStudioPanel
+                pinnedGenerators={activeCampaign.pinnedGenerators || []}
+                onTogglePin={handleTogglePin}
+                onSaveCodex={handleSaveCodex}
+                onNotify={notify}
+              />
+            )}
+          </>
+        )}
+
+        {workspace === 'storyteller' && (
+          <AiStorytellerWorkspace
+            settings={settings}
+            handoffContext={handoffContext}
+            onClearHandoff={() => setHandoffContext(null)}
+            onOpenSettings={() => setSettingsModalOpen(true)}
             onSaveCodex={handleSaveCodex}
-            onSendToCombat={handleSendToCombat}
             onAppendSessionNote={handleAppendSessionNote}
             onRevealHandout={handleRevealHandout}
-            onNotify={notify}
-          />
-        )}
-
-        {activeTab === 'combat' && (
-          <CombatTrackerPanel
-            party={activeCampaign.party || []}
-            combat={activeCampaign.combat || { round: 1, turnIndex: 0, combatants: [] }}
-            onUpdateParty={(party) => mutateActiveCampaign({ party })}
-            onUpdateCombat={(combat) => mutateActiveCampaign({ combat })}
-            onRevealHandout={handleRevealHandout}
-            onNotify={notify}
-          />
-        )}
-
-        {activeTab === 'shops' && (
-          <EstablishmentsPanel
-            onSaveCodex={handleSaveCodex}
-            onAppendSessionNote={handleAppendSessionNote}
-            onRevealHandout={handleRevealHandout}
-            onNotify={notify}
-          />
-        )}
-
-        {activeTab === 'adventure' && (
-          <AdventureForgePanel
-            partyTier={activeCampaign.partyLevelTier || 1}
-            onChangeTier={(tier) => mutateActiveCampaign({ partyLevelTier: tier })}
-            onSaveCodex={handleSaveCodex}
             onSendToCombat={handleSendToCombat}
-            onRevealHandout={handleRevealHandout}
             onNotify={notify}
           />
         )}
 
-        {activeTab === 'world' && (
-          <WorldMatrixPanel onSaveCodex={handleSaveCodex} onNotify={notify} />
-        )}
-
-        {activeTab === 'codex' && (
-          <CampaignCodexPanel
-            campaign={activeCampaign}
-            storageInfo={storageInfo}
-            onUpdateCodex={(codex) => mutateActiveCampaign({ codex })}
-            onUpdateSessionNotes={(sessionNotes) => mutateActiveCampaign({ sessionNotes })}
-            onRevealHandout={handleRevealHandout}
-            onNotify={notify}
-          />
-        )}
-
-        {activeTab === 'studio' && (
-          <GeneratorStudioPanel
-            pinnedGenerators={activeCampaign.pinnedGenerators || []}
-            onTogglePin={handleTogglePin}
+        {workspace === 'oracle' && (
+          <NamespaceOracleWorkspace
+            settings={settings}
+            cppEngine={cppEngine}
+            onOpenSettings={() => setSettingsModalOpen(true)}
             onSaveCodex={handleSaveCodex}
             onNotify={notify}
           />
@@ -676,6 +832,18 @@ export default function DmCommandCenterPage() {
         onClose={() => setQuickRollOpen(false)}
         pinnedGenerators={activeCampaign.pinnedGenerators || []}
         onTogglePin={handleTogglePin}
+        onNotify={notify}
+      />
+
+      <GlobalSettingsModal
+        isOpen={settingsModalOpen}
+        onClose={() => setSettingsModalOpen(false)}
+        initialSettings={settings}
+        cppEngine={cppEngine}
+        onSaved={(nextSettings, nextCpp) => {
+          setSettings(nextSettings);
+          if (nextCpp) setCppEngine(nextCpp);
+        }}
         onNotify={notify}
       />
 

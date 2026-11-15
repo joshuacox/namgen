@@ -35,6 +35,7 @@ export default function CombatTrackerPanel({
   onUpdateParty,
   onUpdateCombat,
   onRevealHandout,
+  onWeaveWithAi,
   onNotify,
 }) {
   const [editingParty, setEditingParty] = useState(false);
@@ -682,6 +683,22 @@ export default function CombatTrackerPanel({
               >
                 📺 Broadcast Order
               </button>
+              {onWeaveWithAi && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onWeaveWithAi({
+                      tool: 'boss-designer',
+                      title: `Combat Round ${round}`,
+                      prompt: `Narrate cinematic Round ${round} combat beats and suggest a tactical environmental twist or villain taunt for active turn ${activeCombatant?.name || 'next combatant'}.`,
+                      contextText: combatants.map((c) => `${c.name} (${c.side}, HP ${c.hp}/${c.maxHp}, Init ${c.initiative})`).join('\n'),
+                    })
+                  }
+                  className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                >
+                  ✨ AI Narrate
+                </button>
+              )}
               <button
                 type="button"
                 onClick={clearMonsters}

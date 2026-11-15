@@ -9,6 +9,7 @@ export default function AdventureForgePanel({
   onSaveCodex,
   onSendToCombat,
   onRevealHandout,
+  onWeaveWithAi,
   onNotify,
 }) {
   const [subMode, setSubMode] = useState('dungeon');
@@ -344,6 +345,22 @@ export default function AdventureForgePanel({
                   >
                     📺 Reveal Prophecy
                   </button>
+                  {onWeaveWithAi && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onWeaveWithAi({
+                          tool: 'boss-designer',
+                          title: `Encounter: ${encounter.environment}`,
+                          prompt: `Expand this ${encounter.tierLabel} encounter in ${encounter.environment} into a multi-phase tactical fight with Phase 2 escalation, lair hazard triggers, and boxed text.`,
+                          contextText: `Twist: ${encounter.twist}\nFoes: ${encounter.monsters.join(', ')}\nHook: ${encounter.questHook}`,
+                        })
+                      }
+                      className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                    >
+                      ✨ Weave with AI
+                    </button>
+                  )}
                 </div>
               </div>
 

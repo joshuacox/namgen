@@ -45,7 +45,9 @@ CATEGORY_METADATA = {
     'diablo': {'name': 'Diablo Universe', 'desc': 'Angels of High Heavens, Demons of the Burning Hells, Nephalem, Khazra.'},
     'dragon_age': {'name': 'Dragon Age', 'desc': 'Dwarfs, Elfs, and Qunari from the world of Thedas.'},
     'eve_online': {'name': 'EVE Online', 'desc': 'Caldari, Gallente, Amarr, and Minmatar pilot genealogies in New Eden.'},
-    'the_witcher': {'name': 'The Witcher Universe', 'desc': 'Witchers, Nilfgaardians, Dryads, Dwarfs, Elfs, and Northern Realms peoples.'}
+    'the_witcher': {'name': 'The Witcher Universe', 'desc': 'Witchers, Nilfgaardians, Dryads, Dwarfs, Elfs, and Northern Realms peoples.'},
+    'brand': {'name': 'Brand & Title Oracle', 'desc': 'Lexical archetypes for studio names, apps, products, and sovereign game titles.'},
+    'tabletop': {'name': 'Tabletop Story Seeds', 'desc': 'Plot hooks, tavern rumors, item quirks, villain schemes, and dungeon traps for GMs.'}
 }
 
 def main():

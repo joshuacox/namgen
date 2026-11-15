@@ -65,13 +65,13 @@ export default function GeneratorExplorer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 mb-3">
-            <span>Directory of 907 Modules</span>
+            <span>Directory of 917 Modules</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Specialized Procedural Generators
           </h2>
           <p className="mt-4 text-slate-300">
-            Search and explore all 907 C++17 procedural name generator modules. Every module is compiled with zero runtime heap allocation into <code className="text-emerald-400">.rodata</code>.
+            Search and explore all 917 C++17 procedural name generator modules. Every module is compiled with zero runtime heap allocation into <code className="text-emerald-400">.rodata</code>.
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export default function GeneratorExplorer() {
                 setSearchQuery(e.target.value);
                 setDisplayLimit(48);
               }}
-              placeholder="Search 907 generators by name, flag, universe, or category (e.g. sith, elf, sword, pokemon, japan)..."
+              placeholder="Search 917 generators by name, flag, universe, or category (e.g. sith, elf, sword, pokemon, japan)..."
               className="w-full pl-11 pr-4 py-3.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-emerald-500 shadow-xl"
             />
             {searchQuery && (

@@ -305,6 +305,168 @@ async function getCampaignById(campaignId) {
   return vault.campaigns.find((c) => c.id === campaignId) || null;
 }
 
+const MASKED_SECRET = '••••••••';
+
+const DEFAULT_SETTINGS = {
+  provider: 'ollama',
+  baseUrl: 'http://127.0.0.1:11434',
+  model: '',
+  apiKey: '',
+  customHeaders: {},
+  temperature: 0.75,
+  numCtx: 8192,
+  githubToken: '',
+  usptoCsvPath: '',
+  preferCppBinary: true,
+};
+
+function getSettingsFilePath() {
+  return path.join(resolveDataDir(), 'settings.json');
+}
+
+function getOracleRunsDir() {
+  return path.join(resolveDataDir(), 'oracle-runs');
+}
+
+function sanitizeSettings(raw) {
+  const s = raw && typeof raw === 'object' ? raw : {};
+  return {
+    provider: s.provider === 'openai' ? 'openai' : 'ollama',
+    baseUrl: String(s.baseUrl || DEFAULT_SETTINGS.baseUrl).trim().replace(/\/+$/, ''),
+    model: String(s.model || '').trim(),
+    apiKey: String(s.apiKey || ''),
+    customHeaders: s.customHeaders && typeof s.customHeaders === 'object' && !Array.isArray(s.customHeaders)
+      ? s.customHeaders
+      : {},
+    temperature: Number.isFinite(Number(s.temperature))
+      ? Math.max(0, Math.min(2, Number(s.temperature)))
+      : DEFAULT_SETTINGS.temperature,
+    numCtx: Number.isFinite(Number(s.numCtx))
+      ? Math.max(512, Math.min(131072, Math.round(Number(s.numCtx))))
+      : DEFAULT_SETTINGS.numCtx,
+    githubToken: String(s.githubToken || '').trim(),
+    usptoCsvPath: String(s.usptoCsvPath || '').trim(),
+    preferCppBinary: s.preferCppBinary !== undefined ? Boolean(s.preferCppBinary) : true,
+  };
+}
+
+async function readSettingsUnsafe() {
+  const filePath = getSettingsFilePath();
+  if (!fs.existsSync(filePath)) {
+    return { ...DEFAULT_SETTINGS };
+  }
+  try {
+    const raw = await fsp.readFile(filePath, 'utf8');
+    return sanitizeSettings(JSON.parse(raw));
+  } catch {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+async function getSettings() {
+  return withWriteLock(async () => readSettingsUnsafe());
+}
+
+async function saveSettings(partial) {
+  return withWriteLock(async () => {
+    const current = await readSettingsUnsafe();
+    const p = partial && typeof partial === 'object' ? partial : {};
+    const merged = sanitizeSettings({
+      ...current,
+      ...p,
+      apiKey: (p.apiKey === undefined || p.apiKey === MASKED_SECRET) ? current.apiKey : p.apiKey,
+      githubToken: (p.githubToken === undefined || p.githubToken === MASKED_SECRET) ? current.githubToken : p.githubToken,
+    });
+    await atomicWriteFile(getSettingsFilePath(), JSON.stringify(merged, null, 2));
+    return merged;
+  });
+}
+
+function maskSettingsForClient(settings) {
+  const s = sanitizeSettings(settings);
+  return {
+    ...s,
+    apiKey: s.apiKey ? MASKED_SECRET : '',
+    githubToken: s.githubToken ? MASKED_SECRET : '',
+    hasApiKey: Boolean(s.apiKey),
+    hasGithubToken: Boolean(s.githubToken),
+    hasEnvGithubToken: Boolean(process.env.GITHUB_TOKEN),
+  };
+}
+
+function safeOracleRunId(id) {
+  return String(id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
+async function listOracleRuns() {
+  const dir = getOracleRunsDir();
+  if (!fs.existsSync(dir)) return [];
+  const entries = await fsp.readdir(dir);
+  const runs = [];
+  for (const name of entries) {
+    if (!name.endsWith('.json')) continue;
+    try {
+      const raw = await fsp.readFile(path.join(dir, name), 'utf8');
+      const data = JSON.parse(raw);
+      runs.push({
+        id: data.id,
+        title: data.title || 'Untitled Oracle Scan',
+        pitch: data.pitch || '',
+        createdAt: data.createdAt || '',
+        totalCandidates: data.stats?.total ?? (data.results?.length || 0),
+        cleanSweepCount: data.stats?.cleanSweep ?? 0,
+        highScoreCount: data.stats?.highScore ?? 0,
+        topSurvivors: (data.results || []).slice(0, 5).map((r) => ({
+          name: r.name,
+          score: r.score,
+          archetype: r.archetype,
+        })),
+      });
+    } catch {}
+  }
+  runs.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+  return runs;
+}
+
+async function getOracleRun(id) {
+  const safeId = safeOracleRunId(id);
+  if (!safeId) return null;
+  const target = path.join(getOracleRunsDir(), `${safeId}.json`);
+  if (!fs.existsSync(target)) return null;
+  try {
+    const raw = await fsp.readFile(target, 'utf8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+async function saveOracleRun(runObj) {
+  return withWriteLock(async () => {
+    const dir = getOracleRunsDir();
+    await fsp.mkdir(dir, { recursive: true });
+    const id = safeOracleRunId(runObj?.id) || createId('oracle');
+    const payload = {
+      ...runObj,
+      id,
+      createdAt: runObj?.createdAt || new Date().toISOString(),
+    };
+    await atomicWriteFile(path.join(dir, `${id}.json`), JSON.stringify(payload, null, 2));
+    return payload;
+  });
+}
+
+async function deleteOracleRun(id) {
+  return withWriteLock(async () => {
+    const safeId = safeOracleRunId(id);
+    if (!safeId) return false;
+    const target = path.join(getOracleRunsDir(), `${safeId}.json`);
+    if (!fs.existsSync(target)) return false;
+    await fsp.unlink(target);
+    return true;
+  });
+}
+
 module.exports = {
   getVault,
   getVaultInfo,
@@ -315,4 +477,13 @@ module.exports = {
   getCampaignById,
   renderCampaignMarkdown,
   slugify,
+  MASKED_SECRET,
+  DEFAULT_SETTINGS,
+  getSettings,
+  saveSettings,
+  maskSettingsForClient,
+  listOracleRuns,
+  getOracleRun,
+  saveOracleRun,
+  deleteOracleRun,
 };

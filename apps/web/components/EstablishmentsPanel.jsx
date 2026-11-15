@@ -7,6 +7,7 @@ export default function EstablishmentsPanel({
   onSaveCodex,
   onAppendSessionNote,
   onRevealHandout,
+  onWeaveWithAi,
   onNotify,
 }) {
   const shopKeys = Object.keys(SHOP_TYPES);
@@ -169,6 +170,22 @@ export default function EstablishmentsPanel({
                 >
                   📺 Reveal Menu to Players
                 </button>
+                {onWeaveWithAi && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onWeaveWithAi({
+                        tool: 'scene-painter',
+                        title: est.name,
+                        prompt: `Paint vivid sensory read-aloud boxed text as players enter ${est.name} (${est.shopLabel}) run by ${est.proprietor?.name}, plus 3 overheard tavern rumors and 2 hidden hooks.`,
+                        contextText: `${est.atmosphere}\n${est.description}\nProprietor Secret: ${est.proprietor?.secret}\nPatron Hook: ${est.patron?.name} — ${est.patron?.hook}`,
+                      })
+                    }
+                    className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                  >
+                    ✨ Weave with AI
+                  </button>
+                )}
               </div>
             </div>
 

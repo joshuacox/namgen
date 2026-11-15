@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { searchGenerators } from 'namgen.js';
+import { searchGenerators, generators as allGenerators } from 'namgen.js';
 
 export default function QuickRollModal({
   isOpen,
@@ -63,7 +63,7 @@ export default function QuickRollModal({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Quick-search 907 namgen generators (e.g. elf, tavern, sword, drow, potion, goblin)..."
+            placeholder={`Quick-search ${allGenerators.length} namgen generators (e.g. elf, tavern, sword, drow, potion, goblin)...`}
             className="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-slate-500"
           />
           <kbd className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">

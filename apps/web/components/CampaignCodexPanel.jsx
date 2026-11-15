@@ -20,6 +20,7 @@ export default function CampaignCodexPanel({
   onUpdateCodex,
   onUpdateSessionNotes,
   onRevealHandout,
+  onWeaveWithAi,
   onNotify,
 }) {
   const [subView, setSubView] = useState('codex');
@@ -288,6 +289,22 @@ export default function CampaignCodexPanel({
                     >
                       📺 Reveal Summary to Players
                     </button>
+                    {onWeaveWithAi && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onWeaveWithAi({
+                            tool: 'story-arc',
+                            title: activeEntry.title,
+                            prompt: `Expand this Campaign Codex entry (${activeEntry.title}) with 2 interconnected plot hooks, an NPC secret, and campaign consequences.`,
+                            contextText: `${activeEntry.subtitle || ''}\n${activeEntry.summary || ''}\nDM Notes: ${activeEntry.dmNotes || ''}`,
+                          })
+                        }
+                        className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-xs font-semibold text-amber-200"
+                      >
+                        ✨ Weave with AI
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => deleteCodexEntry(activeEntry.id)}

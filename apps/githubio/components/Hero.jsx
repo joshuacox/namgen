@@ -32,13 +32,13 @@ export default function Hero() {
 
         {/* Subtitle */}
         <p className="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
-          <strong className="text-white font-semibold">namgen</strong> is a high-performance command-line generator written in pure modern C++17. Combine customizable adjective and noun wordlists with custom casing, or invoke any of the <span className="text-emerald-400 font-semibold">907 built-in procedural generators</span> spanning 40 fantasy, sci-fi, historical, and gaming universes.
+          <strong className="text-white font-semibold">namgen</strong> is a high-performance command-line generator written in pure modern C++17. Combine customizable adjective and noun wordlists with custom casing, or invoke any of the <span className="text-emerald-400 font-semibold">917 built-in procedural generators</span> spanning 40 fantasy, sci-fi, historical, and gaming universes.
         </p>
 
         {/* Metrics Grid */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
           <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
-            <div className="text-2xl sm:text-3xl font-bold text-emerald-400">907</div>
+            <div className="text-2xl sm:text-3xl font-bold text-emerald-400">917</div>
             <div className="text-xs text-slate-400 mt-1 uppercase font-semibold tracking-wider">Generators</div>
           </div>
           <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
@@ -51,7 +51,7 @@ export default function Hero() {
           </div>
           <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 text-center">
             <div className="text-2xl sm:text-3xl font-bold text-cyan-400">18s</div>
-            <div className="text-xs text-slate-400 mt-1 uppercase font-semibold tracking-wider">907 Batch Execution</div>
+            <div className="text-xs text-slate-400 mt-1 uppercase font-semibold tracking-wider">917 Batch Execution</div>
           </div>
         </div>
 
@@ -99,7 +99,7 @@ export default function Hero() {
             href="#generators"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-600 transition-all"
           >
-            <span>Explore 907 Generators</span>
+            <span>Explore 917 Generators</span>
           </a>
         </div>
 

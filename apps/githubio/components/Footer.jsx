@@ -16,7 +16,7 @@ export default function Footer() {
               <span>namgen</span>
             </div>
             <p className="text-sm text-slate-400 max-w-sm mb-4 leading-relaxed">
-              An ultra-fast, zero-allocation procedural name generator in pure C++17 with 907 modules spanning 40 universes.
+              An ultra-fast, zero-allocation procedural name generator in pure C++17 with 917 modules spanning 40 universes.
             </p>
             <div className="text-xs text-slate-500">
               Released under the <a href="https://github.com/joshuacox/namgen/blob/main/LICENSE" className="text-slate-400 hover:text-white underline">GNU General Public License v3.0</a>.
@@ -30,7 +30,7 @@ export default function Footer() {
               <li><a href="#simulator" className="hover:text-emerald-400 transition-colors">Simulator</a></li>
               <li><a href="#installation" className="hover:text-emerald-400 transition-colors">Installation</a></li>
               <li><a href="#options" className="hover:text-emerald-400 transition-colors">CLI Options</a></li>
-              <li><a href="#generators" className="hover:text-emerald-400 transition-colors">907 Generators</a></li>
+              <li><a href="#generators" className="hover:text-emerald-400 transition-colors">917 Generators</a></li>
               <li><a href="#architecture" className="hover:text-emerald-400 transition-colors">C++ Architecture</a></li>
             </ul>
           </div>
@@ -85,7 +85,7 @@ export default function Footer() {
             <span>•</span>
             <span>100% Zero-Allocation Tables</span>
             <span>•</span>
-            <span>907 Modules</span>
+            <span>917 Modules</span>
           </div>
         </div>
       </div>

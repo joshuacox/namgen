@@ -28,7 +28,7 @@ namespace fs = std::filesystem;
 
 static constexpr int DEFAULT_TERMINAL_LINES = 24;
 
-enum class OutputFormat { Plain, Json, Csv, Slug };
+enum class OutputFormat { Plain, Json, JsonRich, Csv, Slug };
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -263,9 +263,72 @@ struct CommandLineOptions {
     std::string serveAddress = "127.0.0.1";
     int servePort = 8080;
     bool stdinMode = false;
+    bool blendMode = false;
+    bool oraclePoolMode = false;
+    std::vector<std::string> keywords;
+    std::vector<std::string> oracleArchetypes;
     bool colorSet = false;
     std::string colorMode = "auto";
 };
+
+inline std::vector<std::string> splitTokenList(const std::string& raw) {
+    std::vector<std::string> out;
+    std::string cur;
+    for (char c : raw) {
+        if (c == ',' || c == ';' || std::isspace(static_cast<unsigned char>(c))) {
+            if (!cur.empty()) {
+                out.push_back(cur);
+                cur.clear();
+            }
+        } else {
+            cur.push_back(c);
+        }
+    }
+    if (!cur.empty()) {
+        out.push_back(cur);
+    }
+    return out;
+}
+
+inline const GeneratorInfo* findGeneratorFlexible(const std::string& raw) {
+    if (raw.empty()) return nullptr;
+    const GeneratorInfo* g = GeneratorRegistry::instance().find(raw);
+    if (!g && raw.rfind("--", 0) != 0) {
+        g = GeneratorRegistry::instance().find("--" + raw);
+    }
+    return g;
+}
+
+inline std::string mapArchetypeToGeneratorFlag(const std::string& archetype, std::size_t fallbackIdx) {
+    std::string low = toLower(archetype);
+    if (low.find("arcane") != std::string::npos || low.find("cyber") != std::string::npos) {
+        return "brand-arcane_cyberpunk";
+    }
+    if (low.find("class") != std::string::npos || low.find("etym") != std::string::npos ||
+        low.find("latin") != std::string::npos || low.find("greek") != std::string::npos) {
+        return "brand-classical_etymology";
+    }
+    if (low.find("portmanteau") != std::string::npos || low.find("punchy") != std::string::npos ||
+        low.find("blend") != std::string::npos) {
+        return "brand-punchy_portmanteaus";
+    }
+    if (low.find("minimal") != std::string::npos || low.find("func") != std::string::npos ||
+        low.find("clean") != std::string::npos) {
+        return "brand-functional_minimalist";
+    }
+    if (low.find("sovereign") != std::string::npos || low.find("neolog") != std::string::npos ||
+        low.find("coin") != std::string::npos) {
+        return "brand-sovereign_neologisms";
+    }
+    static constexpr const char* kFallbackGens[] = {
+        "brand-arcane_cyberpunk",
+        "brand-classical_etymology",
+        "brand-punchy_portmanteaus",
+        "brand-functional_minimalist",
+        "brand-sovereign_neologisms"
+    };
+    return kFallbackGens[fallbackIdx % 5];
+}
 
 inline bool isValidCandidate(const std::string& s, const CommandLineOptions& opts) {
     if (opts.minLenSet && s.length() < opts.minLen) return false;
@@ -320,8 +383,32 @@ void emitOutput(const std::vector<std::string>& results,
                 const fs::path& adjFolder,
                 const fs::path& nounFile,
                 const fs::path& nounFolder,
-                const std::string& separator) {
-    if (opts.format == OutputFormat::Json) {
+                const std::string& separator,
+                const std::vector<std::string>& archetypes = {}) {
+    if (opts.format == OutputFormat::JsonRich) {
+        std::string defaultArch = opts.oraclePoolMode
+            ? "Custom"
+            : (opts.blendMode
+                ? "Punchy Portmanteaus"
+                : (opts.markovMode
+                    ? "Markov Synthesis"
+                    : (opts.activeGenerator ? opts.activeGenerator->flag : "Generated")));
+        std::cout << "[\n";
+        for (std::size_t i = 0; i < results.size(); ++i) {
+            const std::string& name = results[i];
+            std::string arch = (i < archetypes.size() && !archetypes[i].empty()) ? archetypes[i] : defaultArch;
+            int syl = Linguistics::countSyllables(name);
+            std::string sigil = Linguistics::pronunciationSigil(name);
+            std::string slug = toSlug(name);
+            std::cout << "  {\"name\":\"" << escapeJson(name)
+                      << "\",\"archetype\":\"" << escapeJson(arch)
+                      << "\",\"syllables\":" << syl
+                      << ",\"sigil\":\"" << escapeJson(sigil)
+                      << "\",\"slug\":\"" << escapeJson(slug) << "\"}"
+                      << (i + 1 < results.size() ? "," : "") << "\n";
+        }
+        std::cout << "]\n";
+    } else if (opts.format == OutputFormat::Json) {
         std::cout << "[\n";
         for (std::size_t i = 0; i < results.size(); ++i) {
             std::cout << "  \"" << escapeJson(results[i]) << "\""
@@ -538,6 +625,8 @@ int main(int argc, char* argv[]) {
             optCamelcasing = true;
         } else if (arg == "--json") {
             opts.format = OutputFormat::Json;
+        } else if (arg == "--json-rich") {
+            opts.format = OutputFormat::JsonRich;
         } else if (arg == "--csv") {
             opts.format = OutputFormat::Csv;
         } else if (arg == "--slug" || arg == "--kebab") {
@@ -653,6 +742,34 @@ int main(int argc, char* argv[]) {
             counto = static_cast<std::size_t>(std::stoul(argv[i]));
             optCountSet = true;
             opts.markovMode = true;
+        } else if (arg == "--keywords" || arg == "--train-words") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: " << arg << " requires a comma-separated word list.\n";
+                return 1;
+            }
+            ++i;
+            for (const auto& kw : splitTokenList(argv[i])) {
+                opts.keywords.push_back(kw);
+            }
+        } else if (arg == "--blend" || arg == "--portmanteau") {
+            opts.blendMode = true;
+        } else if (arg == "--oracle-pool") {
+            opts.oraclePoolMode = true;
+        } else if (arg == "--archetypes") {
+            if (i + 1 >= argc) {
+                std::cerr << "Error: --archetypes requires a comma-separated list of archetype labels.\n";
+                return 1;
+            }
+            ++i;
+            std::stringstream ss(argv[i]);
+            std::string item;
+            while (std::getline(ss, item, ',')) {
+                std::size_t start = item.find_first_not_of(" \t");
+                std::size_t end = item.find_last_not_of(" \t");
+                if (start != std::string::npos && end != std::string::npos) {
+                    opts.oracleArchetypes.push_back(item.substr(start, end - start + 1));
+                }
+            }
         } else if (arg == "--syllables") {
             if (i + 1 >= argc) {
                 std::cerr << "Error: --syllables requires a range (e.g. 2 or 2-3).\n";
@@ -724,10 +841,14 @@ int main(int argc, char* argv[]) {
             std::cout << "  --syllables RANGE        Constraint syllable count (e.g. 2 or 2-3)\n";
             std::cout << "  --alliterate             Filter for alliterative multi-word names\n";
             std::cout << "  --with-lore, --meaning   Append procedural lore epithet and meaning\n";
-            std::cout << "  --markov [GEN]           Generate novel names using Markov n-gram model\n";
+            std::cout << "  --markov [GEN1,GEN2]     Generate novel names using Markov n-gram model\n";
             std::cout << "  --order NUM              N-gram order for Markov synthesizer (default: 3)\n";
             std::cout << "  --train FILE             Train Markov synthesizer from external text corpus\n";
             std::cout << "  --synthesize COUNT       Synthesize novel names from trained Markov model\n";
+            std::cout << "  --keywords LIST          Seed keywords for Markov, Portmanteau blend, or Oracle pool\n";
+            std::cout << "  --blend, --portmanteau   Synthesize portmanteau blends from keywords/generators\n";
+            std::cout << "  --oracle-pool            Synthesize multi-archetype brand candidate pool\n";
+            std::cout << "  --archetypes LIST        Comma-separated archetype names for --oracle-pool\n";
             std::cout << "  --find KEYWORD           Search generators matching keyword/pattern\n";
             std::cout << "  --compose GEN1,GEN2      Compose multiple generators together\n";
             std::cout << "  --template STRING        Template for composition (default: \"{1} of {2}\")\n";
@@ -736,6 +857,7 @@ int main(int argc, char* argv[]) {
             std::cout << "  --color[=WHEN]           Colorize output (auto, always, never; default: auto)\n";
             std::cout << "  -i, --interactive        Launch interactive terminal explorer UI\n";
             std::cout << "  --json                   Output results as a JSON array of strings\n";
+            std::cout << "  --json-rich              Output JSON objects with archetype, syllables, sigil, and slug\n";
             std::cout << "  --csv                    Output results in CSV format\n";
             std::cout << "  --slug                   Convert output to lowercase kebab-case slugs\n";
             std::cout << "  --cap, --capcasing       Capitalize first letter of both adjective and noun\n";
@@ -875,6 +997,153 @@ int main(int argc, char* argv[]) {
         return namgen::runInteractiveTui(rng);
     }
 
+    // Oracle Pool synthesis mode
+    if (opts.oraclePoolMode) {
+        std::vector<std::string> archetypes = opts.oracleArchetypes;
+        if (archetypes.empty()) {
+            archetypes = {
+                "Arcane/Cyberpunk",
+                "Classical Etymology",
+                "Punchy Portmanteaus",
+                "Functional Minimalist",
+                "Sovereign Neologisms"
+            };
+        }
+
+        std::vector<const GeneratorInfo*> archGens;
+        archGens.reserve(archetypes.size());
+        for (std::size_t i = 0; i < archetypes.size(); ++i) {
+            std::string flag = mapArchetypeToGeneratorFlag(archetypes[i], i);
+            const GeneratorInfo* g = findGeneratorFlexible(flag);
+            if (!g) g = GeneratorRegistry::instance().find("brand-sovereign_neologisms");
+            archGens.push_back(g);
+        }
+
+        // Build keyword + brand corpus for blending and Markov synthesis
+        std::vector<std::string> blendRoots = opts.keywords;
+        static constexpr const char* kFallbackThemeRoots[] = {
+            "hex", "sigil", "rune", "void", "locus", "pact", "aegis", "deck",
+            "rift", "cast", "draft", "arena", "spark", "forge", "vex", "nova"
+        };
+        if (blendRoots.size() < 4) {
+            for (const char* w : kFallbackThemeRoots) {
+                blendRoots.emplace_back(w);
+            }
+        }
+
+        MarkovModel markov(opts.markovOrder);
+        std::vector<std::string> baseSamples;
+        baseSamples.reserve(archGens.size() * 30);
+        for (const auto* g : archGens) {
+            if (!g) continue;
+            for (int s = 0; s < 30; ++s) {
+                baseSamples.push_back(g->generate(rng));
+            }
+        }
+        markov.train(baseSamples);
+        if (!opts.keywords.empty()) {
+            markov.addSamples(opts.keywords, 3);
+        }
+
+        std::vector<std::string> results;
+        std::vector<std::string> resultArchetypes;
+        results.reserve(counto);
+        resultArchetypes.reserve(counto);
+        std::unordered_set<std::string> seenLower;
+
+        std::size_t attempts = 0;
+        const std::size_t maxAttempts = counto * 40 + 500;
+        std::uniform_int_distribution<std::size_t> rootDist(0, blendRoots.size() - 1);
+        std::uniform_int_distribution<int> mixDist(0, 99);
+
+        while (results.size() < counto && attempts < maxAttempts) {
+            std::size_t idx = attempts % archetypes.size();
+            ++attempts;
+            int roll = mixDist(rng);
+            std::string candidate;
+            if (roll < 60 && archGens[idx]) {
+                candidate = archGens[idx]->generate(rng);
+            } else if (roll < 85 && blendRoots.size() >= 2) {
+                std::string w1 = blendRoots[rootDist(rng)];
+                std::string w2 = blendRoots[rootDist(rng)];
+                if (w1 == w2 && archGens[idx]) {
+                    w2 = archGens[idx]->generate(rng);
+                }
+                candidate = Linguistics::portmanteauBlend(w1, w2);
+            } else if (markov.isTrained()) {
+                std::string m = markov.generate(rng, 5, 13);
+                candidate = Linguistics::toBrandToken(m);
+            }
+            if (candidate.empty() && archGens[idx]) {
+                candidate = archGens[idx]->generate(rng);
+            }
+            candidate = Linguistics::toBrandToken(candidate);
+            if (candidate.size() < 4) continue;
+            if (!isValidCandidate(candidate, opts)) continue;
+            std::string low = toLower(candidate);
+            if (!seenLower.insert(low).second) continue;
+            results.push_back(std::move(candidate));
+            resultArchetypes.push_back(archetypes[idx]);
+        }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "", resultArchetypes);
+        return 0;
+    }
+
+    // Portmanteau blend mode
+    if (opts.blendMode) {
+        std::vector<std::string> words = opts.keywords;
+        if (opts.activeGenerator) {
+            for (int s = 0; s < 30; ++s) {
+                for (const auto& tok : splitTokenList(opts.activeGenerator->generate(rng))) {
+                    if (tok.size() >= 3) words.push_back(tok);
+                }
+            }
+        }
+        if (words.size() < 6) {
+            const auto* fallbackGen = GeneratorRegistry::instance().find("brand-punchy_portmanteaus");
+            static constexpr const char* kBlendSeeds[] = {
+                "deck", "forge", "rift", "spell", "summon", "mana", "arena", "clash", "brawl", "nexus", "vault", "pulse"
+            };
+            for (const char* seedWord : kBlendSeeds) words.emplace_back(seedWord);
+            if (fallbackGen) {
+                for (int s = 0; s < 12; ++s) {
+                    words.push_back(fallbackGen->generate(rng));
+                }
+            }
+        }
+
+        std::vector<std::string> results;
+        results.reserve(counto);
+        std::unordered_set<std::string> seenLower;
+        std::uniform_int_distribution<std::size_t> wordDist(0, words.size() - 1);
+        std::size_t kwCount = opts.keywords.size();
+        std::size_t attempts = 0;
+        const std::size_t maxAttempts = counto * 60 + 500;
+        while (results.size() < counto && attempts < maxAttempts) {
+            ++attempts;
+            std::string w1 = (kwCount > 0 && (attempts % 3 != 0))
+                ? opts.keywords[attempts % kwCount]
+                : words[wordDist(rng)];
+            std::string w2 = (kwCount >= 2 && (attempts % 2 == 0))
+                ? opts.keywords[(attempts + 1 + (rng() % (kwCount - 1))) % kwCount]
+                : words[wordDist(rng)];
+            if (toLower(w1) == toLower(w2)) continue;
+            std::string blended = Linguistics::portmanteauBlend(w1, w2);
+            if (blended.size() < 4) continue;
+            if (!isValidCandidate(blended, opts)) continue;
+            if (opts.withLore) {
+                blended = Lore::formatWithLore(blended, rng);
+            }
+            std::string low = toLower(blended);
+            if (opts.unique || kwCount >= 2) {
+                if (!seenLower.insert(low).second) continue;
+            }
+            results.push_back(std::move(blended));
+        }
+        emitOutput(results, opts, optDebug, fs::path(), fs::path(), fs::path(), fs::path(), "");
+        return 0;
+    }
+
     // Markov synthesis mode
     if (opts.markovMode) {
         MarkovModel model(opts.markovOrder);
@@ -883,35 +1152,49 @@ int main(int argc, char* argv[]) {
                 std::cerr << "Error: could not train Markov model from file '" << opts.trainFile << "'\n";
                 return 1;
             }
+            if (!opts.keywords.empty()) {
+                model.addSamples(opts.keywords, 3);
+            }
         } else {
-            const GeneratorInfo* targetGen = nullptr;
+            std::vector<const GeneratorInfo*> targetGens;
             if (!opts.markovGen.empty()) {
-                targetGen = GeneratorRegistry::instance().find(opts.markovGen);
-                if (!targetGen && opts.markovGen.rfind("--", 0) != 0) {
-                    targetGen = GeneratorRegistry::instance().find("--" + opts.markovGen);
-                }
-                if (!targetGen) {
-                    std::cerr << "Error: unknown generator for Markov synthesis: '" << opts.markovGen << "'\n";
-                    return 1;
+                for (const auto& name : splitTokenList(opts.markovGen)) {
+                    const GeneratorInfo* g = findGeneratorFlexible(name);
+                    if (!g) {
+                        std::cerr << "Error: unknown generator for Markov synthesis: '" << name << "'\n";
+                        return 1;
+                    }
+                    targetGens.push_back(g);
                 }
             } else if (opts.activeGenerator) {
-                targetGen = opts.activeGenerator;
+                targetGens.push_back(opts.activeGenerator);
             }
 
             std::vector<std::string> trainingSamples;
-            trainingSamples.reserve(100);
-            if (targetGen) {
-                for (int s = 0; s < 100; ++s) {
-                    trainingSamples.push_back(targetGen->generate(rng));
+            if (!targetGens.empty()) {
+                trainingSamples.reserve(targetGens.size() * 80);
+                for (const auto* g : targetGens) {
+                    for (int s = 0; s < 80; ++s) {
+                        trainingSamples.push_back(g->generate(rng));
+                    }
+                }
+            } else if (!opts.keywords.empty()) {
+                if (const auto* brandGen = findGeneratorFlexible("brand-sovereign_neologisms")) {
+                    for (int s = 0; s < 40; ++s) {
+                        trainingSamples.push_back(brandGen->generate(rng));
+                    }
                 }
             } else {
-                if (const auto* elfGen = GeneratorRegistry::instance().find("fantasy-elves")) {
+                if (const auto* elfGen = findGeneratorFlexible("fantasy-elves")) {
                     for (int s = 0; s < 100; ++s) {
                         trainingSamples.push_back(elfGen->generate(rng));
                     }
                 }
             }
             model.train(trainingSamples);
+            if (!opts.keywords.empty()) {
+                model.addSamples(opts.keywords, 3);
+            }
         }
 
         std::vector<std::string> results;

@@ -101,7 +101,7 @@ export default function OptionsReference() {
     },
     {
       flags: '-h, --help',
-      description: 'Display usage instructions and dynamically enumerate all 907 procedural generators.',
+      description: 'Display usage instructions and dynamically enumerate all 917 procedural generators.',
       defaultVal: '—',
     },
   ];

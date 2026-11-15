@@ -192,6 +192,12 @@
     "count": 6
   },
   {
+    "id": "brand",
+    "name": "Brand & Title Oracle",
+    "description": "Lexical archetypes for studio names, apps, products, and sovereign game titles.",
+    "count": 5
+  },
+  {
     "id": "guild_wars",
     "name": "Guild Wars",
     "description": "Asura, Charr, Norn, and Sylvari from the world of Tyria.",
@@ -213,6 +219,12 @@
     "id": "lord_of_the_rings_online",
     "name": "Lord of the Rings Online",
     "description": "Beornings, Dale-folk, and LOTRO specific cultural lineages.",
+    "count": 5
+  },
+  {
+    "id": "tabletop",
+    "name": "Tabletop Story Seeds",
+    "description": "Plot hooks, tavern rumors, item quirks, villain schemes, and dungeon traps for GMs.",
     "count": 5
   },
   {

@@ -22,7 +22,7 @@ export default function Architecture() {
             <div className="text-emerald-400 font-mono text-sm font-bold mb-2">01 / STATIC CONSTEXPR</div>
             <h3 className="text-lg font-bold text-white mb-2">Immutable .rodata Tables</h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Every word, prefix, suffix, and title across all 907 generators is compiled as <code className="text-emerald-400">static constexpr std::string_view</code> arrays directly embedded into the binary’s <code className="text-slate-200">.rodata</code> section. No JSON parsing, no filesystem reads, and zero startup latency.
+              Every word, prefix, suffix, and title across all 917 generators is compiled as <code className="text-emerald-400">static constexpr std::string_view</code> arrays directly embedded into the binary’s <code className="text-slate-200">.rodata</code> section. No JSON parsing, no filesystem reads, and zero startup latency.
             </p>
           </div>
 

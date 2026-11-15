@@ -53,7 +53,7 @@ console.log('WASM Dragons:', wasm.generate('--fantasy-dragons', 3));`,
 # Run Bats integration tests directly
 bats test/full.bats
 
-# Verify non-empty generation across all 907 modules
+# Verify non-empty generation across all 917 modules
 bash test/tester.sh`,
   };
 

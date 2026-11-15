@@ -20,7 +20,7 @@ export default function UniverseBanner() {
           {/* Dark gradient overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent flex flex-col justify-end p-6 sm:p-10 lg:p-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 w-fit mb-3 backdrop-blur-sm">
-              <span>907 Modules Across 40 Factions & Real-World Cultures</span>
+              <span>917 Modules Across 40 Factions & Real-World Cultures</span>
             </div>
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white max-w-2xl leading-tight">
               Where Ancient Lore Meets Distant Galaxies

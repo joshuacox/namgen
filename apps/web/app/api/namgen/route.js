@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server';
 import { generateCombinations, formatOutput, capitalizeProperName } from 'namgen.js';
 import { generateNames, composeNamesNode } from 'namgen.js/node';
+import { getSettings } from '../../../lib/localStore';
+import {
+  getCppEngineStatus,
+  rollCpp,
+  markovCpp,
+  blendCpp,
+  oraclePoolCpp,
+} from '../../../lib/cppNamgen';
 import {
   forgeNpc,
   forgeEstablishment,
@@ -19,6 +27,10 @@ export async function POST(request) {
     const { action = 'roll' } = body || {};
 
     switch (action) {
+      case 'engine-info': {
+        return NextResponse.json({ cppEngine: getCppEngineStatus() });
+      }
+
       case 'roll': {
         const {
           generator = 'fantasy-dragons',
@@ -29,29 +41,99 @@ export async function POST(request) {
           matchRegex = '',
           alliterate = false,
           syllables = 0,
+          minSyllables = 0,
+          maxSyllables = 0,
           withLore = false,
           format = 'plain',
           capitalize = false,
         } = body;
 
-        const safeCount = Math.min(50, Math.max(1, Number(count) || 8));
-        let names = generateNames(generator, safeCount, {
-          seed,
-          unique,
-          type: Number(type) || 0,
-          matchRegex,
-          alliterate,
-          syllables: Number(syllables) || 0,
-          withLore,
-        });
+        const safeCount = Math.min(200, Math.max(1, Number(count) || 8));
+        const settings = await getSettings();
+        let names;
+        let engine = 'js-fallback';
+
+        if (!matchRegex && !Number(type) && settings.preferCppBinary) {
+          const res = await rollCpp({
+            generator,
+            count: safeCount,
+            seed,
+            unique,
+            alliterate,
+            minSyllables: Number(minSyllables) || Number(syllables) || 0,
+            maxSyllables: Number(maxSyllables) || Number(syllables) || 0,
+            withLore,
+            preferCpp: true,
+          });
+          names = res.names;
+          engine = res.engine;
+        } else {
+          names = generateNames(generator, safeCount, {
+            seed,
+            unique,
+            type: Number(type) || 0,
+            matchRegex,
+            alliterate,
+            syllables: Number(syllables) || 0,
+            withLore,
+          });
+        }
         if (capitalize) {
           names = names.map(capitalizeProperName);
         }
         return NextResponse.json({
           generator,
+          engine,
           names,
           formatted: formatOutput(names, format),
         });
+      }
+
+      case 'markov': {
+        const settings = await getSettings();
+        const res = await markovCpp({
+          generators: body.generators || body.generator || ['fantasy-elfs'],
+          keywords: body.keywords || [],
+          order: body.order || 3,
+          count: body.count || 15,
+          seed: body.seed,
+          minSyllables: body.minSyllables || 0,
+          maxSyllables: body.maxSyllables || 0,
+          preferCpp: settings.preferCppBinary,
+        });
+        return NextResponse.json({
+          ...res,
+          formatted: formatOutput(res.names, body.format || 'plain'),
+        });
+      }
+
+      case 'blend': {
+        const settings = await getSettings();
+        const res = await blendCpp({
+          keywords: body.keywords || [],
+          generator: body.generator || '',
+          count: body.count || 15,
+          seed: body.seed,
+          preferCpp: settings.preferCppBinary,
+        });
+        return NextResponse.json({
+          ...res,
+          formatted: formatOutput(res.names, body.format || 'plain'),
+        });
+      }
+
+      case 'oracle-pool': {
+        const settings = await getSettings();
+        const res = await oraclePoolCpp({
+          count: body.count || 50,
+          keywords: body.keywords || [],
+          archetypes: body.archetypes,
+          seed: body.seed,
+          minSyllables: body.minSyllables || 0,
+          maxSyllables: body.maxSyllables || 0,
+          preferCpp: settings.preferCppBinary,
+        });
+        return NextResponse.json(res);
       }
 
       case 'combinator': {
