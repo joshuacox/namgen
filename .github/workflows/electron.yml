@@ -1,0 +1,123 @@
+name: Build Desktop Apps (Electron)
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+    paths:
+      - 'apps/electron/**'
+      - 'apps/web/**'
+      - 'packages/namgen.js/**'
+      - 'src/**'
+      - 'Makefile'
+      - 'CMakeLists.txt'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/electron.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-desktop:
+    name: Build Desktop (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            builder_cmd: pnpm --filter @namgen/electron dist:linux
+          - os: macos-latest
+            platform: mac
+            builder_cmd: pnpm --filter @namgen/electron dist:mac
+          - os: windows-latest
+            platform: windows
+            builder_cmd: pnpm --filter @namgen/electron dist:win
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.9.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Set up build tools (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3
+
+      - name: Build C++ binary (Linux & macOS)
+        if: runner.os != 'Windows'
+        run: |
+          make namgen
+
+      - name: Build C++ binary (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cmake -B build-win -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-win --config Release --target namgen
+          if (Test-Path build-win/Release/namgen.exe) {
+            Copy-Item build-win/Release/namgen.exe ./namgen.exe
+          } elseif (Test-Path build-win/namgen.exe) {
+            Copy-Item build-win/namgen.exe ./namgen.exe
+          }
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Next.js Web App
+        run: pnpm --filter @namgen/web build
+
+      - name: Package Electron App
+        run: ${{ matrix.builder_cmd }}
+
+      - name: Upload Desktop Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-${{ matrix.platform }}
+          path: |
+            apps/electron/dist/*.AppImage
+            apps/electron/dist/*.deb
+            apps/electron/dist/*.tar.gz
+            apps/electron/dist/*.dmg
+            apps/electron/dist/*.zip
+            apps/electron/dist/*.exe
+          if-no-files-found: warn
+
+  release-desktop:
+    name: Attach Desktop Artifacts to GitHub Release
+    needs: build-desktop
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-desktop-artifacts
+
+      - name: Prepare Assets for Release
+        run: |
+          mkdir -p dist-desktop
+          find release-desktop-artifacts -type f \( -name "*.AppImage" -o -name "*.deb" -o -name "*.tar.gz" -o -name "*.dmg" -o -name "*.zip" -o -name "*.exe" \) -exec cp {} dist-desktop/ \;
+          ls -la dist-desktop/
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist-desktop/*
+          generate_release_notes: true

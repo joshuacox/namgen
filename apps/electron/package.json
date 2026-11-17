@@ -1,0 +1,104 @@
+{
+  "name": "@namgen/electron",
+  "version": "1.0.0",
+  "description": "Cross-platform desktop application for namgen DM Command Center and Namespace Oracle",
+  "author": "Joshua Cox",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development electron .",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:linux": "electron-builder --linux",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "34.5.8"
+  },
+  "dependencies": {
+    "@namgen/web": "workspace:*",
+    "namgen.js": "workspace:*"
+  },
+  "build": {
+    "electronVersion": "34.5.8",
+    "appId": "com.namgen.desktop",
+    "productName": "namgen",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "copyright": "Copyright © 2026 Joshua Cox",
+    "asar": true,
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../web/.next",
+        "to": "web/.next",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../web/public",
+        "to": "web/public",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../web/package.json",
+        "to": "web/package.json"
+      },
+      {
+        "from": "../web/next.config.mjs",
+        "to": "web/next.config.mjs"
+      },
+      {
+        "from": "../../namgen",
+        "to": "bin/namgen",
+        "filter": ["*"]
+      },
+      {
+        "from": "../../namgen.exe",
+        "to": "bin/namgen.exe",
+        "filter": ["*"]
+      }
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "category": "Game;Utility",
+      "icon": "assets/icon.png"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.games",
+      "icon": "assets/icon.png",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

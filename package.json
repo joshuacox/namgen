@@ -15,6 +15,15 @@
     "build:githubio": "npm run build --workspace=apps/githubio",
     "build:web": "npm run build --workspace=apps/web",
     "start": "npm run start --workspace=apps/web",
-    "test:js": "npm run test --workspace=packages/namgen.js"
+    "test:js": "npm run test --workspace=packages/namgen.js",
+    "dev:electron": "npm run dev --workspace=apps/electron",
+    "build:electron": "npm run dist:linux --workspace=apps/electron"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^34.5.8",
+    "electron-builder": "^25.1.8",
+    "get-port": "^5.1.1",
+    "wait-on": "^8.0.5"
   }
 }

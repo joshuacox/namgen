@@ -39,6 +39,7 @@ apps/web/.next/
 apps/web/out/
 apps/web/node_modules/
 apps/web/.namgen-dm/
+apps/electron/dist/
 packages/namgen.js/node_modules/
 __pycache__/
 *.pyc
