@@ -110,7 +110,7 @@ function findFreePort(startPort, endPort) {
 }
 
 async function startNextServer() {
-  const port = await findFreePort(38000, 39999);
+  const port = await findFreePort(6264, 6299);
   serverPort = port;
 
   let webDir;

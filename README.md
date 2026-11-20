@@ -98,14 +98,14 @@ This repository is organized as an npm workspaces monorepo alongside the native 
 # Install monorepo dependencies once
 npm install
 
-# Run the private Dungeon Master app locally (http://localhost:3000)
+# Run the private Dungeon Master app locally (http://localhost:6264 — N-A-M-G)
 npm run dev
 
 # Or build and run in production mode locally
 npm run build:web
 npm run start
 
-# Run the static GitHub Pages documentation app locally (http://localhost:3001)
+# Run the static GitHub Pages documentation app locally (http://localhost:6265)
 npm run dev:githubio
 
 # Run namgen.js tests
